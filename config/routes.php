@@ -1,8 +1,8 @@
 <?php
 
 
-/*
-Example routes.
+
+//Example routes.
 
 $Routes->add('login', '/login', 'Home', 'login');
 
@@ -13,4 +13,3 @@ $Routes->add('hello-world', '/hello-world', 'Home', 'helloWorld');
 $Routes->root('/', 'Home', 'index');
 
 $Routes->resources('student', 'Student');
-*/
