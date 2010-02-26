@@ -2,7 +2,7 @@
 
 function __autoload($class_name) {
 	$file = $class_name . '.php';
-	$included = include_once($file);
+	$included = @include_once($file);
 	if($included === false){
 		//Declaring the class with eval is a hack
 		//__autoload exception throwing is not officially supported until 5.3

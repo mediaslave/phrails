@@ -226,16 +226,17 @@ class TemplatePartial
 		if(!empty($array))
 			extract($array);
 		ob_start();
-		include $file;
+		$included = @include $file;
+		if($included === false)
+			throw new Exception("The template at the path '$file' does not exist.");
 		return ob_get_clean();
 	}
+	
 	private function path($file)
 	{
 		$match = preg_match('/(\/)/', $file);
 		if(!$match)
 			$file = Template::getCurrentViewPath() . '/_' . $file . '.php';
-		if(!is_file($file))
-			throw new Exception("The template at the path '$file' does not exist.");
 		return $file;
 	}
 }
