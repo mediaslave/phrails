@@ -4,3 +4,6 @@ app/helpers/*
 app/models/*
 app/views/*
 lib/*
+public/images/*
+public/javascript/*
+public/stylesheets/*
