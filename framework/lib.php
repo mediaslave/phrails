@@ -1,107 +1,4 @@
 <?php
-
-class Routes{
-
-	static $Hash;
-
-	function __construct(){
-		self::$Hash = new RoutesHash();
-	}
-
-	function add($name, $path, $controller, $action){
-		self::$Hash->route($name, $path, $controller, $action);
-	}
-	
-	function resources($name, $controller){
-		$path = '/' . $name;
-		$this->add($name, $path, $controller, 'index');
-		$this->add('edit-' . $name, $path . '/{id}/edit', $controller, 'edit');
-		$this->add('new-' . $name, $path . '/new', $controller, 'create');
-		$this->add('delete-' . $name, $path . '/{id}/delete', $controller, 'delete');
-	}
-	
-	public static function path($name){
-		$args = func_get_args();
-		$args = self::prepareArgs($args);
-		$path = preg_replace('/{([a-zA-Z])*}/i', '%s', self::$Hash->get($name,'path'));
-		$args = (is_array($args[0])) ? $args[0] : array();
-		$match = preg_match('/(\%s)/', $path);
-		if($match && empty($args))
-			throw new Exception("The path '$name' should be passed some arguments.");
-		return vsprintf($path, $args);
-	}
-	
-	public static function routes()
-	{
-		return self::$Hash;
-	}
-	
-	public static function prepareArgs($args)
-	{
-		//remove the first element of the array.
-		array_shift($args);
-		return $args;
-	}
-	public function root($path, $controller, $action)
-	{
-		if(self::$Hash->isKey('root'))
-			throw new Exception('You may only define one root route.');
-		self::$Hash->route('root', $path, $controller, $action);
-	}
-	/**
-	 * similar_text will need to be changed to take in the current path.
-	 * @todo replace '/profile/12345/edit' with $_SERVER['REQUEST_URI']
-	 * @todo refactor!!!!!!
-	 */
-	public function findByPath()
-	{
-		$closeness = 0;
-		$ret = array();
-		foreach(self::$Hash->export() as $key => $value){
-			//$_SERVER['REQUEST_URI]
-			if($_SERVER['REQUEST_URI'] == $value['path']){
-				$ret = $value;
-				break;
-			}
-			$current = similar_text($_SERVER['REQUEST_URI'], $value['path']);
-			if($current > $closeness){
-				$closeness = $current;
-				$ret = $value;
-			}
-		}
-		$uri   = explode('/', $_SERVER['REQUEST_URI']);
-		$route = explode('/', $ret['path']);
-		if(is_array($route) && is_array($uri)){
-			$rsize = sizeof($route);
-			$size = sizeof($uri);
-			if($rsize != $size)
-				throw new NoRouteException();
-			$count = 0;
-			for($i = 0; $i < sizeof($uri); $i++){
-				$vroute = null;
-				$vuri = null;
-				if(isset($route[$i]))
-					$vroute = $route[$i];
-				if(isset($uri[$i]))
-					$vuri = $uri[$i];
-				$tag = (preg_match('/{([a-zA-Z])*}/i', $vroute));
-				if($tag == 1){
-					$count++;
-					$key = rtrim(ltrim($vroute, '{'), '}');
-					Registry::set($key, $vuri);
-				}else{
-					if($vuri == $vroute){
-						$count++;
-					}
-				}
-			}
-			if($size !== $count)
-				throw new NoRouteException();
-		}
-		return $ret;
-	}
-}
-
 /**
 * 
 */
@@ -176,16 +73,13 @@ class RoutesHash extends Hash{
 */
 class Template
 {
-	public $data;
-	
-	private $layout;
+	private $controller;
 	
 	public static $current_view_path;
 	
-	public function __construct($layout)
+	public function __construct($controller)
 	{
-		$this->data = new Hash();
-		$this->layout = $layout;
+		$this->controller = $controller;
 	}
 
 	public function display()
@@ -194,15 +88,23 @@ class Template
 		self::$current_view_path = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['controller']);
 		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['action']);
 		$path = strtolower($file) . '.php';
-		if($viewPath !== '')
+		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
-		extract($this->data->export());
+		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;
 		$pr_template = ob_get_contents();
 		ob_clean();
-		include 'layouts/' . $this->layout . '.php';
+		include 'layouts/' . $this->controller->pr_layout . '.php';
 		return ob_get_clean();
+	}
+	/**
+	 * Get the declared vars that are available to the template.
+	 * @return array
+	 */
+	public function vars()
+	{
+		return get_object_vars($this->controller);
 	}
 	
 	public static function getCurrentViewPath()
@@ -246,21 +148,17 @@ class TemplatePartial
 */
 class Controller
 {
-	protected $layout = 'application';
-	
+	public $pr_layout = 'application';
+	public $pr_controller;
 	public function __construct()
 	{
-		$this->Template = new Template($this->layout);
+		$this->pr_controller = get_class($this);
 	}
 	/**
 	 * No controller action.
 	 */
 	public function prNoController(){}
 	
-	public function set($key, $value)
-	{
-		$this->Template->data->set($key, $value);
-	}
 }
 
 class Profile

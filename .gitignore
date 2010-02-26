@@ -1,1 +1,6 @@
 .DS_Store
+app/controllers/*
+app/helpers/*
+app/models/*
+app/views/*
+lib/*

@@ -1,1 +1,0 @@
-Woot student index!
