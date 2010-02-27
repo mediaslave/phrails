@@ -37,3 +37,8 @@ function pr_path($name)
 	array_shift($args);
 	return Routes::path($name, $args);
 }
+
+function pr_link($display, $path)
+{
+	return new A($display, $path);
+}

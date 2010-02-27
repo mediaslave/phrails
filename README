@@ -1,0 +1,16 @@
+To set it up add the following to virtual host:
+
+<VirtualHost *:80>
+    ServerName php-rails
+    DocumentRoot /path/to/cloned/directory/php-rails
+
+	RewriteEngine off
+
+    <Location />
+        RewriteEngine on
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
+    </Location>
+
+</VirtualHost>

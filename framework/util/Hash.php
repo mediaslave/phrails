@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 
+ */
 class Hash
 {
 	public $array;
@@ -16,9 +18,7 @@ class Hash
 	
 	public function get($key)
 	{
-		if(!$this->isKey($key))
-			throw new Exception('The key specified does not exist.');
-		return $this->array[$key];
+		return ($this->isKey($key)) ? $this->array[$key] : null;
 	}
 	
 	public function isKey($key)
