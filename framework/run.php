@@ -1,23 +1,11 @@
 <?php
 session_start();
 
-set_include_path(get_include_path() . 
-				 PATH_SEPARATOR . './app/controllers' . 
-				 PATH_SEPARATOR . './app/models' . 
-				 PATH_SEPARATOR . './app/views' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/__view__' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/exceptions' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/helpers' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/html'. 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/template'. 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/util');
-				
+//Load the paths
+//include 'paths.php';
 
-//Load the default view helpers
-include 'view.php';
-
-//Load the autoload mechanism
-include 'autoload.php';
+//Load all of the helper methods
+include_all_in_folder(dirname(__FILE__) . '/helpers');
 
 //Instantiate the Routes object so that the user can specify the routes for the project.
 $Routes = new Routes;
@@ -25,8 +13,8 @@ $Routes = new Routes;
 $Router = new Router;
 
 //Bring in the user routes
-include './config/routes.php';
-//Registry::get('pr-routes-path');
+$routes_file = Registry::get('pr-routes-path');
+include $routes_file;
 
 try{
 	//Figure out what page the user is trying to access.

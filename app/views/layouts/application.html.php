@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div class="menu">
-		<?= pr_render('layouts/_menu.html.php')?>
+		<?= render('layouts/_menu.html.php')?>
 	</div>
 	<?= $pr_template ?>
 </body>

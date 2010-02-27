@@ -5,15 +5,16 @@
 class A extends Tag
 {
 	
-	function __construct($display, $href="", $class='')
+	function __construct($display, $path, $options=null)
 	{
 		$this->display = $display;
-		$this->href = $href;
-		$this->class = $class;
+		$this->href = $path;
+		if($options !== null)
+			$this->options = OptionsParser::toString($options);
 	}
 	public function start()
 	{
-		return '<a href="' . $this->href . '">';
+		return '<a href="' . $this->href . '"' . $this->options . '>';
 	}
 	public function end()
 	{

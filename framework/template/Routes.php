@@ -20,11 +20,9 @@ class Routes{
 		$this->add('delete-' . $name, $path . '/{id}/delete', $controller, 'delete');
 	}
 	
-	public static function path($name){
-		$args = func_get_args();
-		$args = self::prepareArgs($args);
+	public static function path($name, $options=null){
+		$args = OptionsParser::toArray($options);
 		$path = preg_replace('/{([a-zA-Z])*}/i', '%s', self::$Hash->get($name,'path'));
-		$args = (is_array($args[0])) ? $args[0] : array();
 		$match = preg_match('/(\%s)/', $path);
 		if($match && empty($args))
 			throw new Exception("The path '$name' should be passed some arguments.");
@@ -35,13 +33,7 @@ class Routes{
 	{
 		return self::$Hash;
 	}
-	
-	public static function prepareArgs($args)
-	{
-		//remove the first element of the array.
-		array_shift($args);
-		return $args;
-	}
+
 	public function root($path, $controller, $action)
 	{
 		if(self::$Hash->isKey('root'))

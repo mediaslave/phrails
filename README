@@ -1,10 +1,32 @@
-To set it up add the following to virtual host:
+To set it up, under Apache, add the following to virtual host:
 
 <VirtualHost *:80>
     ServerName php-rails
-    DocumentRoot /path/to/cloned/directory/php-rails
+    DocumentRoot /home/jpalmer/projects/php/php-rails
 
-	RewriteEngine off
+    setenv PHP_RAILS_ENV development
+                
+    RewriteEngine off
+        
+    <Location /app>
+        Order allow,deny
+        Deny from all
+    </Location>
+        
+    <Location /config>
+        Order allow,deny
+        Deny from all
+    </Location>
+                
+    <Location /framework>
+        Order allow,deny
+        Deny from all
+    </Location>
+        
+    <Location /lib>
+        Order allow,deny
+        Deny from all  
+    </Location>
 
     <Location />
         RewriteEngine on
@@ -12,5 +34,5 @@ To set it up add the following to virtual host:
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
     </Location>
-
+        
 </VirtualHost>
