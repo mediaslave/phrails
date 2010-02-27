@@ -8,9 +8,6 @@
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
-	<div class="menu">
-		<?= render('layouts/_menu.html.php')?>
-	</div>
 	<?= $pr_template ?>
 </body>
 </html>
