@@ -12,31 +12,27 @@ class RoutesHashTest extends PHPUnit_Framework_TestCase
 	}
 	/**
 	 * @test
-	 * @expectedException Exception
 	 **/
-	public function Throws_exception_when_no_name_is_set_first()
+	public function Throws_exception_when_name_is_not_set_first()
 	{
 		try {
-	         $this->o->set('foo', 'bar');
-	     }catch (Exception $expected) {
+	    	$this->o->set('foo', 'bar');
+	    }catch (Exception $e) {
 			return;
-	     }
-	 
-	     $this->fail('An expected exception has not been raised.');
+	    }
+	    $this->fail('An expected exception has not been raised.');
 	}
 	/**
 	 * @test
-	 * @expectedException Exception
 	 **/
 	public function Throws_exception_when_there_is_no_key_set()
 	{
 		try {
 	         $this->o->get('foo');
-	     }catch (Exception $exception) {
+	    }catch (Exception $e) {
 			return;
-	     }
-	 
-	     $this->fail('An expected exception has not been raised.');
+	    }
+	 	$this->fail('An expected exception has not been raised.');
 	}
 	/**
 	 * @test
@@ -45,7 +41,7 @@ class RoutesHashTest extends PHPUnit_Framework_TestCase
 	{
 		$this->o->route('home', 'root', 'Home', 'index');
 		$this->assertEquals('home', $this->o->get('home', 'name'));
-		$this->assertEquals('root', $this->o->get('home', 'route'));
+		$this->assertEquals('root', $this->o->get('home', 'path'));
 		$this->assertEquals('Home', $this->o->get('home', 'controller'));
 		$this->assertEquals('index', $this->o->get('home', 'action'));
 	}

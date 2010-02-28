@@ -26,7 +26,7 @@ class Registry
 	public static function export()
 	{
 		self::init();
-		return self::$Hash->array;
+		return self::$Hash->export();
 	}
 	
 	private function init()
