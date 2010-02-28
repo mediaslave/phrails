@@ -36,8 +36,6 @@ class Routes{
 
 	public function root($path, $controller, $action)
 	{
-		if(self::$Hash->isKey('root'))
-			throw new Exception('You may only define one root route.');
 		self::$Hash->route('root', $path, $controller, $action);
 	}
 }

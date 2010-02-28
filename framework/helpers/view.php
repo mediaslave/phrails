@@ -18,9 +18,47 @@
  * render('home/_count.php', array('count'=>array('1','2','3')))
  * render('login/_login.php')
  *
+ * @param string
+ * @param array
  * @return string
  */
 function render(){
 	$args = func_get_args();
 	return TemplatePartial::render($args);
+}
+
+/**
+ * Create a link tag for the stylesheet
+ *
+ * @param string $file
+ * @param string $options=''
+ * @return string
+ * @author Justin Palmer
+ **/
+function stylesheet_link_tag($file, $options='')
+{
+	return new LinkCss($file, $options);
+}
+/**
+ * Set the content for a certain var from the view.
+ *
+ * @param string $key 
+ * @param string $value 
+ * @return void
+ * @author Justin Palmer
+ */
+function content_for($key, $value){
+	(isset(Template::$ContentFor->$key)) 
+					? Template::$ContentFor->$key = $value . Template::$ContentFor->$key
+					: Template::$ContentFor->$key = $value;
+}
+/**
+ * Get the value of an existing content_for key.
+ *
+ * @return string $key
+ * @author Justin Palmer
+ **/
+function get_content_for($key)
+{
+	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
 }

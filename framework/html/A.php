@@ -7,10 +7,9 @@ class A extends Tag
 	
 	function __construct($display, $path, $options=null)
 	{
+		parent::__construct($options);
 		$this->display = $display;
 		$this->href = $path;
-		if($options !== null)
-			$this->options = OptionsParser::toString($options);
 	}
 	public function start()
 	{

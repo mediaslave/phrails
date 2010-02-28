@@ -29,7 +29,7 @@ class Registry
 		return self::$Hash->export();
 	}
 	
-	private function init()
+	private static function init()
 	{
 		if(self::$Hash === null){
 			self::$Hash = new Hash();

@@ -6,9 +6,16 @@ set_include_path(get_include_path() .
 				 PATH_SEPARATOR . dirname(__FILE__) . '/template'. 
 				 PATH_SEPARATOR . dirname(__FILE__) . '/util');
 
+/**
+ * Autoload method to load items from the app.
+ *
+ * @param string $class_name
+ * @package framework
+ * @author Justin Palmer
+ */
 function __autoload($class_name) {
 	$file = $class_name . '.php';
-	$included = @include_once($file);
+	$included = include_once($file);
 	if($included === false){
 		//Declaring the class with eval is a hack
 		//__autoload exception throwing is not officially supported until 5.3
@@ -16,7 +23,13 @@ function __autoload($class_name) {
 		throw new NoControllerException();
 	}
 }				
-
+/**
+ * Include all of the files in a folder that end with .php.
+ *
+ * @param string $folder
+ * @package framework
+ * @author Justin Palmer
+ */
 function include_all_in_folder ($folder) {
     foreach (glob($folder . '/*.php') as $file) {
         include $file;
