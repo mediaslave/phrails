@@ -1,11 +1,24 @@
 <?php
 /**
-* 
-*/
+ * Route the request to the correct controller and action
+ *
+ * @package template
+ * @author Justin Palmer
+ */
 class Router
 {	
 	/**
+	 * The extension of the request
+	 *
+	 * @var string
+	 */
+	private $extension = "html";
+
+	/**
 	 * Find the route that is a match from the path in the REQUEST_URI
+	 *
+	 * @return array
+	 * @author Justin Palmer
 	 */
 	public function findByPath()
 	{
@@ -21,13 +34,13 @@ class Router
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
 			$ret = $verified;
-		//We only handle .html files for now.  We will except other types later.
-		$ret['view-type'] = '.html';
+		//the view-type extension
+		$ret['view-type'] = $this->extension;
+		//Return the route array
 		return $ret;
 	}
 	/**
 	 * Find the route that matches the closest.
-	 * @return array
 	 */
 	private function findClosestRoute($request_uri)
 	{
@@ -36,7 +49,6 @@ class Router
 		$ret = array();
 		$controller_action = null;
 		foreach($Routes->export() as $key => $value){
-			//$_SERVER['REQUEST_URI]
 			if($request_uri == $value['path']){
 				$ret = $value;
 				break;
@@ -55,7 +67,7 @@ class Router
 		return array('ret' => $ret, 'controller-action' => $controller_action);
 	}
 	/**
-	 * Verify that the route that is the closests, is actually a real route.
+	 * Verify that the route that is the closest, is actually a real route.
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
@@ -96,6 +108,12 @@ class Router
 	private function requestUri()
 	{
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
-		return $request_uri[0];
+		$extension = explode('.', $request_uri[0]);
+		//print_r($extension);
+		$size = sizeof($extension);
+		if($size > 0 && $request_uri[0] != $extension[0])
+			$this->extension = $extension[$size - 1];
+		//print $this->extension;
+		return rtrim($extension[0], $this->extension);
 	}
 }

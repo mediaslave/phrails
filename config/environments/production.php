@@ -1,6 +1,6 @@
 <?php
 //Set the domain that this app is running on.
-Registry::set('pr-domain-uri', 'http://php-rails');
+Registry::set('pr-domain-uri', '');
 
 //Set where the app is installed.
 //  '/' represents the application being installed on the root.

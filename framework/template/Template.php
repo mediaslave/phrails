@@ -35,13 +35,37 @@ class Template
 	public function display()
 	{
 		$Route = Registry::get('pr-route');
+		//var_dump($Route);
+		try{
+			$this->checkViewType($Route);
+		}catch(NoViewTypeException $e){
+			$Route['controller'] = '';
+			$Route['action'] = 'prNoViewType';
+			$Route['requested'] = $e->getMessage();
+			$Route['view-type'] = 'html';
+			Registry::set('pr-route', $Route);
+			$this->Controller->pr_layout = null;
+		}
 		self::$current_view_path = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['controller']);
 		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['action']);
-		$path = strtolower($file) . $this->Controller->pr_view_type . '.php';
+		$path = strtolower($file) . '.' . $Route['view-type'] . '.php';
 		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
-		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($path) 
+		if($Route['view-type'] != 'html')
+			$this->Controller->pr_layout = null;
+		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($path, $Route['view-type']) 
 													   : $this->displayWithLayout($path);
+	}
+	/**
+	 * Make sure there is a view of the right type.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function checkViewType($route)
+	{
+		if(!$this->Controller->pr_view_types->isKey($route['view-type']))
+			throw new NoViewTypeException($this->Controller->pr_view_types, $route['view-type']);
 	}
 	/**
 	 * Get the declared vars that are available to the template.
@@ -77,20 +101,22 @@ class Template
 	 */
 	private function displayWithLayout($path)
 	{
-		extract($this->objectVars($this->Controller), EXTR_REFS);
 		ob_start();
-		include $path;
-		$pr_view = ob_get_contents();
+			extract($this->objectVars($this->Controller), EXTR_REFS);
+			include $path;
+			$pr_view = ob_get_contents();
 		ob_clean();
-		extract($this->objectVars(self::$ContentFor), EXTR_REFS);
-		include 'layouts/' . $this->Controller->pr_layout . '.html.php';
+			extract($this->objectVars(self::$ContentFor), EXTR_REFS);
+			include 'layouts/' . $this->Controller->pr_layout . '.html.php';
 		return ob_get_clean();
 	}
 	/**
 	 * @nodoc
 	 */
-	private function displayNoLayout($path)
+	private function displayNoLayout($path, $type)
 	{
+		if($type == 'json')
+			return json_encode($this->Controller->pr_view_types->get('json'));
 		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;

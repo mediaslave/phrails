@@ -54,7 +54,7 @@ abstract class Tag
 	private function addOptions($options)
 	{
 		$options = $this->options . ',' . $options;
-		$this->options = ltrim($options, ',');
+		$this->options = ltrim(rtrim($options, ','), ',');
 		return $this->options;
 	}
 }

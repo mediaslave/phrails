@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-//Load the paths
-//include 'paths.php';
-
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
 
@@ -13,9 +10,9 @@ $Routes = new Routes;
 $Router = new Router;
 
 //Bring in the user routes
-$routes_file = Registry::get('pr-routes-path');
-include $routes_file;
+include Registry::get('pr-routes-path');
 
+//Process the request.
 try{
 	//Figure out what page the user is trying to access.
 	$route = $Router->findByPath();
@@ -27,22 +24,26 @@ try{
 	$action = $route['action'];
 	//Instantiate the correct controller and call the action.
 	$Controller = new $controller();
+	//Make sure the user has implemented the action
 	if(!method_exists($Controller, $action))
 		throw new NoActionException();
+	//Process the action
 	$Controller->$action();	
 	//This is a hack.  There is no way to get the method called from a class.
 	$Controller->pr_action = $action;
 }catch(NoRouteException $e){
 	Registry::set('pr-route', array('controller' => '',
 									'action' => 'prNoRoute',
-									'requested' => $_SERVER['REQUEST_URI']));
+									'requested' => $_SERVER['REQUEST_URI'],
+									'view-type' => 'html'));
 	$Controller = new Controller();
 	$Controller->pr_layout = null;
 	$Controller->prNoRoute();
 }catch(NoControllerException $e){	
 	Registry::set('pr-route', array('controller' => '',
 									'action' => 'prNoController',
-									'requested' => $controller));
+									'requested' => $controller,
+									'view-type' => 'html'));
 	$Controller = new Controller();
 	$Controller->pr_layout = null;
 	$Controller->prNoController();
@@ -50,7 +51,8 @@ try{
 	Registry::set('pr-route', array('controller' => '',
 									'action' => 'prNoAction',
 									'no-action' => $action,
-									'no-controller'=> $controller));
+									'no-controller'=> $controller,
+									'view-type' => 'html'));
 	$Controller = new Controller();
 	$Controller->pr_layout = null;
 	$Controller->prNoAction();

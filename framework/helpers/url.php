@@ -30,3 +30,39 @@ function link_to($display, $path, $options=null)
 {
 	return new A($display, $path, $options);
 }
+
+/**
+ * Create a link_to if a condition is true
+ *
+ * @param boolean $condition
+ * @param string $display
+ * @param string $path
+ * @param string $options
+ * @return string
+ * @author Justin Palmer
+ **/
+function link_to_if($condition, $display, $path, $options=null)
+{
+	var_dump($condition);
+	$ret = '';
+	if($condition){
+		$ret = link_to($display, $path, $options);
+	}
+	return $ret;
+}
+
+/**
+ * Create a link_to unless a condition is true
+ *
+ * @param boolean $condition
+ * @param string $display
+ * @param string $path
+ * @param string $options
+ * @return string
+ * @author Justin Palmer
+ **/
+function link_to_unless($condition, $display, $path, $options=null)
+{
+	$condition = ($condition) ? false : true;
+	return link_to_if($condition, $display, $path, $options);
+}

@@ -30,7 +30,7 @@ class Controller
 	 *
 	 * @var string
 	 */
-	public $pr_view_type = '.html';
+	public $pr_view_types;
 	/**
 	 * Initialize some vars
 	 *
@@ -43,6 +43,48 @@ class Controller
 		$this->pr_get = new Hash($_GET);
 		$this->pr_post = new Hash($_POST);
 		$this->pr_server = new Hash($_SERVER);
+		$this->pr_view_types = new Hash(array('html'=>'html'));
+	}
+	/**
+	 * Render a different action.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function render($action)
+	{
+		# code...
+	}
+	/**
+	 * Redirect to a different path;
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function redirect_to($path)
+	{
+		$path = ltrim($path, '/');
+		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
+		exit();
+	}
+	/**
+	 * Respond to the various formats
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function respond_to()
+	{
+		$args = func_get_args();
+		$set = array();
+		foreach($args as $key => $value){
+			if(is_array($value)){
+				$set[key($value)] = current($value);
+			}else{
+				$set[$value] = $value;
+			}
+		}
+		$this->pr_view_types = new Hash($set);
 	}
 	/**
 	 * No route action.
@@ -64,6 +106,15 @@ class Controller
 	 */
 	public function prNoAction(){
 		$this->pr_action = 'prNoAction';
+	}
+	/**
+	 * No respond to type to respond with
+	 *
+	 * @author Justin Palmer
+	 **/
+	public function prNoViewType()
+	{
+		$this->pr_action = 'prNoViewType';
 	}
 	
 }

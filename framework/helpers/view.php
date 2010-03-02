@@ -21,6 +21,7 @@
  * @param string
  * @param array
  * @return string
+ * @author Justin Palmer
  */
 function render(){
 	$args = func_get_args();
@@ -29,6 +30,13 @@ function render(){
 
 /**
  * Create a link tag for the stylesheet
+ *
+ * stylesheet_link_tag('screen', 'media:all') will generate
+ * <link href="/public/stylesheets/screen.css" media="all" type="text/css" />
+ *
+ * Link to a css file in a sub folder
+ * stylesheet_link_tag('sub/folder/screen');
+ * <link href="/public/stylesheets/sub/folder/screen.css" type="text/css" />
  *
  * @param string $file
  * @param string $options=''
@@ -41,6 +49,9 @@ function stylesheet_link_tag($file, $options='')
 }
 /**
  * Set the content for a certain var from the view.
+ * 
+ * Use of this method will over right any vars set in the controller 
+ * that are used in the layout. 
  *
  * @param string $key 
  * @param string $value 
@@ -58,7 +69,6 @@ function content_for($key, $value){
  * @return string $key
  * @author Justin Palmer
  **/
-function get_content_for($key)
-{
+function get_content_for($key){
 	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
 }
