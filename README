@@ -9,22 +9,22 @@ To set it up, under Apache, add the following to virtual host:
     RewriteEngine off
         
     <Location /app>
-        Order allow,deny
         Deny from all
     </Location>
         
     <Location /config>
-        Order allow,deny
         Deny from all
     </Location>
                 
     <Location /framework>
-        Order allow,deny
         Deny from all
     </Location>
         
     <Location /lib>
-        Order allow,deny
+        Deny from all  
+    </Location>	
+
+    <Location /vendor>
         Deny from all  
     </Location>
 
