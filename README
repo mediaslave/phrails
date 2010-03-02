@@ -34,5 +34,4 @@ To set it up, under Apache, add the following to virtual host:
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
     </Location>
-        
 </VirtualHost>
