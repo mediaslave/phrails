@@ -13,6 +13,63 @@ class Router
 	 * @var string
 	 */
 	private $extension = "html";
+	
+	/**
+	 * Route the request
+	 *
+	 * @todo this method can be clean up considerably.
+	 * 
+	 * @return Controller
+	 * @author Justin Palmer
+	 **/
+	public function route()
+	{
+		//Process the request.
+		try{
+			//Figure out what page the user is trying to access.
+			$route = $this->findByPath();
+			//Set the current routes information in the registry.
+			Registry::set('pr-route', $route);
+
+			//Create the controller vars for instantiation and calling.
+			$controller = $route['controller'] . 'Controller';
+			$action = $route['action'];
+			//Instantiate the correct controller and call the action.
+			$Controller = new $controller();
+			//This is a hack.  There is no way to get the method called from a class.
+			$Controller->pr_action = $action;
+			//Make sure the user has implemented the action
+			if(!method_exists($Controller, $action))
+				throw new NoActionException();
+				
+		}catch(NoRouteException $e){
+			Registry::set('pr-route', array('controller' => '',
+											'action' => 'prNoRoute',
+											'requested' => $_SERVER['REQUEST_URI'],
+											'view-type' => 'html'));
+			$Controller = new Controller();
+			$Controller->pr_layout = null;
+			$Controller->pr_action = 'prNoRoute';
+		}catch(NoControllerException $e){	
+			Registry::set('pr-route', array('controller' => '',
+											'action' => 'prNoController',
+											'requested' => $controller,
+											'view-type' => 'html'));
+			$Controller = new Controller();
+			$Controller->pr_layout = null;
+			$Controller->pr_action = 'prNoController';
+		}catch(NoActionException $e){	
+			Registry::set('pr-route', array('controller' => '',
+											'action' => 'prNoAction',
+											'no-action' => $action,
+											'no-controller'=> $controller,
+											'view-type' => 'html'));
+			$Controller = new Controller();
+			$Controller->pr_layout = null;
+			$Controller->pr_action = 'prNoAction';
+		}
+		return $Controller;
+	}
 
 	/**
 	 * Find the route that is a match from the path in the REQUEST_URI
@@ -20,7 +77,7 @@ class Router
 	 * @return array
 	 * @author Justin Palmer
 	 */
-	public function findByPath()
+	private function findByPath()
 	{
 		//Get the correct request_uri
 		$request_uri = $this->requestUri();

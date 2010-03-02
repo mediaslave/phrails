@@ -9,6 +9,20 @@
 class TemplateCache extends Template
 {
 	private $cache_types = array('file');
+	private $is_valid_cache_type = false;
+	private $cache_type=null;
+	/**
+	 * Constructor
+	 *
+	 * @param $controller Controller
+	 * @return TemplateCache
+	 * @author Justin Palmer
+	 **/
+	public function __construct($controller)
+	{
+		parent::__construct($controller);
+		$this->cache_type =  Registry::get('pr-cache-template');
+	}
 	/**
 	 * The display method that including caching.
 	 *
@@ -19,15 +33,16 @@ class TemplateCache extends Template
 	{
 		//Get the cache type.
 		$cache_type = Registry::get('pr-cache-template');
+		
+
 		//If the cache type is null just return the template.
 		//Or, if the cache_type is not one of the supported cache_types
 		if($this->view_path === null  || 
 			$cache_type === null || 
-		   !in_array($cache_type, $this->cache_types)){
+		   !$this->isValidCacheType($cache_type)){
 			return parent::display();
 		}
 		//If it is a valid cache type then call the method and return the template view.
-		$cache_type = ucfirst($cache_type);
 		$Cache = $this->factory($cache_type);
 		$cached = $Cache->isCached();
 		if($cached !== false){
@@ -50,8 +65,19 @@ class TemplateCache extends Template
 	 **/
 	private function factory($type)
 	{
+		$cache_type = ucfirst($type);
 		$Object =  'Cache' . $type;
 		$Cache = new $Object(sha1($this->view_path));
 		return $Cache;
+	}
+	/**
+	 * Is the cache type valid?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function isValidCacheType($type)
+	{
+		return ($this->is_valid_cache_type = (in_array($type, $this->cache_types)));
 	}
 }

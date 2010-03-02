@@ -31,6 +31,9 @@ class CacheFile extends Cache
 		$this->config = Registry::get('pr-cache-config');
 		if($this->config === null)
 			throw new Exception('Please set up the cache config');
+			
+		if(parent::isCached())
+			return true;
 		
 		//Set the file path.
 		$this->path = $this->config->path . '/' . $this->key;

@@ -28,7 +28,9 @@ abstract class Cache
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	abstract public function isCached();
+	public function isCached(){
+		return $this->is_cached;
+	}
 	/**
 	 * Get the cached file.
 	 *
