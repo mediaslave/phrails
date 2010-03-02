@@ -58,4 +58,4 @@ try{
 	$Controller->prNoAction();
 }
 //Register the controller with the Template.
-$Template = new Template($Controller);
+$Template = new TemplateCache($Controller);

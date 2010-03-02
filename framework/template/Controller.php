@@ -108,7 +108,7 @@ class Controller
 		$this->pr_action = 'prNoAction';
 	}
 	/**
-	 * No respond to type to respond with
+	 * No view type to respond with
 	 *
 	 * @author Justin Palmer
 	 **/

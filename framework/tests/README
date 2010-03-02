@@ -2,4 +2,4 @@ The command to run the tests should look like:
 
 phpunit --bootstrap='bootstrap.php' --colors .
 
-When running from the tests directory.
+When running from the 'tests' directory.

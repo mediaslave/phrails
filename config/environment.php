@@ -8,7 +8,8 @@ set_include_path(get_include_path() .
 	 PATH_SEPARATOR . './lib');
 
 //Load all of the applications helpers.
-include_all_in_folder(realpath('./app/helpers'));
+$app_folder = realpath('./app');
+include_all_in_folder($app_folder . '/helpers');
 
 //Set where the routes file is.
 Registry::set('pr-routes-path', dirname(__FILE__) . '/routes.php');

@@ -1,4 +1,6 @@
 <?php
+$start = (float) array_sum(explode(' ',microtime()));
+
 error_reporting(E_ALL);
 
 /*
@@ -20,3 +22,7 @@ include $framework_install_path . '/run.php';
 $foo = 'index.php';
 //Display the view.
 print $Template->display();
+
+$end = (float) array_sum(explode(' ',microtime()));
+
+echo "Processing time: ". sprintf("%.4f", ($end-$start))." seconds";

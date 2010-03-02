@@ -23,6 +23,20 @@ class Routes{
 	function __construct(){
 		self::$Hash = new RoutesHash();
 	}
+	
+	/**
+	 * Declare the root route
+	 *
+	 * @param string $path 
+	 * @param string $controller 
+	 * @param string $action 
+	 * @return void
+	 * @author Justin Palmer
+	 */
+	public function root($path, $controller, $action)
+	{
+		self::$Hash->route('root', $path, $controller, $action);
+	}
 	/**
 	 * Add a route to the hash.
 	 *
@@ -78,18 +92,5 @@ class Routes{
 	public static function routes()
 	{
 		return self::$Hash;
-	}
-	/**
-	 * Declare the root route
-	 *
-	 * @param string $path 
-	 * @param string $controller 
-	 * @param string $action 
-	 * @return void
-	 * @author Justin Palmer
-	 */
-	public function root($path, $controller, $action)
-	{
-		self::$Hash->route('root', $path, $controller, $action);
 	}
 }
