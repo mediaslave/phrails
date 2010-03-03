@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+//Default the pr-install-path to the root of the webserver.
+$base_uri = '/';
+//If it is set in the server config, then we will use it.
+if(isset($_SERVER['PHP_RAILS_BASE_URI']))
+	$base_uri = $_SERVER['PHP_RAILS_BASE_URI'];
+//Set the install path.
+Registry::set('pr-install-path', $base_uri);
+
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
 
@@ -20,7 +28,9 @@ $Template = new TemplateCache($Controller);
 
 //Does this template have a cache?
 $is_valid_type = $Template->isValidCacheType();
-$is_cached = $Template->Cache->isCached();
+$is_cached = null;
+if($is_valid_type)
+	$is_cached = $Template->Cache->isCached();
 
 //Call the action
 $Controller->prRun($is_valid_type, $is_cached);

@@ -42,13 +42,25 @@ class Controller
 	 *
 	 * @var array
 	 */
-	public $pr_cache_only = array();
+	protected $pr_cache_only = array();
 	/**
 	 * Array of actions that should NOT be cached.
 	 *
 	 * @var string
 	 */
-	public $pr_cache_except = array();
+	protected $pr_cache_except = array();
+	/**
+	 * The before filters currently registered.
+	 *
+	 * @var string
+	 */
+	protected $pr_before_filters = array();
+	/**
+	 * The after filters currently registered.
+	 *
+	 * @var string
+	 */
+	protected $pr_after_filters = array();
 	/**
 	 * Initialize some vars
 	 *
@@ -72,25 +84,125 @@ class Controller
 	 **/
 	public function prRun($is_valid_type, $is_cached)
 	{
-		$action = $this->pr_action;
+		//Has the action ran?
+		$action_ran = false;
+		//Is the cache type valid?
 		if($is_valid_type){
+			//Set the controller var to whether or not we need to cache.
 			$this->pr_do_cache = $this->needsCached();
-			if($is_cached == false && $this->pr_do_cache){
-				$this->$action();
+			//if the file is cached AND
+			//if we need to do the cache
+			//Then run the action
+			if($is_cached === false && $this->pr_do_cache){
+				$this->prRunAction();
+			//If we do not need to run the cache then just call the action.
 			}elseif(!$this->pr_do_cache){
-				$this->$action();
+				$this->prRunAction();
 			}
+		//If the cache type is not valid then just run the action.
 		}else{
-			$this->$action();
+			$this->prRunAction();
 		}
 	}
+	/**
+	 * Render a different action.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function render($action)
+	{
+		# code...
+	}
+	/**
+	 * Redirect to a different path;
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function redirect_to($path)
+	{
+		$path = ltrim($path, '/');
+		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
+		exit();
+	}
+	/**
+	 * Respond to the various formats
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function respond_to()
+	{
+		$args = func_get_args();
+		$set = array();
+		foreach($args as $key => $value){
+			if(is_array($value)){
+				$set[key($value)] = current($value);
+			}else{
+				$set[$value] = $value;
+			}
+		}
+		$this->pr_view_types = new Hash($set);
+	}
+	/**
+	 * Run the action with the filters
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function prRunAction()
+	{
+		$action = $this->pr_action;
+		$this->filter($this->pr_before_filters);
+		$this->$action();
+		$this->filter($this->pr_after_filters);
+	}
+	/**
+	 * Run the before filters that are registered for an action.
+	 *
+	 * @param $array $pr_before_filter or $pr_after_filter
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function filter($array)
+	{
+		if(isset($array[$this->pr_action])){
+			$filter = $array[$this->pr_action];
+			if(is_array($filter)){
+				foreach($filter as $method){
+					$this->runFilter($method);
+				}
+			}else{
+				$this->runFilter($filter);
+			}
+		}
+	}
+	
+	/**
+	 * Run the filter specified or throw an exception
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function runFilter($filter)
+	{
+		//If the method exists lets call it.
+		if(method_exists($this, $filter)){
+			$this->$filter();
+		//If it does not throw an exception.
+		}else{
+			throw new Exception("The filter: '$filter()' does not exist please create it in your controller.");
+		}
+	}
+	
 	/**
 	 * Is the action in the cacheable actions?
 	 *
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function needsCached()
+	private function needsCached()
 	{
 		//If the cache only and cache except array's are empty then return false.
 		if(empty($this->pr_cache_only) && empty($this->pr_cache_except))
@@ -103,47 +215,6 @@ class Controller
 			return false;
 		//All else fails don't cache.
 		return true;
-	}
-	/**
-	 * Render a different action.
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function render($action)
-	{
-		# code...
-	}
-	/**
-	 * Redirect to a different path;
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function redirect_to($path)
-	{
-		$path = ltrim($path, '/');
-		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
-		exit();
-	}
-	/**
-	 * Respond to the various formats
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function respond_to()
-	{
-		$args = func_get_args();
-		$set = array();
-		foreach($args as $key => $value){
-			if(is_array($value)){
-				$set[key($value)] = current($value);
-			}else{
-				$set[$value] = $value;
-			}
-		}
-		$this->pr_view_types = new Hash($set);
 	}
 	/**
 	 * No route action.
