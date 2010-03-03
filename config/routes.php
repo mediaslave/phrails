@@ -4,7 +4,7 @@
  */
 $Routes->add('edit-profile', '/profile/{id}/edit', 'Profile', 'edit');
 
-$Routes->add('hello-world', '/hello-world', 'Home', 'helloWorld');
+$Routes->add('world', '/world', 'Home', 'world');
 
 $Routes->root('/', 'Home', 'index');
 

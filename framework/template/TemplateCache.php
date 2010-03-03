@@ -11,6 +11,7 @@ class TemplateCache extends Template
 	private $cache_types = array('file');
 	private $is_valid_cache_type = false;
 	private $cache_type=null;
+	public $Cache;
 	/**
 	 * Constructor
 	 *
@@ -22,6 +23,8 @@ class TemplateCache extends Template
 	{
 		parent::__construct($controller);
 		$this->cache_type =  Registry::get('pr-cache-template');
+		if($this->isValidCacheType())
+			$this->factory();
 	}
 	/**
 	 * The display method that including caching.
@@ -30,30 +33,28 @@ class TemplateCache extends Template
 	 * @author Justin Palmer
 	 **/
 	public function display()
-	{
-		//Get the cache type.
-		$cache_type = Registry::get('pr-cache-template');
-		
-
+	{		
+		//var_dump($this->Controller);
 		//If the cache type is null just return the template.
 		//Or, if the cache_type is not one of the supported cache_types
 		if($this->view_path === null  || 
-			$cache_type === null || 
-		   !$this->isValidCacheType($cache_type)){
+			(!$this->Controller->pr_do_cache) ||
+		   (!$this->isValidCacheType())
+		  )
+		{
 			return parent::display();
 		}
 		//If it is a valid cache type then call the method and return the template view.
-		$Cache = $this->factory($cache_type);
-		$cached = $Cache->isCached();
+		$cached = $this->Cache->isCached();
 		if($cached !== false){
 			print 'from cache<br/><br/>';
-			return $Cache->get();
+			return $this->Cache->get();
 		}
 		//If it is not cached then display the non-cached version.
 		else{
 			$content = parent::display();
-			$Cache->value = $content;
-			$Cache->cache();
+			$this->Cache->value = $content;
+			$this->Cache->cache();
 			return $content;
 		}
 	}
@@ -63,12 +64,12 @@ class TemplateCache extends Template
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	private function factory($type)
+	private function factory()
 	{
-		$cache_type = ucfirst($type);
+		$type = ucfirst($this->cache_type);
 		$Object =  'Cache' . $type;
-		$Cache = new $Object(sha1($this->view_path));
-		return $Cache;
+		$this->Cache = new $Object(sha1($this->view_path));
+		return $this->Cache;
 	}
 	/**
 	 * Is the cache type valid?
@@ -76,8 +77,8 @@ class TemplateCache extends Template
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function isValidCacheType($type)
+	public function isValidCacheType()
 	{
-		return ($this->is_valid_cache_type = (in_array($type, $this->cache_types)));
+		return ($this->is_valid_cache_type = (in_array($this->cache_type, $this->cache_types)));
 	}
 }

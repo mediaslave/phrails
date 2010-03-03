@@ -4,7 +4,8 @@ To set it up, under Apache, add the following to virtual host:
     ServerName php-rails
     DocumentRoot /home/jpalmer/projects/php/php-rails
 
-    setenv PHP_RAILS_ENV development
+    setenv PHP_RAILS_BASE_URI /
+	setenv PHP_RAILS_ENV development
                 
     RewriteEngine off
         

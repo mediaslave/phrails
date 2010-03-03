@@ -15,9 +15,12 @@ $Router = new Router;
 //Route the request
 $Controller = $Router->route();
 
-//Call the action
-$action = $Controller->pr_action;
-$Controller->$action();
-
 //Register the controller with the Template.
 $Template = new TemplateCache($Controller);
+
+//Does this template have a cache?
+$is_valid_type = $Template->isValidCacheType();
+$is_cached = $Template->Cache->isCached();
+
+//Call the action
+$Controller->prRun($is_valid_type, $is_cached);

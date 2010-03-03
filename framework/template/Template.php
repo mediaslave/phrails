@@ -11,16 +11,18 @@ class Template
 	 * The current controller.
 	 * @var Controller
 	 */
-	private $Controller;
+	protected $Controller;
 	/**
 	 * ContentFor is a way to pass data from the view to the layout.
 	 *
+	 * @var stdClass
 	 * @author Justin Palmer
 	 */
 	public static $ContentFor;
 	/**
 	 * The current view that is going to be rendered.
 	 *
+	 * @var string
 	 * @author Justin Palmer
 	 */
 	public static $current_view_path;
@@ -30,6 +32,11 @@ class Template
 	 * @var string
 	 */
 	protected $view_path=null;
+	/**
+	 * Array of the current route.
+	 *
+	 * @var array
+	 */
 	protected $route;
 	/**
 	 * Create a new Template
