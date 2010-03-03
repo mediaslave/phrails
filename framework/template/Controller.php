@@ -10,7 +10,7 @@ class Controller
 	/**
 	 * The layout that will be wrapped around the view.
 	 *
-	 * @var string
+	 * @var string or null
 	 */
 	public $pr_layout = 'application';
 	/**
@@ -28,7 +28,7 @@ class Controller
 	/**
 	 * The view type
 	 *
-	 * @var string
+	 * @var Hash
 	 */
 	public $pr_view_types;
 	/**
