@@ -55,7 +55,8 @@ class Adapter extends PDO
 	public function find($id)
 	{
 		$table_name = $this->model->table_name;
-		$primary = " ($this->model->primary_key = ?)";
+		$primary_key = $this->model->primary_key;
+		$primary = " ($primary_key = ?)";
 		if(!empty($this->builder->conditions)){
 			$and = ($this->builder->conditions[0] != '') ? ' AND' : '';
 			$this->builder->conditions[0] = $this->builder->conditions[0] . $and . $primary;
