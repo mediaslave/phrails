@@ -9,6 +9,14 @@ if(isset($_SERVER['PHP_RAILS_BASE_URI']))
 //Set the install path.
 Registry::set('pr-install-path', $base_uri);
 
+$db_config = parse_ini_file('database.ini', true);
+if(isset($db_config[Registry::get('pr-environment')])){
+	Registry::set('pr-db-config', $db_config[Registry::get('pr-environment')]);
+}else{
+	throw new Exception('Phrails could not find the db config specified by the environment.');
+}
+
+new User;
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
 

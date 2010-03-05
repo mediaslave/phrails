@@ -1,8 +1,8 @@
 To set it up, under Apache, add the following to virtual host:
 
 <VirtualHost *:80>
-    ServerName php-rails
-    DocumentRoot /home/jpalmer/projects/php/php-rails
+    ServerName phrails
+    DocumentRoot /path/to/your/web/phrails
 
     setenv PHP_RAILS_BASE_URI /
 	setenv PHP_RAILS_ENV development

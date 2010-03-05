@@ -19,7 +19,6 @@ include 'config/environment.php';
 //Process the request.
 include $framework_install_path . '/run.php';
 
-$foo = 'index.php';
 //Display the view.
 print $Template->display();
 

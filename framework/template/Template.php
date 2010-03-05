@@ -69,10 +69,10 @@ class Template
 		}catch(NoViewTypeException $e){
 			//If it is not a view type then we will change the route to
 			//change the view to the prNoViewType
-			$Route['controller'] = '';
-			$Route['action'] = 'prNoViewType';
-			$Route['requested'] = $e->getMessage();
-			$Route['view-type'] = 'html';
+			$Route->controller = '';
+			$Route->action = 'prNoViewType';
+			$Route->requested = $e->getMessage();
+			$Route->view_type = 'html';
 			$this->route = $Route;
 			//Set the route
 			Registry::set('pr-route', $Route);
@@ -80,17 +80,17 @@ class Template
 			$this->Controller->pr_layout = null;
 		}
 		//Get the current view path based off of the controller
-		self::$current_view_path = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['controller']);
+		self::$current_view_path = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller);
 		//Get the file to render from the action of the route.
-		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route['action']);
+		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
 		//Concat the necassary items to complete the path.
-		$path = strtolower($file) . '.' . $Route['view-type'] . '.php';
+		$path = strtolower($file) . '.' . $Route->view_type . '.php';
 		//Make sure the path is set
 		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
 		//If the view is not html then we will set the layout to null
 		//json will not use a layout.
-		if($Route['view-type'] != 'html')
+		if($Route->view_type != 'html')
 			$this->Controller->pr_layout = null;
 		//Save the sha of the file path.
 		$this->view_path = $path;
@@ -104,7 +104,7 @@ class Template
 	public function display()
 	{
 		//Return the appropriate layout and view or view.
-		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path, $this->route['view-type']) 
+		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path, $this->route->view_type) 
 													   : $this->displayWithLayout($this->view_path);
 	}
 	/**
@@ -115,8 +115,8 @@ class Template
 	 **/
 	private function checkViewType($route)
 	{
-		if(!$this->Controller->pr_view_types->isKey($route['view-type']))
-			throw new NoViewTypeException($this->Controller->pr_view_types, $route['view-type']);
+		if(!$this->Controller->pr_view_types->isKey($route->view_type))
+			throw new NoViewTypeException($this->Controller->pr_view_types, $route->view_type);
 	}
 	/**
 	 * Get the declared vars that are available to the template.

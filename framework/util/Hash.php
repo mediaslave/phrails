@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ * @todo if an array is passed to set as the $value turn it into an stdClass.
  */
 class Hash
 {
@@ -24,6 +24,18 @@ class Hash
 	public function isKey($key)
 	{
 		return (isset($this->array[$key]));
+	}
+	
+	/**
+	 * Remove element for the hash.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function remove($key)
+	{
+		if($this->isKey($key))
+			unset($this->array[$key]);
 	}
 	
 	public function export()

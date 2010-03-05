@@ -13,6 +13,6 @@ $Route = Registry::get('pr-route');
 <body>
 <p>We could not verify your respond to type.</p>
 	
-<p><?= $Route['requested']?></p>
+<p><?= $Route->requested?></p>
 </body>
 </html>

@@ -30,10 +30,10 @@ class Router
 			$route = $this->findByPath();
 			//Set the current routes information in the registry.
 			Registry::set('pr-route', $route);
-
+			
 			//Create the controller vars for instantiation and calling.
-			$controller = $route['controller'] . 'Controller';
-			$action = $route['action'];
+			$controller = $route->controller . 'Controller';
+			$action = $route->action;
 			//Instantiate the correct controller and call the action.
 			$Controller = new $controller();
 			//This is a hack.  There is no way to get the method called from a class.
@@ -46,7 +46,7 @@ class Router
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoRoute',
 											'requested' => $_SERVER['REQUEST_URI'],
-											'view-type' => 'html'));
+											'view_type' => 'html'));
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoRoute';
@@ -54,7 +54,7 @@ class Router
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoController',
 											'requested' => $controller,
-											'view-type' => 'html'));
+											'view_type' => 'html'));
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoController';
@@ -63,7 +63,7 @@ class Router
 											'action' => 'prNoAction',
 											'no-action' => $action,
 											'no-controller'=> $controller,
-											'view-type' => 'html'));
+											'view_type' => 'html'));
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoAction';
@@ -86,13 +86,13 @@ class Router
 		$ret = $close_route['ret'];
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
-		$route = explode('/', $ret['path']);
+		$route = explode('/', $ret->path);
 		//verify that the route exists. This method will throw an exception if there is a problem.
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
 			$ret = $verified;
-		//the view-type extension
-		$ret['view-type'] = $this->extension;
+		//the view_type extension
+		$ret->view_type = $this->extension;
 		//Return the route array
 		return $ret;
 	}
@@ -103,20 +103,21 @@ class Router
 	{
 		$Routes = Routes::routes();
 		$closeness = 0;
-		$ret = array();
+		$ret = new stdClass;
 		$controller_action = null;
 		foreach($Routes->export() as $key => $value){
-			if($request_uri == $value['path']){
+			$value = (object) $value;
+			if($request_uri == $value->path){
 				$ret = $value;
 				break;
 			}
-			$current = similar_text($request_uri, $value['path']);
+			$current = similar_text($request_uri, $value->path);
 			if($current > $closeness){
 				$closeness = $current;
 				$ret = $value;
 			}
-			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $value['controller']);
-			$first = $second = '/' . strtolower($controller) . '/' . $value['action'];
+			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $value->controller);
+			$first = $second = '/' . strtolower($controller) . '/' . $value->action;
 			$second = $second . '/';
 			if($first == $request_uri || $second == $request_uri)
 				$controller_action = $value;

@@ -14,7 +14,15 @@ class Registry
 	public static function set($key, $value)
 	{
 		self::init();
-		self::$Hash->set($key, $value);
+		$v = $value;
+		if(is_array($value)){
+			$v = new stdClass;
+			foreach($value as $vkey => $value){
+				//print $value . '<br/>';
+				$v->$vkey = $value;
+			}
+		}
+		self::$Hash->set($key, $v);
 	}
 	
 	public static function get($key)
