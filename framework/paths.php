@@ -2,13 +2,13 @@
 /**
  * load the framework paths
  */
-set_include_path(get_include_path() . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/__view__' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/db' .
-				 PATH_SEPARATOR . dirname(__FILE__) . '/exceptions' . 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/html'. 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/template'. 
-				 PATH_SEPARATOR . dirname(__FILE__) . '/util');
+add_include_directory(dirname(__FILE__) . '/__view__');				
+add_include_directory(dirname(__FILE__) . '/db');
+add_include_directory(dirname(__FILE__) . '/exceptions');
+add_include_directory(dirname(__FILE__) . '/html');
+add_include_directory(dirname(__FILE__) . '/html/rules');
+add_include_directory(dirname(__FILE__) . '/template');
+add_include_directory(dirname(__FILE__) . '/util');
 
 /**
  * If the user of the framework defines their own __autoload, we will let them
@@ -53,4 +53,15 @@ function include_all_in_folder ($folder, $extension='.php') {
     foreach (glob($folder . '/*' . $extension) as $file) {
         include $file;
     }
+}
+
+/**
+ * Add an include directory for the project
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function add_include_directory($path)
+{
+	set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 }

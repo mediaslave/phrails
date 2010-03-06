@@ -8,12 +8,13 @@
  */
 class SqlBuilder
 {
-	private $db;
-	private $as = '';
-	private $select = '*';
-	public  $conditions = array();
-	private $order = array();
-	private $limit = '';
+	private $model;
+	private $as;
+	private $select;
+	public  $conditions;
+	private $order;
+	private $limit;
+	private $relationships;
 	/**
 	 * what to do this this?
 	 */
@@ -24,13 +25,15 @@ class SqlBuilder
 	 * @return SqlBuilder
 	 * @author Justin Palmer
 	 **/
-	public function __construct($db)
+	public function __construct($model)
 	{
 		//print '<br/><br/><br/>';
 		//var_dump($db);
 		//print '<br/><br/><br/>';
-		$this->db = $db;
+		$this->model = $model;
 		$this->NamedScope = new Hash();
+		//Resets all class level vars to their default states.
+		$this->reset();
 	}
 	/**
 	 * build the additional items to the query
@@ -44,9 +47,11 @@ class SqlBuilder
 		
 		//Add the select
 		$query = str_replace('?', $this->select, $query);
-		//Do we have an AS?
-		if($this->as != '')
-			$query .= ' AS ' . $this->aas;
+		
+		$query .= ' AS ' . $this->model->alias();
+			
+		//build all of the joins that are called by join()
+		$query .= $this->buildAllJoins();
 		//class to hold the query and the params to return.
 		$result = new stdClass;
 		//any conditions?
@@ -71,17 +76,17 @@ class SqlBuilder
 	 *
 	 * @return Adapter
 	 * @author Justin Palmer
-	 **/
+	 
 	public function alias($string)
 	{
 		//print('in alias');
 		if($string != '')
 			$this->as = $string;
 		//print('after set aas');
-		//var_dump($this->db);
+		//var_dump($this->model);
 		//exit();
-		return $this->db;
-	}
+		return $this->model;
+	}**/
 	/**
 	 * Add items to the select
 	 *
@@ -92,18 +97,42 @@ class SqlBuilder
 	{
 		if($string != '')
 			$this->select = $string;
-		return $this->db;
+		return $this->model;
 	}
+	
 	/**
-	 * Join a table
+	 * Join the tables passed in based off the Schema.
 	 *
-	 * @return Adapter
+	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function join($from_table, $join_table, $on)
+	public function join($args)
 	{
-		$this->join[] = array($from_table, $join_table, $on);
-		return $this->db;
+		$args = func_get_args();
+		foreach($args as $key){
+			if(!$this->model->schema()->relationships->isKey($key))
+				throw new NoSchemaRelationshipDefinedException($this->model->table_name(), $key);
+			$this->relationships[] = $this->model->schema()->relationships->get($key);
+		}
+		return $this->model;
+	}
+	/**
+	 * Build out the join
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	private function buildAllJoins()
+	{
+		$joins = '';
+		if(!empty($this->relationships)){
+			foreach($this->relationships as $key => $join){
+				var_dump($join);
+				$joins .= " INNER JOIN `" . $join->table . "` AS " . $join->alias . 
+						  " ON " . $join->on . " ";
+			}
+		}
+		return $joins;
 	}
 	/**
 	 * Add the conditions
@@ -114,7 +143,7 @@ class SqlBuilder
 	public function conditions($conditions)
 	{
 		$this->conditions = func_get_args();
-		return $this->db;
+		return $this->model;
 	}	
 	/**
 	* Add the order
@@ -125,7 +154,7 @@ class SqlBuilder
 	public function order($order)
 	{
 		$this->order = func_get_args();
-		return $this->db;
+		return $this->model;
 	}	
 	/**
 	 * Add the limit
@@ -138,6 +167,21 @@ class SqlBuilder
 		$this->limit = $min;
 		if($max !== null)
 			$this->limit = $min . ',' . $max;
-		return $this->db;
+		return $this->model;
+	}
+	/**
+	 * Reset the conditions.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function reset()
+	{
+		$this->as = '';
+		$this->select = '*';
+		$this->conditions = array();
+		$this->order = array();
+		$this->limit = '';
+		$this->relationships = array();
 	}
 }

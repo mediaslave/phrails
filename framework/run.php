@@ -16,7 +16,6 @@ if(isset($db_config[Registry::get('pr-environment')])){
 	throw new Exception('Phrails could not find the db config specified by the environment.');
 }
 
-new User;
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
 

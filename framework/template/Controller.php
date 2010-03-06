@@ -120,7 +120,7 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function redirect_to($path)
+	protected function redirectTo($path)
 	{
 		$path = ltrim($path, '/');
 		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
@@ -132,7 +132,7 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function respond_to()
+	protected function respondTo()
 	{
 		$args = func_get_args();
 		$set = array();

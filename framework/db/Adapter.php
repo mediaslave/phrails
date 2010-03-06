@@ -40,7 +40,7 @@ class Adapter extends PDO
 	 **/
 	public function showColumns()
 	{
-		$table_name = $this->model->table_name;
+		$table_name = $this->model->table_name();
 		$this->Statement = $this->prepare("SHOW COLUMNS FROM `$table_name`");
 		$this->Statement->execute();
 		return ResultFactory::factory($this->Statement);
@@ -54,8 +54,8 @@ class Adapter extends PDO
 	 **/
 	public function find($id)
 	{
-		$table_name = $this->model->table_name;
-		$primary_key = $this->model->primary_key;
+		$table_name = $this->model->table_name();
+		$primary_key = $this->model->alias() . '.' . $this->model->primary_key();
 		$primary = " ($primary_key = ?)";
 		if(!empty($this->builder->conditions)){
 			$and = ($this->builder->conditions[0] != '') ? ' AND' : '';
@@ -65,6 +65,7 @@ class Adapter extends PDO
 		}
 		$this->builder->conditions[] = $id;
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
+		$this->builder->reset();
 		$this->Statement = $this->prepare($query->query);
 		$this->Statement->execute($query->params);
 		return ResultFactory::factory($this->Statement);
@@ -77,8 +78,9 @@ class Adapter extends PDO
 	 **/
 	public function findAll()
 	{
-		$table_name = $this->model->table_name;
+		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
+		$this->builder->reset();
 		$this->Statement = $this->prepare($query->query);
 		$this->Statement->execute(array_values($query->params));
 		return ResultFactory::factory($this->Statement, true);
@@ -90,13 +92,13 @@ class Adapter extends PDO
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function save()
+	public function saveNow()
 	{
-		$table_name = $this->model->table_name;
-		$primary_key_name = $this->model->primary_key;
-		$id = $this->model->$primary_key_name;
+		$table_name = $this->model->table_name();
+		$primary_key_name = $this->model->primary_key();
+		$id = $primary_key_name;
 		if($id == null){
-			$props = $this->model->props->export();
+			$props = $this->model->props()->export();
 			$columns = $this->getInsertColumnNames($props);
 			$marks = $this->questionMarksByNum(sizeof($props));
 			$this->Statement = $this->prepare(sprintf("INSERT INTO `$table_name` (%s) values (%s)", $columns, $marks));
@@ -105,11 +107,11 @@ class Adapter extends PDO
 		}else{	
 			$this->model->removeProperty($primary_key_name);
 			//Get the props before setting the primary key for the UpdateSet method
-			$props = $this->model->props->export();
-			$this->model->$primary_key_name = $id;
+			$props = $this->model->props()->export();
+			$primary_key_name = $id;
 			$query = "UPDATE `$table_name` SET %s WHERE `$primary_key_name` = ?";	
 			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
-			$params = array_values($this->model->props->export());
+			$params = array_values($this->model->props()->export());
 			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
 		}
 	}
@@ -119,10 +121,25 @@ class Adapter extends PDO
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function findBySql($sql, $forceSet=true)
+	public function findBySql($sql, $args=array(), $forceSet=true)
 	{
+		$args = func_get_args();
+		//Shift out the sql var.
+		$sql = array_shift($args);
+		//Let's get the key of the forceSet var.
+		$force_set_key = sizeof($args) - 1;
+		//Set the forceSet var.
+		$forceSet = $args[$force_set_key];
+		//Unset the forceSet var, leaving us with just the args for execute().
+		unset($args[$force_set_key]);
+		//Prepare the sql.
 		$this->Statement = $this->prepare($sql);
-		$this->Statement->execute();
+		//If the user passed in an array of args then well get the first one for the execute method.
+		if(is_array($args[0]))
+			$args = $args[0];
+		//Execute the query.
+		$this->Statement->execute($args);
+		//Return the correct object for the situation.
 		return ResultFactory::factory($this->Statement, $forceSet);
 	}
 	/**

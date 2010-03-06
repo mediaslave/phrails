@@ -23,7 +23,7 @@ class ResultFactory
 			return new ResultSet($Statement);
 		switch($count){
 			case 0:
-				return new RecordNotFoundException;
+				throw new RecordNotFoundException($Statement->queryString);
 			case 1:
 				return $Statement->fetchObject('ResultRow');
 			default:

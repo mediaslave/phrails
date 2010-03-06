@@ -82,7 +82,45 @@ class Inflections
         'information',
         'equipment'
     );
-
+	/**
+	 * Change a table name into a class name
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public static function classify($string)
+	{
+		$string = Inflections::singularize($string);
+		$string = str_replace('_', ' ', $string);
+		return str_replace(' ', '', ucwords($string));
+	}
+	/**
+	 * Underscore a camel case word
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public static function underscore($string)
+	{
+		return strtolower(preg_replace('/([^\s])([A-Z])/', '\1_\2', $string));
+	}
+	/**
+	 * Make a table name out of string
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public static function tableize($string)
+	{
+		return self::pluralize(self::underscore($string));
+	}
+	/**
+	 * Change a string to plural
+	 *
+	 * @param string $string 
+	 * @return string
+	 * @author Justin Palmer
+	 */
     public static function pluralize( $string )
     {
         // save some time in the case that singular and plural are the same
@@ -107,7 +145,23 @@ class Inflections
 
         return $string;
     }
-
+	/**
+	 * change a string to a foreign key
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public static function foreignKey($string)
+	{
+		return self::underscore($string) . '_id';
+	}
+	/**
+	 * Change a string to singular
+	 *
+	 * @param string $string 
+	 * @return string
+	 * @author Justin Palmer
+	 */
     public static function singularize( $string )
     {
         // save some time in the case that singular and plural are the same
@@ -132,7 +186,14 @@ class Inflections
 
         return $string;
     }
-
+	/**
+	 * Change a string to plural conditionally.
+	 *
+	 * @param string $count 
+	 * @param string $string 
+	 * @return string
+	 * @author Justin Palmer
+	 */
     public static function pluralize_if($count, $string)
     {
         if ($count == 1)

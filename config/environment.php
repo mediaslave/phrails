@@ -1,12 +1,11 @@
 <?php
 
 //Set up the include paths for the app.
-set_include_path(get_include_path() . 
-	 PATH_SEPARATOR . './app/controllers' . 
-	 PATH_SEPARATOR . './app/models' . 
-	 PATH_SEPARATOR . './app/views'. 
-	 PATH_SEPARATOR . './lib'. 
-	 PATH_SEPARATOR . './config');
+add_include_directory('./app/controllers');
+add_include_directory('./app/models');
+add_include_directory('./app/views');
+add_include_directory('./lib');
+add_include_directory('./config');
 
 //Load all of the applications helpers.
 $app_folder = realpath('./app');
