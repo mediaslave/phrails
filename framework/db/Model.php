@@ -3,20 +3,66 @@
  * The base model.
  *
  * 
- * @package database
+ * @package db
  * @author Justin Palmer
  **/
 abstract class Model
 {
+	/**
+	 * The primary key.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	protected $primary_key = 'id';
+	/**
+	 * The models table name.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	protected $table_name;
+	/**
+	 * The alias for the model.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	protected $alias;
+	/**
+	 * The Adapter for the project
+	 *
+	 * @author Justin Palmer
+	 * @var Adapter
+	 */
 	protected $db;
+	/**
+	 * The Schema for the model.
+	 *
+	 * @author Justin Palmer
+	 * @var Schema
+	 */
 	protected $schema;
-	//Holds data for the columns.
+	/**
+	 * The properties for the model set by the user.
+	 *
+	 * @author Justin Palmer
+	 * @var Hash
+	 */	
 	protected $props;
-	//Holds the valid columns.
+	/**
+	 * The valid columns for the model from the db.
+	 *
+	 * @author Justin Palmer
+	 * @var Hash
+	 */
 	protected $columns;
+	/**
+	 * The current errors, if any during the validation process.
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	protected $errors = array();
 	
 	/**

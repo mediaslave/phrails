@@ -5,16 +5,38 @@
  * @todo There is a lot to do with relationships (Schema class) and how to deal with them.
  * It is really hard coded in now as a of sorts.
  * 
- * @package database
+ * @package db
  * @author Justin Palmer
  */				
 class Adapter extends PDO
 {	
+	/**
+	 * Implemented drivers
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	protected static $drivers = array('mysql');
-	
+	/**
+	 * The config loaded from the database.ini
+	 *
+	 * @author Justin Palmer
+	 * @var stdClass
+	 */
 	protected static $Config = null;
-	
+	/**
+	 * builder object
+	 *
+	 * @author Justin palmer
+	 * @var SqlBuilder
+	 */
 	public $builder;
+	/**
+	 * The current model
+	 *
+	 * @author Justin Palmer
+	 * @var Model
+	 */
 	public $model;
 	
 	/**

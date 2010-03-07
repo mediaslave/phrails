@@ -8,9 +8,33 @@
  */
 class TemplateCache extends Template
 {
+	/**
+	 * Valid cache types
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	private $cache_types = array('file');
+	/**
+	 * Is the current cache type a valid one.
+	 *
+	 * @author Justin Palmer
+	 * @var boolean
+	 */
 	private $is_valid_cache_type = false;
+	/**
+	 * The current cache type that is trying to be processed.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	private $cache_type=null;
+	/**
+	 * The cache object to cache the template with.
+	 *
+	 * @author Justin Palmer
+	 * @var Cache
+	 */
 	public $Cache;
 	/**
 	 * Constructor

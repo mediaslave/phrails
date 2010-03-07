@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* The route specified does not exist.
+* @package exceptions
 */
 class NoActionException extends Exception
 {

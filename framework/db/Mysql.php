@@ -2,7 +2,7 @@
 /**
  * Mysql adapter
  *
- * @package database
+ * @package db
  * @author Justin Palmer
  */				
 class Mysql extends Adapter

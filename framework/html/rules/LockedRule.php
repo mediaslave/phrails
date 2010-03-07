@@ -1,6 +1,6 @@
 <?php
 /**
- * base rule
+ * If the model property is locked then it can not be written to.
  *
  * @package html
  * @subpackage rules
@@ -8,6 +8,9 @@
  **/
 class LockedRule extends Rule
 {
+	/**
+	 * @see Rule::message
+	 */
 	public $message = '%s is locked.  It can not be modified.';
 	/**
 	 * @see Rule::run()

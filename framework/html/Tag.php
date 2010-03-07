@@ -1,11 +1,31 @@
 <?php
 /**
-* 
+* Base class for all tags.
+* @author Justin Palmer
+* @package html
 */
 abstract class Tag
 {
+	/**
+	 * Does the current tag have an end tag?
+	 *
+	 * @author Justin Palmer
+	 * @var boolean
+	 */
 	protected $hasEndTag = true;
+	/**
+	 * The display that appears in between the start and end tag.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	protected $display = '';
+	/**
+	 * The options for the current tag
+	 *
+	 * @author Justin Palmer
+	 * @var string or array
+	 */
 	protected $options = '';
 	/**
 	 * Constructor for the Tag class
@@ -18,10 +38,12 @@ abstract class Tag
 		$this->options = OptionsParser::toString($this->addOptions($options));
 	}
 	/**
+	 * Start tag for the current tag.
 	 * @abstract
 	 */
 	abstract function start();
 	/**
+	 * End tag for the current tag.
 	 * @abstract
 	 */
 	abstract function end();

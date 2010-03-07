@@ -3,15 +3,40 @@
  * To define the schema of a model
  * 
  * @todo There is a lot more to do with relationships.  As of this (03-06-10), you can do very 
- * simple hasOne and hasMany.  We need to deal with the rest.
+ * simple hasOne and hasMany.  We need to deal with the rest
+ * 
  * @package db
  * @author Justin Palmer
  **/
 class Schema
 {
+	/**
+	 * The current model
+	 *
+	 * @author Justin Palmer
+	 * @var Model
+	 */
 	private $model;
+	/**
+	 * The rules for the current model.
+	 *
+	 * @author Justin Palmer
+	 * @var Hash
+	 */
 	public $rules;
+	/**
+	 * The relationships defined
+	 *
+	 * @author Justin Palmer
+	 * @var hash
+	 */
 	public $relationships;
+	/**
+	 * The last relationship
+	 *
+	 * @author Justin Palmer
+	 * @var Hash
+	 */
 	private $last_relationship = null;
 	/**
 	 * Constructor

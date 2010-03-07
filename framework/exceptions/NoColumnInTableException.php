@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* Invalid column set for the specified table.
+* @package exceptions
 */
 class NoColumnInTableException extends Exception
 {

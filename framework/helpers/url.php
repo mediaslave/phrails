@@ -1,5 +1,11 @@
 <?php
 /**
+ * The helpers to helper to deal with url's, paths.
+ *
+ * @author Justin Palmer
+ * @package helpers
+ */
+/**
  * Return the path of a route with arguments passed if given.
  *
  * Options are parsed and replace {value} from route.

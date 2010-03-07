@@ -7,9 +7,33 @@
  **/
 abstract class Cache
 {
+	/**
+	 * The key to bring up the cache.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $key;
+	/**
+	 * The value for the current key
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $value;
+	/**
+	 * The path of the current cache
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $path;
+	/**
+	 * Is the request cached already?
+	 *
+	 * @author Justin Palmer
+	 * @var boolean
+	 */
 	protected $is_cached = false;
 	/**
 	 * Constructor

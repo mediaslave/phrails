@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* Invalid attributes in the model.
+* @package exceptions
 */
 class RecordInvalidException extends Exception
 {

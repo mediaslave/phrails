@@ -3,18 +3,60 @@
  * Build sql statements
  *
  * @todo named_scope
+ * 
  * @package db
  * @author Justin Palmer
  */
 class SqlBuilder
 {
+	/**
+	 * The current model.
+	 *
+	 * @author Justin Palmer
+	 * @var Model
+	 */
 	private $model;
-	private $as;
+	/**
+	 * The select statement that should added to the query.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	private $select;
+	/**
+	 * The conditions for the current query.
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	public  $conditions;
+	/**
+	 * The order for the current query.
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	private $order;
+	/**
+	 * The limit for the current query.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	private $limit;
+	/**
+	 * The relationships that are available for the the current model.
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	private $relationships;
+	/**
+	 * The has_many relationships for the current model.
+	 *
+	 * @author Justin Palmer
+	 * @var array
+	 */
 	private $has_many;
 	/**
 	 * what to do this this?
@@ -74,22 +116,6 @@ class SqlBuilder
 		}
 		return $result;
 	}
-	/**
-	 * Alias the main table
-	 *
-	 * @return Adapter
-	 * @author Justin Palmer
-	 **/
-	//public function alias($string)
-	//{
-		//print('in alias');
-	//	if($string != '')
-	//		$this->as = $string;
-		//print('after set aas');
-		//var_dump($this->model);
-		//exit();
-	//	return $this->model;
-	//}
 	/**
 	 * Add items to the select
 	 *

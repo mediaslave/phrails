@@ -4,7 +4,7 @@
  * Return an stdClass if there is 1
  * throw an RecordNotFoundException not found if there is 0
  *
- * @package database
+ * @package db
  * @author Justin Palmer
  **/
 class ResultFactory

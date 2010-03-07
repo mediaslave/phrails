@@ -8,8 +8,26 @@
  **/
 class Rule
 {
+	/**
+	 * The value that the rule should be run against.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $value;
+	/**
+	 * The default message that should be returned.
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $message;
+	/**
+	 * A custom error message that will override the default $message
+	 *
+	 * @author Justin Palmer
+	 * @var string
+	 */
 	public $custom_message='';
 	/**
 	 * Constructor
@@ -24,7 +42,6 @@ class Rule
 		if($this->message === null)
 			throw new MessageForRuleException(get_class($this));
 	}
-	
 	/**
 	 * Run the rule
 	 *

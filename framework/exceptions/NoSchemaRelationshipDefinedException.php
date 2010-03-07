@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* The relationship was not specified for the model.
+* @package exceptions
 */
 class NoSchemaRelationshipDefinedException extends Exception
 {

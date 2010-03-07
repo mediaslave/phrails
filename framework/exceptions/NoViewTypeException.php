@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* No view created for the request.
+* @package exceptions
 */
 class NoViewTypeException extends Exception
 {

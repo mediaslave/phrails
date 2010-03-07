@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* The record could not be found.
+* @package exceptions
 */
 class RecordNotFoundException extends Exception
 {

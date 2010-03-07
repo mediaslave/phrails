@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* No route for the expected path.
+* @package exceptions
 */
 class NoRouteException extends Exception
 {

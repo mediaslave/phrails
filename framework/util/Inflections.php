@@ -4,7 +4,12 @@
 //           http://www.fortunecity.com/bally/durrus/153/gramch13.html
 //           http://www2.gsu.edu/~wwwesl/egw/crump.htm
 //
-
+/**
+ * Inflections provides many methods that helps with the Model, helpers and ...
+ *
+ * @package util
+ * @author Justin Palmer
+ */
 class Inflections
 {
     static $plural = array(

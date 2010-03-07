@@ -1,4 +1,10 @@
 <?php
+/**
+ * Represents one row.
+ *
+ * @package db
+ * @author Justin Palmer
+ */
 class ResultRow
 {
 	/**

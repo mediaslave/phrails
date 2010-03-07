@@ -1,7 +1,24 @@
 <?php
+/**
+ * Represents many results
+ *
+ * @package db
+ * @author Justin Palmer
+ */
 class ResultSet implements IteratorAggregate
 {
+	/**
+	 * PDO::Statement
+	 *
+	 * @var PDOStatement
+	 */
 	private $Statement;
+	/**
+	 * Constructor
+	 *
+	 * @param PDOStatement $stmt 
+	 * @author Justin Palmer
+	 */
 	function __construct(PDOStatement $stmt)
 	{
 		$this->Statement = $stmt;

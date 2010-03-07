@@ -1,6 +1,7 @@
 <?php
 /**
-* 
+* The correct order of methods were not called for the schema
+* @package exceptions
 */
 class NoSchemaRelationshipException extends Exception
 {

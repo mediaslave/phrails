@@ -1,7 +1,8 @@
 <?php
 /**
-* @package html
-*/
+ * Creates a css link.
+ * @package html
+ */
 class LinkCss extends Link
 {
 	/**

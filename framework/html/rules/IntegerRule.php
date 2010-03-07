@@ -1,6 +1,6 @@
 <?php
 /**
- * base rule
+ * Is the current model property an integer.
  *
  * @package html
  * @subpackage rules
@@ -8,6 +8,9 @@
  **/
 class IntegerRule extends Rule
 {
+	/**
+	 * @see Rule::message
+	 */
 	public $message = '%s should be an integer.';
 	
 	/**
