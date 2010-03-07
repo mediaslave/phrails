@@ -15,6 +15,7 @@ class SqlBuilder
 	private $order;
 	private $limit;
 	private $relationships;
+	private $has_many;
 	/**
 	 * what to do this this?
 	 */
@@ -67,8 +68,10 @@ class SqlBuilder
 			$query .= ' LIMIT ' . $this->limit;
 		}
 		$result->params = array_merge($this->conditions, $this->order);
-		$result->query = $query;
-		//print $query;
+		$result->query[] = $query;
+		foreach($this->has_many as $many){
+			$result->query[$many->alias] = "SELECT * FROM `" . $many->table . "` WHERE " . $many->on; 
+		}
 		return $result;
 	}
 	/**
@@ -76,17 +79,17 @@ class SqlBuilder
 	 *
 	 * @return Adapter
 	 * @author Justin Palmer
-	 
-	public function alias($string)
-	{
+	 **/
+	//public function alias($string)
+	//{
 		//print('in alias');
-		if($string != '')
-			$this->as = $string;
+	//	if($string != '')
+	//		$this->as = $string;
 		//print('after set aas');
 		//var_dump($this->model);
 		//exit();
-		return $this->model;
-	}**/
+	//	return $this->model;
+	//}
 	/**
 	 * Add items to the select
 	 *
@@ -127,9 +130,16 @@ class SqlBuilder
 		$joins = '';
 		if(!empty($this->relationships)){
 			foreach($this->relationships as $key => $join){
-				var_dump($join);
-				$joins .= " INNER JOIN `" . $join->table . "` AS " . $join->alias . 
-						  " ON " . $join->on . " ";
+				print $join->type . "<br/>";
+				switch($join->type){
+					case 'has-many':
+						$this->has_many[] = $join;
+						break;
+					case 'has-one':
+						$joins .= " INNER JOIN `" . $join->table . "` AS " . $join->alias . 
+								  " ON " . $join->on . " ";
+						break;
+				}
 			}
 		}
 		return $joins;
@@ -183,5 +193,6 @@ class SqlBuilder
 		$this->order = array();
 		$this->limit = '';
 		$this->relationships = array();
+		$this->has_many = array();
 	}
 }

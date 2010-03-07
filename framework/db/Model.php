@@ -36,7 +36,7 @@ abstract class Model
 			$this->table_name = Inflections::tableize(get_class($this));
 		$this->props = new Hash($array);
 		$this->schema = new Schema($this);
-		$this->alias = $this->table_name;
+		$this->alias = Inflections::singularize($this->table_name);
 		//Store the db adapter.
 		$this->db = new $Adapter($this);
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.

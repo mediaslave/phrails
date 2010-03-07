@@ -2,6 +2,9 @@
 /**
  * Database adapter
  *
+ * @todo There is a lot to do with relationships (Schema class) and how to deal with them.
+ * It is really hard coded in now as a of sorts.
+ * 
  * @package database
  * @author Justin Palmer
  */				
@@ -66,9 +69,24 @@ class Adapter extends PDO
 		$this->builder->conditions[] = $id;
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
 		$this->builder->reset();
-		$this->Statement = $this->prepare($query->query);
+		$this->Statement = $this->prepare(array_shift($query->query));
+		$params = $query->params;
 		$this->Statement->execute($query->params);
-		return ResultFactory::factory($this->Statement);
+		try{
+			$result = ResultFactory::factory($this->Statement);
+			foreach($query->query as $key => $query){
+				print $key;
+				$key = Inflections::pluralize($key);
+				$stmt = $this->prepare($query);
+				print $stmt->queryString . "<br/>";
+				var_dump($query->params);
+				$stmt->execute($params);
+				$result->$key = ResultFactory::factory($stmt, true);
+			}
+		}catch(RecordNotFoundException $e){
+			throw $e;
+		}
+		return $result;
 	}
 	/**
 	 * undocumented function

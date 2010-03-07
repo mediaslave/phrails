@@ -1,21 +1,9 @@
 <?php
 /**
- * These first two query partials are the same.
- */
-
-
-	//$Schema->belongsTo('table_name')->as('bob');          
-	//$Schema->belongsTo('table_name')->as('bob')->on('base.id = table_name_id');    
-    
-	//$Schema->hasMany('table_name')->as('fred');
-	//$Schema->hasMany('table_name')->as('fred')->on('table_name_id');
-
-	//$Schema->hasOne('table_name')->as('bob');
-	//$Schema->hasOne('table_name')->as('bob')->on('table_name_id');
-
-/**
  * To define the schema of a model
- *
+ * 
+ * @todo There is a lot more to do with relationships.  As of this (03-06-10), you can do very 
+ * simple hasOne and hasMany.  We need to deal with the rest.
  * @package db
  * @author Justin Palmer
  **/
@@ -70,9 +58,9 @@ class Schema
 	 * @return Schema
 	 * @author Justin Palmer
 	 **/
-	public function class_name($table)
+	public function className($table)
 	{
-		$this->addOption(array('table', Inflections::tableize($table)), 'table');
+		return $this->addOption(array('table' => Inflections::tableize($table)), 'table');
 	}
 	/**
 	 * The alias that the last relationship should be, this will be used in the join query.
@@ -82,7 +70,7 @@ class Schema
 	 **/
 	public function alias($alias)
 	{
-		$this->addOption(array('alias'=>$alias), 'alias');
+		return $this->addOption(array('alias'=>$alias), 'alias');
 	}
 	/**
 	 * How the join should be preformed(base.id = alias_table.id).
@@ -92,7 +80,17 @@ class Schema
 	 **/
 	public function on($on)
 	{
-		$this->addOption(array('on'=>$on), 'on');
+		return $this->addOption(array('on'=>$on), 'on');
+	}
+	/**
+	 * Set the foreign key to join on if it does not follow standard.
+	 *
+	 * @return Schema
+	 * @author Justin Palmer
+	 **/
+	public function foreignKey($key)
+	{
+		return $this->addOption(array('foreign_key' => $key), 'foreignKey');
 	}
 	/**
 	 * belongs to
@@ -103,7 +101,7 @@ class Schema
 	public function belongsTo($name)
 	{	
 		$this->last_relationship = $name;
-		$this->addRelationship($name, 'belongs-to');
+		return $this->addRelationship($name, 'belongs-to');
 	}
 	/**
 	 * has many
@@ -114,7 +112,7 @@ class Schema
 	public function hasMany($name)
 	{	
 		$this->last_relationship = $name;
-		$this->addRelationship($name, 'has-many');
+		return $this->addRelationship($name, 'has-many');
 	}
 	/**
 	 * has one
@@ -125,7 +123,7 @@ class Schema
 	public function hasOne($name)
 	{	
 		$this->last_relationship = $name;
-		$this->addRelationship($name, 'has-one');
+		return $this->addRelationship($name, 'has-one');
 	}
 	/**
 	 * Add the option to the last relationship.
@@ -141,6 +139,8 @@ class Schema
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
 		$options->$key = $value;
+		//Regenerate the on to see if there is anything that needs changed.
+		$options->on = $this->autoGenerateOn($options->name);
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
@@ -157,6 +157,7 @@ class Schema
 		$options->type = $type;
 		$options->alias = Inflections::underscore(str_replace('-', '_', $name));
 		$options->table = Inflections::tableize($options->alias);
+		$options->foreign_key = Inflections::foreignKey(Inflections::singularize($this->model->table_name()));
 		$this->relationships->set($name, $options);
 		$options->on = $this->autoGenerateOn($name);
 		$this->relationships->set($name, $options);		
@@ -174,7 +175,11 @@ class Schema
 		$ret = '';
 		switch($options->type){
 			case 'has-one':
-				$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . Inflections::foreignKey(Inflections::singularize($this->model->table_name()));
+				$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
+				break;
+			case 'has-many':
+				$ret = $options->table . "." . $options->foreign_key . " = ?";
+				break;
 		}
 		return $ret;
 	}
