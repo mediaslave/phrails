@@ -97,11 +97,11 @@ class Adapter extends PDO
 		try{
 			$result = ResultFactory::factory($this->Statement);
 			foreach($query->query as $key => $query){
-				print $key;
+				//print $key;
 				$key = Inflections::pluralize($key);
 				$stmt = $this->prepare($query);
-				print $stmt->queryString . "<br/>";
-				var_dump($query->params);
+				//print $stmt->queryString . "<br/>";
+				//var_dump($query->params);
 				$stmt->execute($params);
 				$result->$key = ResultFactory::factory($stmt, true);
 			}

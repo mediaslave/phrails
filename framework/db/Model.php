@@ -61,9 +61,9 @@ abstract class Model
 	 * The current errors, if any during the validation process.
 	 *
 	 * @author Justin Palmer
-	 * @var array
+	 * @var Hash
 	 */
-	protected $errors = array();
+	protected $errors;
 	
 	/**
 	 * Constructor
@@ -83,6 +83,7 @@ abstract class Model
 		$this->props = new Hash($array);
 		$this->schema = new Schema($this);
 		$this->alias = Inflections::singularize($this->table_name);
+		$this->errors = new Hash();
 		//Store the db adapter.
 		$this->db = new $Adapter($this);
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
@@ -121,8 +122,6 @@ abstract class Model
 		$boolean = $this->validate();
 		if($boolean){
 			return $this->db->saveNow();
-		}else{
-			throw new RecordInvalidException;
 		}
 	}
 	/**
@@ -134,10 +133,18 @@ abstract class Model
 	public function validate()
 	{
 		$boolean = true;
+		$errors = array();
+		$last_model_value = '';
 		//Run validation before calling save.
 		$rules = $this->schema->rules();
 		foreach($rules as $model_value => $element_rules){
-			foreach($element_rules as $rule){
+			//set the errors
+			if(!empty($errors) && $last_model_value != $model_value){
+				$this->errors->set($this->table_name . $model_value, $errors);
+				$last_model_value = $model_value;
+			}
+			foreach($element_rules as $key => $rule){
+				//print $key;
 				//Set the value of the property in the model to the value of the rule
 				//to run the validation on.
 				$rule->value = $this->$model_value;
@@ -145,11 +152,28 @@ abstract class Model
 					if($boolean)
 						$boolean = false;
 					//Add the error message to some sort of array. So that we can add it to a flash.
-					$this->errors[] = $rule->message;
+					$errors[] = $rule->message;
 				}
 			}
 		}
+		if(!empty($errors)){
+			$this->errors->set($this->alias() . '[' . $model_value . ']', $errors);
+		}
+		if(!$this->errors->isEmpty())
+			$boolean = false;
 		return $boolean;
+	}
+	/**
+	 * Does the model actually have the property specified.
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function hasProperty($column)
+	{	
+		if(!$this->columns->isKey($column))
+			throw new NoColumnInTableException($column, $this->table_name());
+		return true;
 	}
 	/**
 	 * Does this model have validation errors
@@ -215,7 +239,7 @@ abstract class Model
 	public function __set($key, $value)
 	{
 		if(!$this->columns->isKey($key))
-			throw new NoColumnInTableException();
+			throw new NoColumnInTableException($key, $this->table_name());
 		$this->props->set($key, $value);
 	}
 	/**

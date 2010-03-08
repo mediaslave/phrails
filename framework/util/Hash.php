@@ -81,4 +81,14 @@ class Hash
 	{
 		return $this->array;
 	}
+	/**
+	 * Is the hash empty?
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function isEmpty()
+	{
+		return (empty($this->array)) ? true : false;
+	}
 }

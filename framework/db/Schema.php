@@ -58,8 +58,9 @@ class Schema
 	 **/
 	public function rule($column, Rule $rule)
 	{
-		if(!$this->model->columns()->isKey($column))
-			throw new NoColumnInTableException($column, $this->model->table_name());
+		//Make sure the property exists.
+		$this->model->hasProperty($column);
+		//Get the rules for this property.
 		$rules = $this->rules->get($column);
 		if($rules === null){
 			$rules = array();

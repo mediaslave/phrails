@@ -62,6 +62,12 @@ class Controller
 	 */
 	protected $pr_after_filters = array();
 	/**
+	 * Holds the flash for the current view.
+	 * 
+	 * @var string
+	 */
+	public $flash = '';
+	/**
 	 * Initialize some vars
 	 *
 	 * @return Controller

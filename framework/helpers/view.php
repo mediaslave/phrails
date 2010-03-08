@@ -72,3 +72,16 @@ function content_for($key, $value){
 function get_content_for($key){
 	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
 }
+
+/**
+ * Flash the message on the screen
+ *
+ * @return string
+ * @author Justin Palmer
+ **/
+function flash_it($flash)
+{
+	if($flash instanceof Flash)
+		return $flash->display();
+	return $flash;
+}

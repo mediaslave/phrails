@@ -9,6 +9,8 @@
 	<?=stylesheet_link_tag('screen', 'media:all')?>
 </head>
 <body>
+	
+	<?= flash_it($flash) ?><br/>
 	<?=link_to('home', path('root'), 'class:menu')?>
 	<br/>
 	<?= $pr_view ?>

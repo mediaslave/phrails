@@ -144,7 +144,7 @@ class Router
 			if($tag == 1){
 				$count++;
 				$key = rtrim(ltrim($vroute, '{'), '}');
-				Registry::set($key, $vuri);
+				$_GET[$key] = $vuri;
 			}else{
 				if($vuri == $vroute){
 					$count++;

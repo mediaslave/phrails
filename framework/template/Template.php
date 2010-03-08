@@ -38,6 +38,7 @@ class Template
 	 * @var array
 	 */
 	protected $route;
+	
 	/**
 	 * Create a new Template
 	 *
@@ -147,6 +148,7 @@ class Template
 	{
 		return strtolower(self::$current_view_path);
 	}	
+
 	/**
 	 * @nodoc
 	 */
