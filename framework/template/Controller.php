@@ -2,6 +2,8 @@
 /**
  * Base controller
  *
+ * @todo Implement pr_from_cache.  If the template comes from the cache and the user
+ * wants to use this feature let them.
  * @package template
  * @author Justin Palmer
  */
@@ -61,6 +63,12 @@ class Controller
 	 * @var string
 	 */
 	protected $pr_after_filters = array();
+	/**
+	 * Was the template generated from the cache?
+	 *
+	 * @var boolean
+	 */
+	public $pr_from_cache_message = '<!-- pr_from_cache -->';
 	/**
 	 * Holds the flash for the current view.
 	 * 

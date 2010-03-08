@@ -3,6 +3,7 @@
  * Text helpers
  *
  * @package helpers
+ * @subpackage text
  * @author Justin Palmer
  */
 /**

@@ -35,7 +35,7 @@ abstract class Model
 	 * @author Justin Palmer
 	 * @var Adapter
 	 */
-	protected $db;
+	protected static $db;
 	/**
 	 * The Schema for the model.
 	 *
@@ -72,7 +72,7 @@ abstract class Model
 	 * @return Model
 	 * @author Justin Palmer
 	 **/
-	public function __construct(array $array=array())
+	public function __construct($array=array())
 	{
 		$Config = Registry::get('pr-db-config');
 		$Adapter = ucwords($Config->driver);
@@ -80,14 +80,14 @@ abstract class Model
 		//Generate the table name if it is not set.
 		if($this->table_name === null)
 			$this->table_name = Inflections::tableize(get_class($this));
-		$this->props = new Hash($array);
 		$this->schema = new Schema($this);
 		$this->alias = Inflections::singularize($this->table_name);
 		$this->errors = new Hash();
 		//Store the db adapter.
-		$this->db = new $Adapter($this);
+		self::$db = new $Adapter($this);
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
 		$this->columns = $this->prepareShowColumns($this->showColumns());
+		$this->setProperties($array);
 		$this->init();
 	}
 	/**
@@ -121,7 +121,7 @@ abstract class Model
 	{
 		$boolean = $this->validate();
 		if($boolean){
-			return $this->db->saveNow();
+			return self::$db->saveNow();
 		}
 	}
 	/**
@@ -132,34 +132,44 @@ abstract class Model
 	 **/
 	public function validate()
 	{
+		//print '<pre>';
 		$boolean = true;
 		$errors = array();
-		$last_model_value = '';
+		$last_prop_name = '';
 		//Run validation before calling save.
+		$props = $this->props->export();
 		$rules = $this->schema->rules();
-		foreach($rules as $model_value => $element_rules){
-			//set the errors
-			if(!empty($errors) && $last_model_value != $model_value){
-				$this->errors->set($this->table_name . $model_value, $errors);
-				$last_model_value = $model_value;
+		//var_dump($props);
+		//Loop through the set properties.
+		foreach($props as $name => $value){
+			if(empty($errors))
+				$last_prop_name = $name;
+			if(!empty($errors) && $last_prop_name != $name){
+				$this->errors->set($this->alias() . '[' . $last_prop_name . ']', $errors);
+				$last_prop_name = $name;
+				$errors = array();
 			}
-			foreach($element_rules as $key => $rule){
-				//print $key;
-				//Set the value of the property in the model to the value of the rule
-				//to run the validation on.
-				$rule->value = $this->$model_value;
-				if(!$rule->run()){
-					if($boolean)
-						$boolean = false;
-					//Add the error message to some sort of array. So that we can add it to a flash.
-					$errors[] = $rule->message;
+			//If there are rules for the property let's go through them.
+			if($rules->isKey($name)){
+				//print $name . ':' . $value . '<br/><br/>';
+				//Get the rules.
+				$prop_rules = $rules->get($name);
+				//var_dump($prop_rules);
+				foreach($prop_rules as $key => $rule){
+					$rule->value = $value;
+					if(!$rule->run()){
+						if($boolean)
+							$boolean = false;
+						//Add the error message to some sort of array. So that we can add it to a flash.
+						$errors[] = $rule->message;
+					}
 				}
 			}
 		}
 		if(!empty($errors)){
-			$this->errors->set($this->alias() . '[' . $model_value . ']', $errors);
+			$this->errors->set($this->alias() . '[' . $name . ']', $errors);
 		}
-		if(!$this->errors->isEmpty())
+		if(!$this->errors()->isEmpty())
 			$boolean = false;
 		return $boolean;
 	}
@@ -209,10 +219,10 @@ abstract class Model
 	{
 		//print('we tried to call' . $method);
 		$object = null;
-		if(method_exists($this->db, $method)){
-			$object = $this->db;
-		}else if(method_exists($this->db->builder, $method)){
-			$object = $this->db->builder;
+		if(method_exists(self::$db, $method)){
+			$object = self::$db;
+		}else if(method_exists(self::$db->builder, $method)){
+			$object = self::$db->builder;
 		}else{
 			throw new Exception('We do not have that method. Tried to call: ' . $method);
 		}
@@ -238,7 +248,7 @@ abstract class Model
 	 **/
 	public function __set($key, $value)
 	{
-		if(!$this->columns->isKey($key))
+		if(!$this->columns()->isKey($key))
 			throw new NoColumnInTableException($key, $this->table_name());
 		$this->props->set($key, $value);
 	}
@@ -250,7 +260,21 @@ abstract class Model
 	 **/
 	public function __destruct()
 	{
-		$this->db = null;
+		self::$db = null;
+	}
+	/**
+	 * Set properties from an array(), this will throw an exception if a property in the array is invalid;
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function setProperties($array)
+	{	
+		$this->props = new Hash();
+		if(is_array($array)){
+			foreach($array as $key => $value)
+				$this->$key = $value;
+		}
 	}
 	/**
 	 * Get the error array
@@ -298,9 +322,9 @@ abstract class Model
 	 * @return Adapter
 	 * @author Justin Palmer
 	 **/
-	public function db()
+	public static function db()
 	{
-		return $this->db;
+		return self::$db;
 	}
 	/**
 	 * Get the alias

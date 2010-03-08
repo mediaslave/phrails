@@ -64,6 +64,7 @@ class FlashForm extends Flash
 			$labels = self::$Labels;
 			if(!empty($this->array)){
 				$ret = '<div class="' . $this->class . '">
+							<div>' . $this->title . '</div>
 							<ul>';
 				foreach($this->array as $key => $value){
 					foreach($value as $message){

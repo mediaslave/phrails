@@ -39,4 +39,4 @@ To set it up, under Apache, add the following to virtual host:
 
 To create documentation from the framework folder run:
 
-phpdoc -t docs -d . -ti Phrails -i tests/ -o HTML:frames:earthli
+phpdoc -t docs -d . -ti Phrails Documentation -o HTML:frames:earthli -i tests/,helpers/examples/,__view__/

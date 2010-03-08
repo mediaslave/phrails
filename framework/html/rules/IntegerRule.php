@@ -17,6 +17,6 @@ class IntegerRule extends Rule
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		return parent::run(!is_int($this->value));
+		return parent::run(!is_numeric($this->value));
 	 }
 } // END class Rule

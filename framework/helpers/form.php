@@ -1,5 +1,12 @@
 <?php
 /**
+ * Text helpers
+ *
+ * @package helpers
+ * @subpackage form
+ * @author Justin Palmer
+ */
+/**
  * Image submit button
  *
  * @return string

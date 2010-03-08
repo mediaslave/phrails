@@ -28,9 +28,10 @@
 <p class="short-description">Base controller</p>
 	<ul class="tags">
 				<li><span class="field">author:</span> Justin Palmer</li>
+				<li><span class="field">todo:</span> Implement pr_from_cache.  If the template comes from the cache and the user  wants to use this feature let them.</li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_template---Controller.php.html">/template/Controller.php</a> (line <span class="field">8</span>)
+			Located in <a class="field" href="_template---Controller.php.html">/template/Controller.php</a> (line <span class="field">10</span>)
 		</p>
 		
 				
@@ -53,7 +54,7 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																<div class="var-title">
+																																																																																																								<div class="var-title">
 					<img src="../media/images/Variable.png" alt=" " />
 					<span class="var-type">string</span>
 					<a href="#$flash" title="details" class="var-name">$flash</a>
@@ -92,6 +93,11 @@
 					<img src="../media/images/Variable.png" alt=" " />
 					<span class="var-type">boolean</span>
 					<a href="#$pr_do_cache" title="details" class="var-name">$pr_do_cache</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">boolean</span>
+					<a href="#$pr_from_cache_message" title="details" class="var-name">$pr_from_cache_message</a>
 				</div>
 																<div class="var-title">
 					<img src="../media/images/Variable.png" alt=" " />
@@ -199,7 +205,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$flash</span>
-			 = <span class="var-default"> ''</span>			(line <span class="line-number">69</span>)
+			 = <span class="var-default"> ''</span>			(line <span class="line-number">77</span>)
 		</span>
 	</div>
 
@@ -222,7 +228,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_action</span>
-						(line <span class="line-number">27</span>)
+						(line <span class="line-number">29</span>)
 		</span>
 	</div>
 
@@ -245,7 +251,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_after_filters</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number">63</span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number">65</span>)
 		</span>
 	</div>
 
@@ -268,7 +274,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_before_filters</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number">57</span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number">59</span>)
 		</span>
 	</div>
 
@@ -291,7 +297,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_cache_except</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number">51</span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number">53</span>)
 		</span>
 	</div>
 
@@ -314,7 +320,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$pr_cache_only</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number">45</span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number">47</span>)
 		</span>
 	</div>
 
@@ -337,7 +343,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_controller</span>
-						(line <span class="line-number">21</span>)
+						(line <span class="line-number">23</span>)
 		</span>
 	</div>
 
@@ -360,7 +366,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$pr_do_cache</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">39</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">41</span>)
 		</span>
 	</div>
 
@@ -375,15 +381,38 @@
 		
 
 </div>
-<a name="var$pr_layout" id="$pr_layout"><!-- --></A>
+<a name="var$pr_from_cache_message" id="$pr_from_cache_message"><!-- --></A>
 <div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">boolean</span>
+			<span class="var-name">$pr_from_cache_message</span>
+			 = <span class="var-default"> '&lt;!-- pr_from_cache --&gt;'</span>			(line <span class="line-number">71</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Was the template generated from the cache?</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$pr_layout" id="$pr_layout"><!-- --></A>
+<div class="oddrow">
 
 	<div class="var-header">
 		<img src="../media/images/Variable.png" />
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pr_layout</span>
-			 = <span class="var-default"> 'application'</span>			(line <span class="line-number">15</span>)
+			 = <span class="var-default"> 'application'</span>			(line <span class="line-number">17</span>)
 		</span>
 	</div>
 
@@ -400,14 +429,14 @@
 
 </div>
 <a name="var$pr_view_types" id="$pr_view_types"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<img src="../media/images/Variable.png" />
 		<span class="var-title">
 			<span class="var-type"><a href="../util/Hash.html">Hash</a></span>
 			<span class="var-name">$pr_view_types</span>
-						(line <span class="line-number">33</span>)
+						(line <span class="line-number">35</span>)
 		</span>
 	</div>
 
@@ -438,11 +467,11 @@
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Constructor.png" />
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">76</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">84</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -464,11 +493,11 @@
 			
 	</div>
 <a name="methodprNoAction" id="prNoAction"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">prNoAction</span> (line <span class="line-number">243</span>)
+		<span class="method-title">prNoAction</span> (line <span class="line-number">251</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -489,11 +518,11 @@
 			
 	</div>
 <a name="methodprNoController" id="prNoController"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">prNoController</span> (line <span class="line-number">236</span>)
+		<span class="method-title">prNoController</span> (line <span class="line-number">244</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -514,11 +543,11 @@
 			
 	</div>
 <a name="methodprNoRoute" id="prNoRoute"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">prNoRoute</span> (line <span class="line-number">229</span>)
+		<span class="method-title">prNoRoute</span> (line <span class="line-number">237</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -539,11 +568,11 @@
 			
 	</div>
 <a name="methodprNoViewType" id="prNoViewType"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">prNoViewType</span> (line <span class="line-number">251</span>)
+		<span class="method-title">prNoViewType</span> (line <span class="line-number">259</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -565,11 +594,11 @@
 			
 	</div>
 <a name="methodprRun" id="prRun"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">prRun</span> (line <span class="line-number">91</span>)
+		<span class="method-title">prRun</span> (line <span class="line-number">99</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -599,11 +628,11 @@
 			
 	</div>
 <a name="methodredirectTo" id="redirectTo"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">redirectTo</span> (line <span class="line-number">129</span>)
+		<span class="method-title">redirectTo</span> (line <span class="line-number">137</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -630,11 +659,11 @@
 			
 	</div>
 <a name="methodrender" id="render"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">render</span> (line <span class="line-number">119</span>)
+		<span class="method-title">render</span> (line <span class="line-number">127</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -661,11 +690,11 @@
 			
 	</div>
 <a name="methodrespondTo" id="respondTo"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../media/images/Method.png" />
-		<span class="method-title">respondTo</span> (line <span class="line-number">141</span>)
+		<span class="method-title">respondTo</span> (line <span class="line-number">149</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -692,7 +721,7 @@
 
 	
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 07 Mar 2010 23:10:07 -0800 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Mon, 08 Mar 2010 08:29:30 -0800 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

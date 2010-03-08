@@ -10,6 +10,7 @@
 </head>
 <body>
 	
+	<?= $pr_from_cache_message ?>
 	<?= flash_it($flash) ?>
 	<br/>
 	<?= $pr_view ?>

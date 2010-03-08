@@ -1,6 +1,7 @@
 <?php
 /**
  * @package helpers 
+ * @subpackage view
  */
 
 /**

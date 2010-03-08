@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs for page view.php</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="file-name"><img src="../../media/images/Page_logo.png" alt="File" style="vertical-align: middle">/helpers/view.php</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-functions">Functions</a>
+			</div>
+	<div class="info-box-body">	
+		<!-- ========== Info from phpDoc block ========= -->
+		
+			</div>
+</div>
+		
+
+	
+	
+	
+	<a name="sec-functions"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Functions</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<span class="disabled">Functions</span>
+		</div>
+		<div class="info-box-body">	
+			<a name="functioncontent_for" id="functioncontent_for"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">content_for</span> (line <span class="line-number">45</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set the content for a certain var from the view.</p>
+<p class="description"><p>Use of this method will over right any vars set in the controller  that are used in the layout.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Justin Palmer</li>
+			</ul>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			content_for
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$key</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$key</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionflash_it" id="functionflash_it"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">flash_it</span> (line <span class="line-number">69</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Flash the message on the screen.</p>
+<p class="description"><p>You can create your own Flash by extending the <div class="src-code"><ol><li><div class="src-line"><span class="src-id"><a href="../../util/Flash.html">Flash</a></span></div></li>
+</ol></div> class  and implementing the <div class="src-code"><ol><li><div class="src-line"><span class="src-id">display</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+</ol></div> method.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Justin Palmer</li>
+			</ul>
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			flash_it
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$flash</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$flash</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionget_content_for" id="functionget_content_for"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">get_content_for</span> (line <span class="line-number">56</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get the value of an existing content_for key.</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Justin Palmer</li>
+			</ul>
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			get_content_for
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$key</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$key</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionrender" id="functionrender"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">render</span> (line <span class="line-number">16</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Render a partial or file to the current view.</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Justin Palmer</li>
+				<li><span class="field">example:</span> <a href="../../__examplesource/exsource_hp_php-rails_framework_helpers_examples_render.php_2ded19d3ea31cb0aae92b611e68a262d.html">example</a></li>
+			</ul>
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			render
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">0</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">1</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">0</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">1</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionstylesheet_link_tag" id="functionstylesheet_link_tag"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">stylesheet_link_tag</span> (line <span class="line-number">30</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Create a link tag for the stylesheet</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Justin Palmer</li>
+				<li><span class="field">example:</span> <a href="../../__examplesource/exsource_framework_helpers_examples_stylesheet-link-tag.php_ed8c1d001a63306af2ad71d2ebe168db.html">example</a></li>
+			</ul>
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			stylesheet_link_tag
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">&#039;&#039;</span>], <span class="var-type">string</span>&nbsp;<span class="var-name">$options=''</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$file</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$options=''</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$options</span>			</li>
+				</ul>
+		
+	
+</div>
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Mon, 08 Mar 2010 08:29:37 -0800 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

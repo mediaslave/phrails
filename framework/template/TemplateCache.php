@@ -71,7 +71,6 @@ class TemplateCache extends Template
 		//If it is a valid cache type then call the method and return the template view.
 		$cached = $this->Cache->isCached();
 		if($cached !== false){
-			//print 'from cache<br/><br/>';
 			return $this->Cache->get();
 		}
 		//If it is not cached then display the non-cached version.

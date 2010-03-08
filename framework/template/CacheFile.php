@@ -2,6 +2,7 @@
 /**
  * Class to cache files
  *
+ * @todo cache message is hard coded, should be able to change this.
  * @credit Largly based off of Brian E. Lozier (brian@massassi.net) template caching example
  * on sitepoint.com.
  * @package template
@@ -92,7 +93,7 @@ class CacheFile extends Cache
 		$boolean = true;
 		// Write the cache 
 	    if($fp = fopen($this->path, 'x')) {    
-	        $boolean = fwrite($fp, $this->value);    
+	        $boolean = fwrite($fp, str_replace('<!-- pr_from_cache -->', '<div class="from-cache-message">This template is generated from the cache and the data may be out of date.</div>', $this->value));    
 	        fclose($fp);    
 			//chmod($filename, '777');
 	    }else{

@@ -39,6 +39,12 @@ class Schema
 	 */
 	private $last_relationship = null;
 	/**
+	 * The last column that a rule was added to.
+	 *
+	 * @var string
+	 */
+	private $last_rule_column = null;
+	/**
 	 * Constructor
 	 *
 	 * @return void
@@ -76,7 +82,7 @@ class Schema
 	 **/
 	public function rules()
 	{
-		return $this->rules->export();
+		return $this->rules;
 	}
 	/**
 	 * Set the table name for the current relationship explicitly.

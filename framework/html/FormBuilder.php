@@ -7,7 +7,8 @@
  */
 class FormBuilder
 {
-	private $model;
+	protected $model;
+	protected $class = 'form-error';
 	/**
 	 * Constructor
 	 *
@@ -15,9 +16,10 @@ class FormBuilder
 	 * @author Justin Palmer
 	 * @return FormBuilder
 	 */
-	function __construct(Model $model)
+	function __construct(Model $model, $on_error_class='form-error')
 	{
 		$this->model = $model;
+		$this->class = $on_error_class;
 	}
 	/**
 	 * return a Label for a model property
@@ -29,6 +31,7 @@ class FormBuilder
 	public function label($property, $text, $options='')
 	{
 		$name = $this->getElementName($property);
+		$options = $this->checkForErrors($property, $options);
 		FlashForm::setLabel($name, $text);
 		return new Label($text, $this->model->alias() . "_$property" . "_id", $options);
 	}
@@ -40,7 +43,8 @@ class FormBuilder
 	 * @author Justin Palmer
 	 **/
 	public function text_field($property, $options='')
-	{
+	{	
+		$options = $this->checkForErrors($property, $options);
 		return new InputText($this->getElementName($property), $this->model->$property, $options);
 	}	
 	/**
@@ -52,6 +56,7 @@ class FormBuilder
 	 **/
 	public function hidden_field($property, $options='')
 	{
+			$options = $this->checkForErrors($property, $options);
 		return new InputHidden($this->getElementName($property), $this->model->$property, $options);
 	}	
 	/**
@@ -63,6 +68,7 @@ class FormBuilder
 	 **/
 	public function file_field($property, $options='')
 	{
+			$options = $this->checkForErrors($property, $options);
 		return new InputFile($this->getElementName($property), $this->model->$property, $options);
 	}
 	/**
@@ -74,6 +80,7 @@ class FormBuilder
 	 **/
 	public function check_box($property, $checked=false, $options='')
 	{
+			$options = $this->checkForErrors($property, $options);
 		return new InputCheckbox($this->getElementName($property), $this->model->$property, $checked, $options);
 	}
 	/**
@@ -85,6 +92,7 @@ class FormBuilder
 	 **/
 	public function radio_button($property, $value, $checked=false, $options='')
 	{
+			$options = $this->checkForErrors($property, $options);
 		$name = $this->getElementName($property);
 		if($checked == false && $this->model->$property == $value)
 			$checked = true;
@@ -99,7 +107,23 @@ class FormBuilder
 	 **/
 	public function text_area($property, $options='')
 	{
+			$options = $this->checkForErrors($property, $options);
 		return new Textarea($this->getElementName($property), $this->model->$property, $options);
+	}
+	/**
+	 * Check to see if the model has errors registered for this element.
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	private function checkForErrors($property, $options)
+	{
+		if($this->model->errors()->isKey($this->getElementName($property))){
+			if($options != '')
+				$options .= ',';
+			$options .= 'class:' . $this->class;
+		}
+		return $options;
 	}
 	/**
 	 * Get the elements name
