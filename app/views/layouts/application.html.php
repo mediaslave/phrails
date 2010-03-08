@@ -10,8 +10,7 @@
 </head>
 <body>
 	
-	<?= flash_it($flash) ?><br/>
-	<?=link_to('home', path('root'), 'class:menu')?>
+	<?= flash_it($flash) ?>
 	<br/>
 	<?= $pr_view ?>
 	<br/>

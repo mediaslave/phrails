@@ -36,3 +36,7 @@ To set it up, under Apache, add the following to virtual host:
         RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
     </Location>
 </VirtualHost>
+
+To create documentation from the framework folder run:
+
+phpdoc -t docs -d . -ti Phrails -i tests/ -o HTML:frames:earthli

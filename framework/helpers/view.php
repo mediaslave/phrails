@@ -6,18 +6,7 @@
 /**
  * Render a partial or file to the current view.
  *
- * If the file to render is in the current views directory then you can pass
- * in just the name of the file minus the '_' and the '.php'
- *
- * render('count', array('count'=>array('1','2','3')))
- * render('login');
- *
- * If the file to render is <b>outside</b> the  current views directory you must
- * pass in the full path.
- *
- * render('home/_count.php', array('count'=>array('1','2','3')))
- * render('login/_login.php')
- *
+ * @example examples/render.php
  * @param string
  * @param array
  * @return string
@@ -31,13 +20,7 @@ function render(){
 /**
  * Create a link tag for the stylesheet
  *
- * stylesheet_link_tag('screen', 'media:all') will generate
- * <link href="/public/stylesheets/screen.css" media="all" type="text/css" />
- *
- * Link to a css file in a sub folder
- * stylesheet_link_tag('sub/folder/screen');
- * <link href="/public/stylesheets/sub/folder/screen.css" type="text/css" />
- *
+ * @example examples/stylesheet-link-tag.php
  * @param string $file
  * @param string $options=''
  * @return string
@@ -74,7 +57,10 @@ function get_content_for($key){
 }
 
 /**
- * Flash the message on the screen
+ * Flash the message on the screen.
+ * 
+ * You can create your own Flash by extending the <code>Flash</code> class 
+ * and implementing the <code>display()</code> method.
  *
  * @return string
  * @author Justin Palmer
