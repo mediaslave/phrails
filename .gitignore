@@ -1,10 +1,6 @@
 .DS_Store
-app/controllers/*
-app/helpers/*
-app/models/*
-app/views/*
-app/view-cache
-lib/*
-public/images/*
-public/javascript/*
-public/stylesheets/*
+app
+config
+lib
+public
+vendor
