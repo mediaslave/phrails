@@ -11,8 +11,8 @@ $Route = Registry::get('pr-route');
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
-</p>We could not find the controller: <b><?= $Route['requested'] ?></b></p>
+</p>We could not find the controller: <b><?= $Route->requested ?></b></p>
 	
-<p>Create the controller at <em>app/controllers/<?= $Route['requested']?>.php</em></p>
+<p>Create the controller at <em>app/controllers/<?= $Route->requested?>.php</em></p>
 </body>
 </html>

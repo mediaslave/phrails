@@ -84,6 +84,9 @@ class Router
 		//Find the closest route
 		$close_route = $this->findClosestRoute($request_uri);
 		$ret = $close_route['ret'];
+		$test = (array)$ret;
+		if(empty($test))
+			throw new NoRouteException();
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
 		$route = explode('/', $ret->path);

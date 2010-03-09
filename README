@@ -1,4 +1,8 @@
-To set it up, under Apache, add the following to virtual host:
+To create a new project using phrails please go to the phrails-bin project:
+
+http://github.com/mediaslave/phrails-bin
+
+Under Apache, add the following to virtual host:
 
 <VirtualHost *:80>
     ServerName phrails
