@@ -61,8 +61,8 @@ class Router
 		}catch(NoActionException $e){	
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoAction',
-											'no-action' => $action,
-											'no-controller'=> $controller,
+											'no_action' => $action,
+											'no_controller'=> $controller,
 											'view_type' => 'html'));
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
