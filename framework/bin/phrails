@@ -1,0 +1,43 @@
+#!/usr/local/bin/php -q
+<?php
+$script_name = array_shift($argv);
+$path = array_shift($argv);
+if($path !== null){
+	create_directory_structure($path);
+}
+else{
+	print 'Must specify a name for the project. Example: ./phrails /home/jpalmer/to-do.';
+}
+
+function create_directory_structure($path){
+	create_directory($path);
+		//app
+		create_directory($path . '/app');
+		create_directory($path . '/app/controllers');
+		create_directory($path . '/app/helpers');
+		create_directory($path . '/app/models');
+		create_directory($path . '/app/views');
+		create_directory($path . '/app/views/layouts');
+		//config
+		create_directory($path . '/config');
+		create_directory($path . '/config/environments');
+		//lib
+		create_directory($path . '/lib');
+		//public
+		create_directory($path . '/public');
+		create_directory($path . '/public/images');
+		create_directory($path . '/public/javascript');
+		create_directory($path . '/public/stylesheets');
+		//vendor
+		create_directory($path . '/vendor');
+		create_directory($path . '/vendor/plugins');
+}
+
+function create_directory($path){
+	if(is_dir($path)){
+		print "Fail - Already Exists: $path\n";
+	}else{
+		mkdir($path);
+		print "Created: $path\n"
+	}
+}
