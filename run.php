@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-Registry::set('pr-phrails-version', '0.01');
-
 //Default the pr-install-path to the root of the webserver.
 $base_uri = '/';
 //If it is set in the server config, then we will use it.

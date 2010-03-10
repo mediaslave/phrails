@@ -1,46 +1,61 @@
 To create a new project using phrails please go to the phrails-bin project:
 
-http://github.com/mediaslave/phrails-bin
+	http://github.com/mediaslave/phrails-bin
 
 Under Apache, add the following to virtual host:
 
-<VirtualHost *:80>
-    ServerName phrails
-    DocumentRoot /path/to/your/web/phrails
+	<VirtualHost *:80>
+	    ServerName phrails
+	    DocumentRoot /path/to/your/web/phrails
 
-    setenv PHP_RAILS_BASE_URI /
-	setenv PHP_RAILS_ENV development
+	    setenv PHP_RAILS_BASE_URI /
+		setenv PHP_RAILS_ENV development
                 
-    RewriteEngine off
+	    RewriteEngine off
         
-    <Location /app>
-        Deny from all
-    </Location>
+	    <Location /app>
+	        Deny from all
+	    </Location>
         
-    <Location /config>
-        Deny from all
-    </Location>
+	    <Location /config>
+	        Deny from all
+	    </Location>
                 
-    <Location /framework>
-        Deny from all
-    </Location>
+	    <Location /framework>
+	        Deny from all
+	    </Location>
         
-    <Location /lib>
-        Deny from all  
-    </Location>	
+	    <Location /lib>
+	        Deny from all  
+	    </Location>	
 
-    <Location /vendor>
-        Deny from all  
-    </Location>
+	    <Location /vendor>
+	        Deny from all  
+	    </Location>
 
-    <Location />
-        RewriteEngine on
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
-    </Location>
-</VirtualHost>
+	    <Location />
+	        RewriteEngine on
+	        RewriteCond %{REQUEST_FILENAME} !-f
+	        RewriteCond %{REQUEST_FILENAME} !-d
+	        RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
+	    </Location>
+	</VirtualHost>
 
-To create documentation from the framework folder run:
+Generate controllers and models
+	
+	Controller generator will create the controller class and the view files based off the actions provided.
+	
+		Format: script/generate controller ControllerName [action, ...]
+		
+		Example: script/generate controller Home
+		Example: script/generate controller Home index about
 
-phpdoc -t docs -d . -ti Phrails Documentation -o HTML:frames:earthli -i tests/,helpers/examples/,__view__/
+	Model generator will create the correct model class.  Singular model names expect plural table names.
+	
+		Format: script/generate model ModelName
+		
+		Example: script/generate model User
+
+To create documentation from the base folder run:
+
+	phpdoc -t docs -d . -ti Phrails -o HTML:frames:earthli -i tests/*,examples/*,__view__/*
