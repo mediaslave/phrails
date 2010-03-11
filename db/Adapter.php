@@ -95,6 +95,7 @@ class Adapter extends PDO
 		$params = $query->params;
 		$this->Statement->execute($query->params);
 		try{
+			//$model = get_class($this->model);
 			$result = ResultFactory::factory($this->Statement);
 			foreach($query->query as $key => $query){
 				//print $key;
@@ -121,7 +122,7 @@ class Adapter extends PDO
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
 		$this->builder->reset();
-		$this->Statement = $this->prepare($query->query[0]);
+		$this->Statement = $this->prepare(array_shift($query->query));
 		$this->Statement->execute(array_values($query->params));
 		return ResultFactory::factory($this->Statement, $forceSet);
 	}
@@ -144,13 +145,14 @@ class Adapter extends PDO
 			$this->Statement = $this->prepare(sprintf("INSERT INTO `$table_name` (%s) values (%s)", $columns, $marks));
 			$params = array_values($props);
 			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
-		}else{	
+		}else{
+			$id = $this->model->$primary_key_name;	
 			$this->model->removeProperty($primary_key_name);
 			//Get the props before setting the primary key for the UpdateSet method
 			$props = $this->model->props()->export();
-			$primary_key_name = $id;
 			$query = "UPDATE `$table_name` SET %s WHERE `$primary_key_name` = ?";	
 			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
+			$this->model->$primary_key_name = $id;
 			$params = array_values($this->model->props()->export());
 			return ($this->Statement->execute($params)) ? true : false;
 		}

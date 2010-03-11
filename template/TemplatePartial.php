@@ -51,7 +51,7 @@ class TemplatePartial
 	{
 		$match = preg_match('/(\/)/', $file);
 		if(!$match)
-			$file = Template::getCurrentViewPath() . '/_' . $file . '.php';
+			$file = Template::getCurrentViewPath() . '/_' . $file . '.html.php';
 		return $file;
 	}
 }
