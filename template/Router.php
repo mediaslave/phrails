@@ -174,6 +174,11 @@ class Router
 	private function requestUri()
 	{
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
+		$request_uri[0] = ltrim($request_uri[0], Registry::get('pr-install-path'));
+		//print $request_uri[0] . '<br/>';
+		//var_dump(Registry::get('pr-install-path'));
+		if($request_uri[0] == '')
+			$request_uri[0] = '/';
 		$extension = explode('.', $request_uri[0]);
 		//print_r($extension);
 		//var_dump($extension);
