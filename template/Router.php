@@ -24,7 +24,7 @@ class Router
 	 **/
 	public function route()
 	{
-		print '<pre>';
+		//print '<pre>';
 		//Process the request.
 		try{
 			//Figure out what page the user is trying to access.
@@ -90,15 +90,15 @@ class Router
 		//var_dump($test);
 		if(empty($test))
 			throw new NoRouteException();
-		print $request_uri . '<br/>';
-		print $ret->path . '<br/>';
+		//print $request_uri . '<br/>';
+		//print $ret->path . '<br/>';
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
-		print 'uri-findByPath:' . '<br/>';
-		var_dump($uri);
+		//print 'uri-findByPath:' . '<br/>';
+		//var_dump($uri);
 		$route = explode('/', $ret->path);
-		print 'route-findByPath<br/>';
-		var_dump($route);
+		//print 'route-findByPath<br/>';
+		//var_dump($route);
 		//verify that the route exists. This method will throw an exception if there is a problem.
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
@@ -118,6 +118,7 @@ class Router
 		$ret = new stdClass;
 		$controller_action = null;
 		foreach($Routes->export() as $key => $value){
+			//var_dump($Routes->export());
 			$value = (object) $value;
 			if($request_uri == $value->path){
 				$ret = $value;
@@ -141,8 +142,8 @@ class Router
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
-		var_dump($uri);
-		var_dump($route);
+		//var_dump($uri);
+		//var_dump($route);
 		//print $controller_action . '<br/>';
 		$ret = null;
 		$rsize = sizeof($route);
