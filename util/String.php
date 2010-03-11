@@ -8,6 +8,28 @@
 class String
 {
 	/**
+	 * Truncate a string based on the params given.
+	 * 
+	 * Based off Kyle Neath's truncate function.
+	 *
+	 * @param string $string 
+	 * @param integer $limit 
+	 * @param string $pad 
+	 * @param string $break 
+	 * @return void
+	 * @author Justin Palmer
+	 */
+	public static function truncate($string, $limit, $pad="...", $break=".") { 
+	    if(strlen($string) <= $limit) return $string; 
+	    if(false !== ($breakpoint = strpos($string, $break, $limit))) { 
+	        if($breakpoint < strlen($string) - 1) { 
+	            $string = substr($string, 0, $breakpoint) . $pad; 
+	        } 
+	    } 
+	    return $string;
+	}
+	
+	/**
 	 * Escape the passed in var.
 	 *
 	 * @param string $value 

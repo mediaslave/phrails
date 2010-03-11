@@ -7,7 +7,7 @@
  * @author Justin Palmer
  */
 /**
- * @see String::escape();
+ * @see String::$escape()
  **/
 function h($string)
 {
@@ -15,7 +15,7 @@ function h($string)
 }
 
 /**
- * @see String::decode();
+ * @see String::$decode()
  **/
 function decode()
 {
@@ -23,7 +23,7 @@ function decode()
 }
 
 /**
- * @see Inflections::pluralize
+ * @see Inflections::$pluralize()
  **/
 function pluralize($string)
 {
@@ -31,9 +31,16 @@ function pluralize($string)
 }
 
 /**
- * @see Inflections::singularize
+ * @see Inflections::$singularize()
  **/
 function singularize($string)
 {
 	return Inflections::singularize($string);
+}
+/**
+ * @see String::$truncate()
+ **/
+function truncate($string, $limit, $pad='...', $break='.')
+{
+	return String::truncate($string, $limit, $pad, $break);
 }
