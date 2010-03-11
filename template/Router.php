@@ -81,6 +81,7 @@ class Router
 	{
 		//Get the correct request_uri
 		$request_uri = $this->requestUri();
+		//print $request_uri . '<br/>';
 		//Find the closest route
 		$close_route = $this->findClosestRoute($request_uri);
 		$ret = $close_route['ret'];
@@ -90,6 +91,7 @@ class Router
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
 		$route = explode('/', $ret->path);
+		//var_dump($uri);
 		//verify that the route exists. This method will throw an exception if there is a problem.
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
@@ -132,6 +134,9 @@ class Router
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
+		//var_dump($uri);
+		//var_dump($route);
+		//print $controller_action . '<br/>';
 		$ret = null;
 		$rsize = sizeof($route);
 		$size = sizeof($uri);
@@ -171,10 +176,16 @@ class Router
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
 		$extension = explode('.', $request_uri[0]);
 		//print_r($extension);
+		//var_dump($extension);
 		$size = sizeof($extension);
-		if($size > 0 && $request_uri[0] != $extension[0])
+		//print sizeof($extension) . '<br/>';
+		//print $request_uri[0] . '<br/>';
+		//print $extension[0] . '<br/>';
+		if($size > 1 && trim($request_uri[0]) != trim($extension[0])){
 			$this->extension = $extension[$size - 1];
-		//print $this->extension;
-		return rtrim($extension[0], $this->extension);
+		}
+		//print $this->extension . '<br/>';
+		//print $extension[0] . '<br/>';
+		return str_replace('.' . $this->extension, '', $extension[0]);
 	}
 }

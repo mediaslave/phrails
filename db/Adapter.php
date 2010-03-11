@@ -121,7 +121,7 @@ class Adapter extends PDO
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
 		$this->builder->reset();
-		$this->Statement = $this->prepare($query->query);
+		$this->Statement = $this->prepare($query->query[0]);
 		$this->Statement->execute(array_values($query->params));
 		return ResultFactory::factory($this->Statement, $forceSet);
 	}

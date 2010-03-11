@@ -182,16 +182,19 @@ class Controller
 	 * @author Justin Palmer
 	 **/
 	private function filter($array)
-	{
+	{	
+		$filters = array();
 		if(isset($array[$this->pr_action])){
-			$filter = $array[$this->pr_action];
-			if(is_array($filter)){
-				foreach($filter as $method){
-					$this->runFilter($method);
-				}
-			}else{
-				$this->runFilter($filter);
+			$filters[] = $array[$this->pr_action];
+		}
+		if(isset($array['pr_global']))
+			$filters = array_merge($filters, $array['pr_global']);
+		if(is_array($filters)){
+			foreach($filters as $method){
+				$this->runFilter($method);
 			}
+		}else{
+			$this->runFilter($filter);
 		}
 	}
 	
