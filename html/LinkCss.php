@@ -16,7 +16,7 @@ class LinkCss extends Link
 	 * 
 	 * @var string
 	 */
-	protected $options = 'type:text/css';
+	protected $options = 'type:text/css,rel:stylesheet';
 	/**
 	 * Return a linkCss object
 	 *
@@ -30,7 +30,7 @@ class LinkCss extends Link
 		$path = $path . '.css';
 		$app_path = Registry::get('pr-install-path');
 		if($app_path != null)
-			$path = $app_path . 'public/stylesheets/' . $path;
+			$path = $app_path . 'public/stylesheets/' . $path . '?' . time();
 		parent::__construct($path, $options);
 	}
 }

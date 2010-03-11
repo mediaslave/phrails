@@ -50,7 +50,6 @@ class Template
 	{
 		$this->Controller = $controller;
 		self::$ContentFor = new stdClass;
-		$this->prepare();
 	}
 	/**
 	 * Sets the file path and route array.
@@ -104,6 +103,7 @@ class Template
 	 */
 	public function display()
 	{
+		$this->prepare();
 		//Return the appropriate layout and view or view.
 		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path, $this->route->view_type) 
 													   : $this->displayWithLayout($this->view_path);
@@ -154,6 +154,7 @@ class Template
 	 */
 	private function displayWithLayout($path)
 	{
+		//var_dump($path);
 		ob_start();
 			extract($this->objectVars($this->Controller), EXTR_REFS);
 			include $path;

@@ -116,14 +116,14 @@ class Adapter extends PDO
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function findAll()
+	public function findAll($forceSet=true)
 	{
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->prepare($query->query);
 		$this->Statement->execute(array_values($query->params));
-		return ResultFactory::factory($this->Statement, true);
+		return ResultFactory::factory($this->Statement, $forceSet);
 	}
 	
 	/**
@@ -137,7 +137,7 @@ class Adapter extends PDO
 		$table_name = $this->model->table_name();
 		$primary_key_name = $this->model->primary_key();
 		$id = $primary_key_name;
-		if($id == null){
+		if($this->model->$id === null){
 			$props = $this->model->props()->export();
 			$columns = $this->getInsertColumnNames($props);
 			$marks = $this->questionMarksByNum(sizeof($props));
@@ -152,7 +152,7 @@ class Adapter extends PDO
 			$query = "UPDATE `$table_name` SET %s WHERE `$primary_key_name` = ?";	
 			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
 			$params = array_values($this->model->props()->export());
-			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
+			return ($this->Statement->execute($params)) ? true : false;
 		}
 	}
 	/**

@@ -64,7 +64,8 @@ class Routes{
 		$path = '/' . $name;
 		$this->add($name, $path, $controller, 'index');
 		$this->add('edit-' . $name, $path . '/{id}/edit', $controller, 'edit');
-		$this->add('new-' . $name, $path . '/new', $controller, 'create');
+		$this->add('new-' . $name, $path . '/new', $controller, 'init');
+		$this->add('create-' . $name, $path . '/create', $controller, 'create');
 		$this->add('delete-' . $name, $path . '/{id}/delete', $controller, 'delete');
 	}
 	/**

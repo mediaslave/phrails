@@ -36,7 +36,6 @@ class FlashForm extends Flash
 		$array = array();
 		
 		foreach($args as $model){
-			//var_dump($model);
 			$array = array_merge($array, $model->errors()->export());
 		}
 		$this->array = $array;
@@ -62,6 +61,7 @@ class FlashForm extends Flash
 			$ret = '';
 			$lis = '';
 			$labels = self::$Labels;
+			//var_dump($labels);
 			if(!empty($this->array)){
 				$ret = '<div class="' . $this->class . '">
 							<div>' . $this->title . '</div>

@@ -32,6 +32,23 @@ function stylesheet_link_tag($file, $options='')
 	return new LinkCss($file, $options);
 }
 /**
+ * Load a javascript library from google.
+ *
+ * @param string $library
+ * @param string $version
+ * @param boolean $jsapi - Include the google jsapi library?
+ * @return string
+ * @author Justin Palmer
+ **/
+function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsapi=true)
+{
+	$js = '';
+	if($jsapi == true)
+		$js .= '<script src="https://www.google.com/jsapi"></script>' . "\n";
+	$js .= '<script language="JavaScript" type="text/javascript">google.load("' . $library . '", "' . $version . '");</script>' . "\n";
+	return $js;
+}
+/**
  * Set the content for a certain var from the view.
  * 
  * Use of this method will over right any vars set in the controller 
@@ -68,7 +85,10 @@ function get_content_for($key){
  **/
 function flash_it($flash)
 {
-	if($flash instanceof Flash)
+	if($flash instanceof Flash){
 		return $flash->display();
+	}else{
+		$flash = '<div class="flash">' . $flash . '</div>';
+	}
 	return $flash;
 }

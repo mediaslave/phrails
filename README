@@ -58,4 +58,4 @@ Generate controllers and models
 
 To create documentation from the base folder run:
 
-	phpdoc -t docs -d . -ti Phrails -o HTML:frames:earthli -i tests/*,examples/*,__view__/*
+	phpdoc -t docs -d . -ti Phrails -o HTML:frames:earthli -i .git/,tests/,*examples/,__view__/

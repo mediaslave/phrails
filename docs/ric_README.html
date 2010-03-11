@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title></title>
+			<link rel="stylesheet" href="media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<div align="center"><h1>README</h1></div>
+<pre>
+To create a new project using phrails please go to the phrails-bin project:
+
+	http://github.com/mediaslave/phrails-bin
+
+Under Apache, add the following to virtual host:
+
+	&lt;VirtualHost *:80&gt;
+	    ServerName phrails
+	    DocumentRoot /path/to/your/web/phrails
+
+	    setenv PHP_RAILS_BASE_URI /
+		setenv PHP_RAILS_ENV development
+                
+	    RewriteEngine off
+        
+	    &lt;Location /app&gt;
+	        Deny from all
+	    &lt;/Location&gt;
+        
+	    &lt;Location /config&gt;
+	        Deny from all
+	    &lt;/Location&gt;
+                
+	    &lt;Location /framework&gt;
+	        Deny from all
+	    &lt;/Location&gt;
+        
+	    &lt;Location /lib&gt;
+	        Deny from all  
+	    &lt;/Location&gt;	
+
+	    &lt;Location /vendor&gt;
+	        Deny from all  
+	    &lt;/Location&gt;
+
+	    &lt;Location /&gt;
+	        RewriteEngine on
+	        RewriteCond %{REQUEST_FILENAME} !-f
+	        RewriteCond %{REQUEST_FILENAME} !-d
+	        RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
+	    &lt;/Location&gt;
+	&lt;/VirtualHost&gt;
+
+Generate controllers and models
+	
+	Controller generator will create the controller class and the view files based off the actions provided.
+	
+		Format: script/generate controller ControllerName [action, ...]
+		
+		Example: script/generate controller Home
+		Example: script/generate controller Home index about
+
+	Model generator will create the correct model class.  Singular model names expect plural table names.
+	
+		Format: script/generate model ModelName
+		
+		Example: script/generate model User
+
+To create documentation from the base folder run:
+
+	phpdoc -t docs -d . -ti Phrails -o HTML:frames:earthli -i tests/*,examples/*,__view__/*
+</pre>
+	<p class="notes" id="credit">
+		Documentation generated on Wed, 10 Mar 2010 08:31:16 -0800 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</body>
+</html>
