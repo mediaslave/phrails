@@ -24,6 +24,7 @@ class Router
 	 **/
 	public function route()
 	{
+		print '<pre>';
 		//Process the request.
 		try{
 			//Figure out what page the user is trying to access.
@@ -86,12 +87,18 @@ class Router
 		$close_route = $this->findClosestRoute($request_uri);
 		$ret = $close_route['ret'];
 		$test = (array)$ret;
-		var_dump($test);
+		//var_dump($test);
 		if(empty($test))
 			throw new NoRouteException();
+		print $request_uri . '<br/>';
+		print $ret->path . '<br/>';
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
+		print 'uri-findByPath:' . '<br/>';
+		var_dump($uri);
 		$route = explode('/', $ret->path);
+		print 'route-findByPath<br/>';
+		var_dump($route);
 		//verify that the route exists. This method will throw an exception if there is a problem.
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
@@ -134,8 +141,8 @@ class Router
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
-		//var_dump($uri);
-		//var_dump($route);
+		var_dump($uri);
+		var_dump($route);
 		//print $controller_action . '<br/>';
 		$ret = null;
 		$rsize = sizeof($route);
@@ -174,7 +181,10 @@ class Router
 	private function requestUri()
 	{
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
-		$request_uri[0] = ltrim($request_uri[0], Registry::get('pr-install-path'));
+		/**
+		 * Strip of the install path and add a / all routes begin with /.
+		 */
+		$request_uri[0] = '/' . ltrim($request_uri[0], Registry::get('pr-install-path'));
 		//print $request_uri[0] . '<br/>';
 		//var_dump(Registry::get('pr-install-path'));
 		if($request_uri[0] == '')
