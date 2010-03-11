@@ -86,12 +86,12 @@ class Router
 		$close_route = $this->findClosestRoute($request_uri);
 		$ret = $close_route['ret'];
 		$test = (array)$ret;
+		var_dump($test);
 		if(empty($test))
 			throw new NoRouteException();
 		//Create two arrays one for the route and one for the request_uri
 		$uri   = explode('/', $request_uri);
 		$route = explode('/', $ret->path);
-		//var_dump($uri);
 		//verify that the route exists. This method will throw an exception if there is a problem.
 		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
 		if($verified !== null)
