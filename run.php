@@ -1,14 +1,6 @@
 <?php
 session_start();
 
-//Default the pr-install-path to the root of the webserver.
-$base_uri = '/';
-//If it is set in the server config, then we will use it.
-if(isset($_SERVER['PHP_RAILS_BASE_URI']))
-	$base_uri = $_SERVER['PHP_RAILS_BASE_URI'];
-//Set the install path.
-Registry::set('pr-install-path', $base_uri);
-
 $db_config = parse_ini_file('database.ini', true);
 if(isset($db_config[Registry::get('pr-environment')])){
 	Registry::set('pr-db-config', $db_config[Registry::get('pr-environment')]);

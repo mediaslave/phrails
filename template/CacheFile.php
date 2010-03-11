@@ -92,7 +92,7 @@ class CacheFile extends Cache
 	{
 		$boolean = true;
 		// Write the cache 
-	    if($fp = fopen($this->path, 'x')) {    
+	    if($fp = fopen($this->path, 'x')) {
 	        $boolean = fwrite($fp, str_replace('<!-- pr_from_cache -->', '<div class="from-cache-message">This template is generated from the cache and the data may be out of date.</div>', $this->value));    
 	        fclose($fp);    
 			//chmod($filename, '777');

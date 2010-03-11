@@ -5,40 +5,40 @@ To create a new project using phrails please go to the phrails-bin project:
 Under Apache, add the following to virtual host:
 
 	<VirtualHost *:80>
-	    ServerName phrails
-	    DocumentRoot /path/to/your/web/phrails
+	    ServerName php-rails
+	    DocumentRoot /home/jpalmer/projects/php/phrails
 
-	    setenv PHP_RAILS_BASE_URI /
-		setenv PHP_RAILS_ENV development
-                
 	    RewriteEngine off
-        
-	    <Location /app>
-	        Deny from all
-	    </Location>
-        
-	    <Location /config>
-	        Deny from all
-	    </Location>
-                
-	    <Location /framework>
-	        Deny from all
-	    </Location>
-        
-	    <Location /lib>
-	        Deny from all  
-	    </Location>	
 
-	    <Location /vendor>
-	        Deny from all  
+	    <Location /app>
+	        Order allow,deny
+	        Deny from all                
+	    </Location>
+
+	    <Location /config>
+	        Order allow,deny
+	        Deny from all
+	    </Location>
+
+	    <Location /framework>
+	        Order allow,deny
+	        Deny from all
+	    </Location>
+
+	    <Location /lib>
+	        Order allow,deny
+	        Deny from all
 	    </Location>
 
 	    <Location />
 	        RewriteEngine on
+	        setenv PHRAILS_ENV development
+	        setenv PHRAILS_INSTALL_PATH /          
 	        RewriteCond %{REQUEST_FILENAME} !-f
 	        RewriteCond %{REQUEST_FILENAME} !-d
 	        RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
 	    </Location>
+
 	</VirtualHost>
 
 Generate controllers and models

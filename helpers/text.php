@@ -44,3 +44,16 @@ function truncate($string, $limit, $pad='...', $break='.')
 {
 	return String::truncate($string, $limit, $pad, $break);
 }
+function markdown($string) {
+#
+# Initialize the parser and return the result of its transform method.
+#
+	# Setup static parser variable.
+	static $parser;
+	if (!isset($parser)) {
+		$parser = new Markdown;
+	}
+
+	# Transform text using parser.
+	return $parser->transform($string);
+}

@@ -65,3 +65,18 @@ function add_include_directory($path)
 {
 	set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 }
+
+/**
+ * Set the install path.
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function set_install_path($base_uri='/')
+{
+	//If it is set in the server config, then we will use it.
+	if(isset($_SERVER['PHRAILS_BASE_URI']))
+		$base_uri = $_SERVER['PHRAILS_BASE_URI'];
+	//Set the install path.
+	Registry::set('pr-install-path', $base_uri);
+}

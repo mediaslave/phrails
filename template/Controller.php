@@ -127,7 +127,7 @@ class Controller
 	protected function render($action)
 	{
 		$route = Registry::get('pr-route');
-		$route->action = $action;
+		$route->pr_action = $action;
 		Registry::set('pr-route', $route);
 	}
 	/**
