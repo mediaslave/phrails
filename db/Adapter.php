@@ -13,10 +13,11 @@ class Adapter extends PDO
 	/**
 	 * Implemented drivers
 	 *
+	 * @todo , 'sqlite'=>'Sqlite' support
 	 * @author Justin Palmer
 	 * @var array
 	 */
-	protected static $drivers = array('mysql');
+	protected static $drivers = array('mysql'=>'Mysql');
 	/**
 	 * The config loaded from the database.ini
 	 *
@@ -45,17 +46,40 @@ class Adapter extends PDO
 	 * @return DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
-	public function __construct($model, $encoding)
+	public function __construct($model, $encoding=null)
 	{
-		self::getConfig();
-		self::checkDriver();
+		
+		//var_dump(PDO::getAvailableDrivers());
 		$this->model = $model;
-		parent::__construct(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
-							self::$Config->username, 
-							self::$Config->password, 
-							$encoding);
+		$this->parentConstruct($encoding);
 		//Register the adapter with the builder.
 		$this->builder = new SqlBuilder($this->model);
+	}
+	
+	/**
+	 * Hack to get the right connection information to the pdo construct.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function parentConstruct($encoding)
+	{
+		self::getConfig();
+		self::getDriverClass();
+		switch(self::$Config->driver){
+			case 'sqlite':
+				$driver = self::$Config->driver . ":" . self::$Config->database;
+				parent::__construct($driver);
+				break;
+			case 'mysql':
+				parent::__construct(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
+									self::$Config->username, 
+									self::$Config->password, 
+									$encoding);
+				break;
+			default:
+				throw new Exception("Database driver: '" . self::$Config->driver . "' is unknown.");
+		}
 	}
 	/**
 	 * Get all of the column data.
@@ -63,10 +87,9 @@ class Adapter extends PDO
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function showColumns()
+	public function showColumns($query)
 	{
-		$table_name = $this->model->table_name();
-		$this->Statement = $this->prepare("SHOW COLUMNS FROM `$table_name`");
+		$this->Statement = $this->prepare($query);
 		$this->Statement->execute();
 		return ResultFactory::factory($this->Statement);
 	}
@@ -242,11 +265,12 @@ class Adapter extends PDO
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public static function checkDriver()
+	public static function getDriverClass()
 	{
 		$Config = self::getConfig();
-		if(!in_array($Config->driver, self::$drivers))
+		if(!array_key_exists($Config->driver, self::$drivers))
 			throw new Exception("Database driver: '$Config->driver' is unknown.");
+		return self::$drivers[$Config->driver];
 	}
 	
 	/**

@@ -74,9 +74,7 @@ abstract class Model
 	 **/
 	public function __construct($array=array())
 	{
-		$Config = Registry::get('pr-db-config');
-		$Adapter = ucwords($Config->driver);
-		Adapter::checkDriver();
+		$Adapter = Adapter::getDriverClass();
 		//Generate the table name if it is not set.
 		if($this->table_name === null)
 			$this->table_name = Inflections::tableize(get_class($this));

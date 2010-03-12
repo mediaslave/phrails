@@ -46,14 +46,6 @@ Under Apache, add the following to virtual host:
 	
 Install in subdirectory 
 
-	**
-	** This is currently not working.  There is something wrong with the .htaccess file in install root.
-	** You can see more about the problem: http://stackoverflow.com/questions/2423652/htaccess-send-requests-to-a-subfolders-index-php
-	** Possible fix is at: http://github.com/mediaslave/phrails/issues#issue/4
-	**
-	** The possible fix works, but I am trying to get the rewrite to work out of the root to make things more clear.
-	**
-
 	Create a .htaccess file in:
 		app
 		config
@@ -71,11 +63,14 @@ Install in subdirectory
 		setenv PHRAILS_ENV development
 		setenv PHRAILS_BASE_URI /path/to/sub/directory/install/
 
-		RewriteEngine on      
-		RewriteBase /path/to/sub/directory/install/   
+		RewriteEngine On
+
+		Options Indexes FollowSymLinks
+
+		RewriteBase /path/to/sub/directory/install/
 		RewriteCond %{REQUEST_FILENAME} !-f
 		RewriteCond %{REQUEST_FILENAME} !-d
-		RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
+		RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
 
 Generate controllers and models
 	
