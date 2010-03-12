@@ -2,8 +2,8 @@
 /**
  * Base controller
  *
- * @todo Implement pr_from_cache.  If the template comes from the cache and the user
- * wants to use this feature let them.
+ * @todo Implement pr_from_cache_message.  This really needs re-thought.  There should be an easier way.
+ * 
  * @package template
  * @author Justin Palmer
  */
