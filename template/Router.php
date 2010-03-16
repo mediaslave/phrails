@@ -178,14 +178,17 @@ class Router
 	}
 	/**
 	 * Get the request uri for comparison.
+	 * 
+	 * @todo str_replace in both cases below should be replaced with preg_replace.
 	 */
 	private function requestUri()
 	{
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
+		//var_dump($request_uri);
 		/**
 		 * Strip of the install path and add a / all routes begin with /.
 		 */
-		$request_uri[0] = '/' . ltrim($request_uri[0], Registry::get('pr-install-path'));
+		$request_uri[0] = '/' . str_replace(Registry::get('pr-install-path'), '', $request_uri[0]);
 		//print $request_uri[0] . '<br/>';
 		//var_dump(Registry::get('pr-install-path'));
 		if($request_uri[0] == '')
