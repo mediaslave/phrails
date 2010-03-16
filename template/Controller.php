@@ -51,18 +51,13 @@ class Controller
 	 * @var string
 	 */
 	protected $pr_cache_except = array();
+	
 	/**
-	 * The before filters currently registered.
+	 * Filters object
 	 *
-	 * @var string
+	 * @var Filters
 	 */
-	protected $pr_before_filters = array();
-	/**
-	 * The after filters currently registered.
-	 *
-	 * @var string
-	 */
-	protected $pr_after_filters = array();
+	protected $pr_filters = null;
 	/**
 	 * Was the template generated from the cache?
 	 *
@@ -87,7 +82,9 @@ class Controller
 		$this->pr_get = new Hash($_GET);
 		$this->pr_post = new Hash($_POST);
 		$this->pr_server = new Hash($_SERVER);
+		$this->pr_params = new Hash($_POST += $_GET += $_SERVER);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
+		$this->pr_filters = new Filters($this);
 	}
 	
 	/**
@@ -170,49 +167,11 @@ class Controller
 	private function prRunAction()
 	{
 		$action = $this->pr_action;
-		$this->filter($this->pr_before_filters);
+		$this->filters()->run(Filters::before);
+		$this->filters()->run(Filters::around);
 		$this->$action();
-		$this->filter($this->pr_after_filters);
-	}
-	/**
-	 * Run the before filters that are registered for an action.
-	 *
-	 * @param $array $pr_before_filter or $pr_after_filter
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	private function filter($array)
-	{	
-		$filters = array();
-		if(isset($array[$this->pr_action])){
-			$filters[] = $array[$this->pr_action];
-		}
-		if(isset($array['pr_global']))
-			$filters = array_merge($filters, $array['pr_global']);
-		if(is_array($filters)){
-			foreach($filters as $method){
-				$this->runFilter($method);
-			}
-		}else{
-			$this->runFilter($filter);
-		}
-	}
-	
-	/**
-	 * Run the filter specified or throw an exception
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	private function runFilter($filter)
-	{
-		//If the method exists lets call it.
-		if(method_exists($this, $filter)){
-			$this->$filter();
-		//If it does not throw an exception.
-		}else{
-			throw new Exception("The filter: '$filter()' does not exist please create it in your controller.");
-		}
+		$this->filters()->run(Filters::around);
+		$this->filters()->run(Filters::after);
 	}
 	
 	/**
@@ -265,5 +224,24 @@ class Controller
 	{
 		$this->pr_action = 'prNoViewType';
 	}
-	
+	/**
+	 * Return the filters object.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function filters()
+	{
+		return $this->pr_filters;
+	}
+	/**
+	 * Return request params
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function params($key)
+	{
+		return $this->pr_params->get($key);
+	}
 }
