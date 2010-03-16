@@ -44,7 +44,7 @@ Under Apache, add the following to virtual host:
 
 	</VirtualHost>
 	
-Install in subdirectory
+Install in subdirectory 
 
 	Create a .htaccess file in:
 		app
@@ -63,10 +63,14 @@ Install in subdirectory
 		setenv PHRAILS_ENV development
 		setenv PHRAILS_BASE_URI /path/to/sub/directory/install/
 
-		RewriteEngine on         
+		RewriteEngine On
+
+		Options Indexes FollowSymLinks
+
+		RewriteBase /path/to/sub/directory/install/
 		RewriteCond %{REQUEST_FILENAME} !-f
 		RewriteCond %{REQUEST_FILENAME} !-d
-		RewriteRule !\.(js|ico|gif|jpg|png|css)$ /index.php
+		RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
 
 Generate controllers and models
 	
