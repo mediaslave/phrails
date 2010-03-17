@@ -188,7 +188,8 @@ class Router
 		/**
 		 * Strip of the install path and add a / all routes begin with /.
 		 */
-		$request_uri[0] = '/' . str_replace(Registry::get('pr-install-path'), '', $request_uri[0]);
+		if(Registry::get('pr-install-path') != '/')
+			$request_uri[0] = '/' . str_replace(Registry::get('pr-install-path'), '', $request_uri[0]);
 		//print $request_uri[0] . '<br/>';
 		//var_dump(Registry::get('pr-install-path'));
 		if($request_uri[0] == '')
