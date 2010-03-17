@@ -31,7 +31,6 @@ class Router
 			$route = $this->findByPath();
 			//Set the current routes information in the registry.
 			Registry::set('pr-route', $route);
-			
 			//Create the controller vars for instantiation and calling.
 			$controller = $route->controller . 'Controller';
 			$action = $route->action;

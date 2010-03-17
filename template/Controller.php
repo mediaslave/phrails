@@ -150,8 +150,9 @@ class Controller
 		$args = func_get_args();
 		$set = array();
 		foreach($args as $key => $value){
+			//var_dump($value);
 			if(is_array($value)){
-				$set[key($value)] = current($value);
+				$set[key($value)] = array_shift($value);
 			}else{
 				$set[$value] = $value;
 			}

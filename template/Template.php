@@ -50,7 +50,7 @@ class Template
 	{
 		$this->Controller = $controller;
 		self::$ContentFor = new stdClass;
-		$this->prepare();
+		//$this->prepare();
 	}
 	/**
 	 * Sets the file path and route array.
@@ -117,6 +117,8 @@ class Template
 	 **/
 	private function checkViewType($route)
 	{
+		//var_dump($this->Controller->pr_view_types);
+		//var_dump($route->view_type);
 		if(!$this->Controller->pr_view_types->isKey($route->view_type))
 			throw new NoViewTypeException($this->Controller->pr_view_types, $route->view_type);
 	}
