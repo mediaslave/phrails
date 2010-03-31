@@ -1,12 +1,7 @@
 <?php
 session_start();
 
-$db_config = parse_ini_file('database.ini', true);
-if(isset($db_config[Registry::get('pr-environment')])){
-	Registry::set('pr-db-config', $db_config[Registry::get('pr-environment')]);
-}else{
-	throw new Exception('Phrails could not find the db config specified by the environment.');
-}
+include 'db.php';
 
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
