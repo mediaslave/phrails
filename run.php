@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-include 'db.php';
-
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
 

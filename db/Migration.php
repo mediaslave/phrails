@@ -2,6 +2,9 @@
 
 /**
 * @todo break this apart to handle multiple types of databases.  Now it is set to handle mysql.
+* @todo this really is just hacked out, I really need to refactor this.  It fits my needs for now.
+* The stack should turn into a hash of stacks, the key would be the timestamp with milliseconds every time 
+* createTable or updateTable is called.  That way messages can then be queue.
 */
 abstract class Migration extends Model
 {
@@ -12,6 +15,7 @@ abstract class Migration extends Model
 	private $statement;
 	private $is_create = true;
 	private $config;
+	public $operations;
 	
 	/**
 	 * Migration class.
@@ -36,9 +40,10 @@ abstract class Migration extends Model
 	public function createTable($name, $primary='id', $engine='INNODB', $charset='utf8', $collation='utf8_general_ci')
 	{
 		$this->migrate();
+		$this->operations .= "\033[0;36;1m$name\033[0m | \033[0;35;1m$engine\033[0m | \033[0;36;1m$charset\033[0m | \033[0;35;1m$collation\033[0m\n";
 		$this->stack = array();
 		$this->table = $name;
-		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(%s)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
+		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(\n\t%s\n)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
 		$this->integer('id', 'auto:true');
 	}
 	
@@ -59,7 +64,7 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
-		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` %s $operation";
+		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` \n\t%s\n $operation";
 	}
 	
 	/**
@@ -76,13 +81,34 @@ abstract class Migration extends Model
 				$columns .= $value . ',';
 			}
 			$columns = rtrim($columns, ',');
-			print sprintf($this->statement, $columns);
-			print '<br/>' . '<br/>';
+			$query = sprintf($this->statement, $columns);
+			$stmt = $this->prepare($query);
+			$stmt->execute();
+			$this->log($query);
+			//print '<br/>' . '<br/>';
 		}
 		foreach($this->alter_stack as $query){
-			print $query;
-			print '<br/><br/>';
+			$stmt = $this->prepare($query);
+			$stmt->execute();
+			$this->log($query);
+			//print $query;
+			//print '<br/><br/>';
 		}
+		print $this->operations;
+		$this->operations = '';
+	}
+	/**
+	 * log of queries ran for the current migration
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function log($query)
+	{
+		$o = '=============================================================' . "\n";
+		$o .= $query . "\n";
+		$o .= '============================================================' . "\n";
+		$this->operations .= $o;
 	}
 	
 	/**
@@ -249,6 +275,8 @@ abstract class Migration extends Model
 			$bit .= "(" . $options['limit'] . ")";
 		if(isset($options['null'])){
 			($options['null']) ? $bit .= ' NULL' : $bit .= ' NOT NULL';
+		}else{
+			$bit .= ' NOT NULL';
 		}
 		if(isset($options['default']))
 			$bit .= " DEFAULT '" . $options['default'] . "'";
@@ -262,7 +290,7 @@ abstract class Migration extends Model
 		if(isset($options['primary']) && $options['primary'] == 'true' && !isset($options['auto']))
 			$this->primary($this->table, $name);
 			
-		$this->stack[] = $bit;
+		$this->stack[] = $bit . "\n\t";
 	}
 	
 	/**
@@ -339,37 +367,4 @@ abstract class Migration extends Model
 	
 	public function init(){}
 	
-}
-
-
-class sresu extends Migration{
-	
-	/**
-	 * undocumented function
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function up()
-	{
-		$this->createTable('blah2');
-			$this->string('var_char', 'limit:255');
-			$this->references('user');	
-			$this->text('text_of_some_sort');
-			$this->unique('blah2', 'var_char');
-		$this->migrate();
-		
-		$this->index('blah2', 'users_id');
-	}
-	
-	/**
-	 * 
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function down()
-	{
-		
-	}
 }

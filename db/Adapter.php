@@ -91,7 +91,7 @@ class Adapter extends PDO
 	{
 		$this->Statement = $this->prepare($query);
 		$this->Statement->execute();
-		return ResultFactory::factory($this->Statement);
+		return ResultFactory::factory($this->Statement, true);
 	}
 	/**
 	 * Find by primary key
@@ -161,7 +161,9 @@ class Adapter extends PDO
 		$table_name = $this->model->table_name();
 		$primary_key_name = $this->model->primary_key();
 		$id = $primary_key_name;
+		//var_dump($this->model->$id);
 		if($this->model->$id === null){
+			//print 'insert' . '<br/>';
 			$props = $this->model->props()->export();
 			$columns = $this->getInsertColumnNames($props);
 			$marks = $this->questionMarksByNum(sizeof($props));
@@ -169,6 +171,7 @@ class Adapter extends PDO
 			$params = array_values($props);
 			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
 		}else{
+			//print 'update' . '<br/>';
 			$id = $this->model->$primary_key_name;	
 			$this->model->removeProperty($primary_key_name);
 			//Get the props before setting the primary key for the UpdateSet method

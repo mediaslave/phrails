@@ -15,12 +15,12 @@ add_include_directory(dirname(__FILE__) . '/util');
  * for them to do so, they will need to call our autoload if theirs does not load 
  * anything.
  */
-if(!function_exists('__autoload')){
-	function __autoload($class_name) {
-		autoload($class_name);
-	}				
-}
 
+//If the user defines an __autoload then we will load it 
+if(function_exists('__autoload'))
+	spl_autoload_register('__autoload');
+//Load our autoload function.
+spl_autoload_register('autoload');
 /**
  * Autoload method to load items from the app.
  *

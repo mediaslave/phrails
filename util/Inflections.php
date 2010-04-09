@@ -8,7 +8,6 @@
  * Inflections provides many methods that helps with the Model, helpers and ...
  *
  * @package util
- * @author Justin Palmer
  */
 class Inflections
 {
@@ -87,6 +86,30 @@ class Inflections
         'information',
         'equipment'
     );
+
+	/**
+	 * Add irregulars
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	static public function addIrregular(array $array)
+	{
+		foreach($array as $key => $value){
+			self::$irregular[$key] = $value;
+		}
+	}
+	/**
+	 * addUncountable
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	static public function addUncountable($args)
+	{
+		$args = func_get_args();
+		self::$uncountable = array_merge($args, self::$uncountable);
+	}
 	/**
 	 * Change a table name into a class name
 	 *
@@ -199,7 +222,7 @@ class Inflections
 	 * @return string
 	 * @author Justin Palmer
 	 */
-    public static function pluralize_if($count, $string)
+    public static function pluralizeIf($count, $string)
     {
         if ($count == 1)
             return "1 $string";
