@@ -26,6 +26,7 @@ abstract class Migration extends Model
 	 */
 	function __construct()
 	{
+		parent::__construct();
 		$this->config = $this->db()->getConfig();
 		$this->stack = array();
 	}
@@ -42,6 +43,7 @@ abstract class Migration extends Model
 		$this->migrate();
 		$this->operations .= "\033[0;36;1m$name\033[0m | \033[0;35;1m$engine\033[0m | \033[0;36;1m$charset\033[0m | \033[0;35;1m$collation\033[0m\n";
 		$this->stack = array();
+		$this->alter_stack = array();
 		$this->table = $name;
 		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(\n\t%s\n)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
 		$this->integer('id', 'auto:true');
@@ -57,6 +59,7 @@ abstract class Migration extends Model
 	{
 		$this->migrate();
 		$this->stack = array();
+		$this->alter_stack = array();
 		$operation = '';
 		if($engine !== null)
 			$operation .= "ENGINE=$engine";
@@ -83,13 +86,15 @@ abstract class Migration extends Model
 			$columns = rtrim($columns, ',');
 			$query = sprintf($this->statement, $columns);
 			$stmt = $this->prepare($query);
-			$stmt->execute();
+			$b = $stmt->execute();
+			//var_dump($b);
 			$this->log($query);
 			//print '<br/>' . '<br/>';
 		}
 		foreach($this->alter_stack as $query){
 			$stmt = $this->prepare($query);
-			$stmt->execute();
+			$l = $stmt->execute();
+			//var_dump($l);
 			$this->log($query);
 			//print $query;
 			//print '<br/><br/>';
@@ -271,12 +276,15 @@ abstract class Migration extends Model
 		//'primary'=>false, 'index'=>false, 'unique'=>false
 		//Add to the string the bits needed.
 		$bit = "`$name` $datatype";
-		if(isset($options['limit']))
+		if(isset($options['limit'])){
 			$bit .= "(" . $options['limit'] . ")";
+		}elseif($datatype == 'VARCHAR'){
+			$bit .= "(255)";
+		}
 		if(isset($options['null'])){
 			($options['null']) ? $bit .= ' NULL' : $bit .= ' NOT NULL';
 		}else{
-			$bit .= ' NOT NULL';
+			$bit .= ' NULL';
 		}
 		if(isset($options['default']))
 			$bit .= " DEFAULT '" . $options['default'] . "'";

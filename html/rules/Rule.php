@@ -54,7 +54,6 @@ class Rule
 		{
 			if($this->custom_message != '')
 				$this->message = $this->custom_message;
-			//$this->message = trim(sprintf($this->message, '<span class="label">' . $this->label . '</label>'));
 			$boolean = false;
 		}
 		return $boolean;

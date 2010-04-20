@@ -6,17 +6,17 @@
  * @subpackage rules
  * @author Justin Palmer
  **/
-class IntegerRule extends Rule
+class RequiredRule extends Rule
 {
 	/**
 	 * @see Rule::message
 	 */
-	public $message = '%s should be a number.';
+	public $message = '%s is required.';
 	
 	/**
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		return parent::run(!is_numeric($this->value));
+		return parent::run($this->value == '' || $this->value == null);
 	 }
 } // END class Rule

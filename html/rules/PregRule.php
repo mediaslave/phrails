@@ -8,13 +8,14 @@
  **/
 class PregRule extends Rule
 {
+	public $preg;
 	/**
 	 * Constructor
 	 *
 	 * @return PregRule
 	 * @author Justin Palmer
 	 **/
-	public function __construct($preg, $message)
+	public function __construct($preg=null, $message=null)
 	{
 		$this->preg = $preg;
 		$this->message = $message;

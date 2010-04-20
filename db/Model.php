@@ -22,6 +22,11 @@ abstract class Model
 	 * @var string
 	 */
 	protected $table_name;
+	
+	/**
+	 * The database name for this project
+	 */
+	protected $database_name;
 	/**
 	 * The alias for the model.
 	 *
@@ -78,11 +83,17 @@ abstract class Model
 		//Generate the table name if it is not set.
 		if($this->table_name === null)
 			$this->table_name = Inflections::tableize(get_class($this));
+		
+		//
 		$this->schema = new Schema($this);
 		$this->alias = Inflections::singularize($this->table_name);
 		$this->errors = new Hash();
 		//Store the db adapter.
 		self::$db = new $Adapter($this);
+		//Set the default database name;
+		$config = $this->db()->getConfig();
+		$this->database_name = $config->database;
+		$this->props = new Hash();
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
 		$this->columns = $this->prepareShowColumns($this->showColumns());
 		$this->setProperties($array);
@@ -140,6 +151,16 @@ abstract class Model
 		//var_dump($props);
 		//Loop through the set properties.
 		foreach($props as $name => $value){
+			//if the value is null and it is not a required property then lets just 
+			//continue onto the next property, nothing to do here.
+			if($value == NULL && !in_array($name, $this->schema()->required)){
+				if(!empty($errors)){
+					$this->errors->set($this->alias() . '[' . $name . ']', $errors);
+				}
+				$errors = array();
+				$last_prop_name = '';
+				continue;
+			}
 			if(empty($errors))
 				$last_prop_name = $name;
 			if(!empty($errors) && $last_prop_name != $name){
@@ -203,7 +224,11 @@ abstract class Model
 	{
 		$array = array();
 		foreach($ResultSet as $value){
-			$array[$value->Field] = $value;
+			$key = $value->Field;
+			//Set the property to null to begin.
+			$this->props->set($key, null);
+			//add the key and value to the array.
+			$array[$key] = $value;
 		}
 		return new Hash($array);
 	}
@@ -268,7 +293,6 @@ abstract class Model
 	 **/
 	private function setProperties($array)
 	{	
-		$this->props = new Hash();
 		if(is_array($array)){
 			foreach($array as $key => $value)
 				$this->$key = $value;
@@ -343,6 +367,16 @@ abstract class Model
 	public function table_name()
 	{
 		return $this->table_name;
+	}
+	/**
+	 * Get the table name.
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public function database_name()
+	{
+		return $this->database_name;
 	}
 	/**
 	 * Get the primary_key value

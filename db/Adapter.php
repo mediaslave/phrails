@@ -52,6 +52,7 @@ class Adapter extends PDO
 		//var_dump(PDO::getAvailableDrivers());
 		$this->model = $model;
 		$this->parentConstruct($encoding);
+		//$this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('Statement', array($this)));
 		//Register the adapter with the builder.
 		$this->builder = new SqlBuilder($this->model);
 	}
@@ -67,10 +68,11 @@ class Adapter extends PDO
 		self::getConfig();
 		self::getDriverClass();
 		switch(self::$Config->driver){
-			case 'sqlite':
+			/*case 'sqlite':
 				$driver = self::$Config->driver . ":" . self::$Config->database;
 				parent::__construct($driver);
 				break;
+			*/
 			case 'mysql':
 				parent::__construct(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
 									self::$Config->username, 
@@ -102,6 +104,7 @@ class Adapter extends PDO
 	 **/
 	public function find($id)
 	{
+			$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$primary_key = $this->model->alias() . '.' . $this->model->primary_key();
 		$primary = " ($primary_key = ?)";
@@ -112,7 +115,7 @@ class Adapter extends PDO
 			$this->builder->conditions[] = $primary;
 		}
 		$this->builder->conditions[] = $id;
-		$query = $this->builder->build("SELECT ? FROM `$table_name`");
+		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->prepare(array_shift($query->query));
 		$params = $query->params;
@@ -142,8 +145,9 @@ class Adapter extends PDO
 	 **/
 	public function findAll($forceSet=true)
 	{
+			$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
-		$query = $this->builder->build("SELECT ? FROM `$table_name`");
+		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->prepare(array_shift($query->query));
 		$this->Statement->execute(array_values($query->params));
@@ -158,25 +162,33 @@ class Adapter extends PDO
 	 **/
 	public function saveNow()
 	{
+		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$primary_key_name = $this->model->primary_key();
 		$id = $primary_key_name;
 		//var_dump($this->model->$id);
 		if($this->model->$id === null){
+			try{
+				$this->model->created_at = new Expression('NOW()');
+			}catch(NoColumnInTableException $e){}
 			//print 'insert' . '<br/>';
 			$props = $this->model->props()->export();
 			$columns = $this->getInsertColumnNames($props);
-			$marks = $this->questionMarksByNum(sizeof($props));
-			$this->Statement = $this->prepare(sprintf("INSERT INTO `$table_name` (%s) values (%s)", $columns, $marks));
-			$params = array_values($props);
+			$marks = $this->getValues($props);
+			$this->Statement = $this->prepare(sprintf("INSERT INTO `$database_name`.`$table_name` (%s) values (%s)", $columns, $marks));
+			
+			$params = array_values($this->model->props()->export());
 			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
 		}else{
+			try{
+				$this->model->updated_at = new Expression('NOW()');
+			}catch(NoColumnInTableException $e){}
 			//print 'update' . '<br/>';
 			$id = $this->model->$primary_key_name;	
 			$this->model->removeProperty($primary_key_name);
 			//Get the props before setting the primary key for the UpdateSet method
 			$props = $this->model->props()->export();
-			$query = "UPDATE `$table_name` SET %s WHERE `$primary_key_name` = ?";	
+			$query = "UPDATE `$database_name`.`$table_name` SET %s WHERE `$primary_key_name` = ?";	
 			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
 			$this->model->$primary_key_name = $id;
 			$params = array_values($this->model->props()->export());
@@ -220,7 +232,12 @@ class Adapter extends PDO
 	{
 		$return = '';
 		foreach($props as $key => $value){
-			$return .= "`$key` = ?,";
+			if($value instanceof Expression){
+				$return .= "`$key` = $value,";
+				$this->model->props()->remove($key);
+			}else{
+				$return .= "`$key` = ?,";
+			}
 		}
 		return rtrim($return, ',');
 	}
@@ -239,16 +256,21 @@ class Adapter extends PDO
 		return rtrim($return, ',');
 	}
 	/**
-	 * Get the correct number of ?marks back to put into the string.
+	 * build values
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function questionMarksByNum($num)
+	public function getValues($props)
 	{
 		$return = '';
-		for($i = 0; $i < $num; $i++){
-			$return .= '?,';
+		foreach($props as $key => $value){
+			if($value instanceof Expression){
+				$return .= "$value,";
+				$this->model->props()->remove($key);
+			}else{
+				$return .= "?,";
+			}
 		}
 		return rtrim($return, ',');
 	}

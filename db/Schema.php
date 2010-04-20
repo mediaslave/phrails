@@ -85,6 +85,20 @@ class Schema
 		return $this->rules;
 	}
 	/**
+	 * Add the required rule to all of the properties listed
+	 *
+	 * @params mixed
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function required($args)
+	{
+		$this->required = $args = func_get_args();
+		foreach($args as $property){
+			$this->rule($property, new RequiredRule());
+		}
+	}
+	/**
 	 * Set the table name for the current relationship explicitly.
 	 *
 	 * @return Schema
