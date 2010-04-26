@@ -85,6 +85,10 @@ class Controller
 		$this->pr_params = new Hash($_POST += $_GET += $_SERVER);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new Filters($this);
+		if(isset($_SESSION['pr_flash'])){
+			$this->flash = $_SESSION['pr_flash'];
+			unset($_SESSION['pr_flash']);
+		}
 	}
 	
 	/**
@@ -135,6 +139,9 @@ class Controller
 	 **/
 	protected function redirectTo($path)
 	{
+		if($this->flash !== ''){
+			$_SESSION['pr_flash'] = $this->flash;
+		}
 		$path = ltrim($path, '/');
 		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
 		exit();
@@ -243,6 +250,16 @@ class Controller
 	 **/
 	protected function params($key)
 	{
-		return $this->pr_params->get($key);
+		$ret = null;
+		$var = $this->pr_params->get($key);
+		if(is_array($var)){
+			$ret = array();
+			foreach($var as $key => $value){
+				$ret[$key] = trim(stripslashes($value));
+			}
+		}else{
+			$ret = trim(stripslashes($var));
+		}
+		return $ret;
 	}
 }

@@ -151,22 +151,17 @@ abstract class Model
 		//var_dump($props);
 		//Loop through the set properties.
 		foreach($props as $name => $value){
-			//if the value is null and it is not a required property then lets just 
-			//continue onto the next property, nothing to do here.
-			if($value == NULL && !in_array($name, $this->schema()->required)){
-				if(!empty($errors)){
-					$this->errors->set($this->alias() . '[' . $name . ']', $errors);
-				}
-				$errors = array();
-				$last_prop_name = '';
-				continue;
-			}
 			if(empty($errors))
 				$last_prop_name = $name;
 			if(!empty($errors) && $last_prop_name != $name){
 				$this->errors->set($this->alias() . '[' . $last_prop_name . ']', $errors);
 				$last_prop_name = $name;
 				$errors = array();
+			}
+			//if the value is null and it is not a required property then lets just 
+			//continue onto the next property, nothing to do here.
+			if($value == NULL && !in_array($name, $this->schema()->required)){
+				continue;
 			}
 			//If there are rules for the property let's go through them.
 			if($rules->isKey($name)){

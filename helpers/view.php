@@ -67,11 +67,23 @@ function content_for($key, $value){
 /**
  * Get the value of an existing content_for key.
  *
+ * @param string $key
  * @return string $key
  * @author Justin Palmer
  **/
 function get_content_for($key){
 	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
+}
+/**
+ * Is there content for the specified key?
+ *
+ * @param string $key
+ * @return boolean
+ * @author Justin Palmer
+ **/
+function has_content_for($key)
+{
+	return isset(Template::$ContentFor->$key);
 }
 
 /**

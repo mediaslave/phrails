@@ -67,7 +67,7 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
-		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` \n\t%s\n $operation";
+		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` ADD \n\t%s\n $operation";
 	}
 	
 	/**

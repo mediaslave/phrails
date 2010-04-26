@@ -178,7 +178,13 @@ class Adapter extends PDO
 			$this->Statement = $this->prepare(sprintf("INSERT INTO `$database_name`.`$table_name` (%s) values (%s)", $columns, $marks));
 			
 			$params = array_values($this->model->props()->export());
-			return ($this->Statement->execute($params)) ? true : (object)$this->Statement->errorInfo();
+			if($this->Statement->execute($params)){
+				$ret = true;
+				$this->model->$primary_key_name = $this->lastInsertId();
+			}else{
+				$ret = (object)$this->Statement->errorInfo();
+			}
+			return $ret;
 		}else{
 			try{
 				$this->model->updated_at = new Expression('NOW()');

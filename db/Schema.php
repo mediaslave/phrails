@@ -185,8 +185,10 @@ class Schema
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
 		$options->$key = $value;
-		//Regenerate the on to see if there is anything that needs changed.
-		$options->on = $this->autoGenerateOn($options->name);
+		if($name != 'on'){
+			//Regenerate the on to see if there is anything that needs changed.
+			$options->on = $this->autoGenerateOn($options->name);
+		}
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
