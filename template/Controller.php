@@ -248,7 +248,7 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function params($key)
+	protected function params($key, $value=null)
 	{
 		$ret = null;
 		$var = $this->pr_params->get($key);

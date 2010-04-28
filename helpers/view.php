@@ -61,7 +61,7 @@ function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsa
  */
 function content_for($key, $value){
 	(isset(Template::$ContentFor->$key)) 
-					? Template::$ContentFor->$key = $value . Template::$ContentFor->$key
+					? Template::$ContentFor->$key = Template::$ContentFor->$key . $value
 					: Template::$ContentFor->$key = $value;
 }
 /**

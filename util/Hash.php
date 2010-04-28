@@ -48,6 +48,17 @@ class Hash
 	{
 		return ($this->isKey($key)) ? $this->array[$key] : null;
 	}
+	
+	/**
+	 * Get
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function __get($key)
+	{
+		return $this->get($key);
+	}
 	/**
 	 * Is there a key in the Hash?
 	 *

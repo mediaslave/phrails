@@ -6,7 +6,7 @@
  * @subpackage rules
  * @author Justin Palmer
  **/
-class UsStreetRule extends AlphaExtraRule
+class StreetRule extends AlphaExtraRule
 {
 	/**
 	 * constructor
