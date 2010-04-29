@@ -56,6 +56,13 @@ abstract class Model
 	 */	
 	protected $props;
 	/**
+	 * An array of properties that have changed.
+	 * 
+	 * @author Justin Palmer
+	 * @var array
+	 */
+	protected $props_changed;
+	/**
 	 * The valid columns for the model from the db.
 	 *
 	 * @author Justin Palmer
@@ -268,6 +275,7 @@ abstract class Model
 	{
 		if(!$this->columns()->isKey($key))
 			throw new NoColumnInTableException($key, $this->table_name());
+		$this->props_changed[] = $key;
 		$this->props->set($key, $value);
 	}
 	/**
@@ -322,6 +330,16 @@ abstract class Model
 	public function props()
 	{
 		return $this->props;
+	}
+	/**
+	 * Get the properties that have changed since the object was constructed.
+	 *
+	 * @return array
+	 * @author Justin Palmer
+	 **/
+	public function props_changed()
+	{
+		return $this->props_changed;
 	}
 	/**
 	 * Get the schema object.

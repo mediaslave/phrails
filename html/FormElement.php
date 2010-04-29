@@ -18,13 +18,13 @@ abstract class FormElement extends Element
 	{
 		if($name != '')
 			$this->options .= ",name:$name";
-		if($value != '')
-			$this->options .= ",value:$value";
+		$this->options .= ",value:$value";
 		$id = $name . '_id';
 		$matches = array();
 		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-z_]*)\]/i", $id, $matches))
 			$id = $matches['table'] . '_' . $matches['id'] . '_id';
 		$this->options .= ",id:$id";
+		//print $this->options . '<br/>';
 		parent::__construct($options);
 	}
 }

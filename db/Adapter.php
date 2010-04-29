@@ -102,9 +102,17 @@ class Adapter extends PDO
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function find($id)
+	public function find($id=null)
 	{
-			$database_name = $this->model->database_name();
+		if($id == null){
+			$primary_key = $this->model->primary_key();
+			if($this->model->$primary_key == null){
+				throw new Exception('Model::find did not receive an id and the model does not have the id.');
+			}else{
+				$id = $this->model->$primary_key;
+			}
+		}
+		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$primary_key = $this->model->alias() . '.' . $this->model->primary_key();
 		$primary = " ($primary_key = ?)";
@@ -197,8 +205,7 @@ class Adapter extends PDO
 			$query = "UPDATE `$database_name`.`$table_name` SET %s WHERE `$primary_key_name` = ?";	
 			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
 			$this->model->$primary_key_name = $id;
-			$params = array_values($this->model->props()->export());
-			return ($this->Statement->execute($params)) ? true : false;
+			return ($this->Statement->execute($this->getUpdateValues())) ? true : false;
 		}
 	}
 	/**
@@ -238,14 +245,32 @@ class Adapter extends PDO
 	{
 		$return = '';
 		foreach($props as $key => $value){
-			if($value instanceof Expression){
-				$return .= "`$key` = $value,";
-				$this->model->props()->remove($key);
-			}else{
-				$return .= "`$key` = ?,";
+			if(in_array($key, $this->model->props_changed())){
+				if($value instanceof Expression){
+					$return .= "`$key` = $value,";
+					$this->model->props()->remove($key);
+				}else{
+					$return .= "`$key` = ?,";
+				}
 			}
 		}
 		return rtrim($return, ',');
+	}
+	/**
+	 * Get the values that are in the changed props of the model.
+	 *
+	 * @return array
+	 * @author Justin Palmer
+	 **/
+	public function getUpdateValues()
+	{
+		$ret = array();
+		$params = $this->model->props()->export();
+		foreach($params as $key => $value){
+			if(in_array($key, $this->model->props_changed()))
+				$ret[] = $value;
+		}
+		return $ret;
 	}
 	/**
 	 * Get the column names in a list for insert

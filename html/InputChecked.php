@@ -8,7 +8,7 @@
 class InputChecked extends Input
 {		
 	protected $checked = '';
-	
+	protected $checked_value;
 	/**
 	 * We have the InputHidden print before the checkbox so that if it is not checked
 	 * we will still have a post value
@@ -23,10 +23,9 @@ class InputChecked extends Input
 	 * @param string or array $options 
 	 * @author Justin Palmer
 	 */
-	function __construct($name, $value, $checked=false, $options=null)
+	function __construct($name, $value, $options=null)
 	{
-		if($checked)
-			$this->checked = 'checked';
+		$this->checked_value = $value;
 		parent::__construct($name, $value, $options);
 	}
 	/**
@@ -38,5 +37,17 @@ class InputChecked extends Input
 	public function start()
 	{
 		return '<input' . $this->options . ' ' . $this->checked . '/>';
+	}
+	
+	/**
+	 * Should we check it?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function setChecked($value)
+	{
+		if($this->checked_value = $value)
+			$this->checked = ' checked';
 	}
 }

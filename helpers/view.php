@@ -32,6 +32,16 @@ function stylesheet_link_tag($file, $options='')
 	return new LinkCss($file, $options);
 }
 /**
+ * Create an img tag.
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function image_tag($source, $options='')
+{
+	return new Img($source, $options);
+}
+/**
  * Load a javascript library from google.
  *
  * @param string $library
@@ -97,10 +107,12 @@ function has_content_for($key)
  **/
 function flash_it($flash)
 {
+	$flash = '';
 	if($flash instanceof Flash){
 		return $flash->display();
 	}else{
-		$flash = '<div class="flash">' . $flash . '</div>';
+		if($flash != '')
+			$flash = '<div class="flash">' . $flash . '</div>';
 	}
 	return $flash;
 }

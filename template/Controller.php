@@ -79,10 +79,8 @@ class Controller
 	public function __construct()
 	{
 		$this->pr_controller = get_class($this);
-		$this->pr_get = new Hash($_GET);
-		$this->pr_post = new Hash($_POST);
-		$this->pr_server = new Hash($_SERVER);
-		$this->pr_params = new Hash($_POST += $_GET += $_SERVER);
+		$this->pr_request = new Request;
+		Registry::set('pr-request', $this->pr_request);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new Filters($this);
 		if(isset($_SESSION['pr_flash'])){
@@ -250,16 +248,6 @@ class Controller
 	 **/
 	protected function params($key, $value=null)
 	{
-		$ret = null;
-		$var = $this->pr_params->get($key);
-		if(is_array($var)){
-			$ret = array();
-			foreach($var as $key => $value){
-				$ret[$key] = trim(stripslashes($value));
-			}
-		}else{
-			$ret = trim(stripslashes($var));
-		}
-		return $ret;
+		return $this->pr_request->params($key, $value);
 	}
 }

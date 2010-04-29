@@ -23,7 +23,7 @@ class Option extends Element
 		if($value === null)
 			$value = $display;
 		$this->selected = $selected;
-		//$this->options = "value:$value";
+		$this->options = "value:$value";
 		$this->value = $value;
 		parent::__construct($options);
 	}
