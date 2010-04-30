@@ -15,7 +15,7 @@ class OptionsParserTest extends PHPUnit_Framework_TestCase
 	 */
 	public function Convert_toString()
 	{
-		$this->assertType('string', OptionsParser::toString($this->s));	
+		$this->assertType('string', OptionsParser::toHtmlProperties($this->s));	
 	}
 	/**
 	 * @test

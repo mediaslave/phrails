@@ -34,7 +34,7 @@ class Option extends Element
 	{
 		$selected = '';
 		if($this->selected == true)
-			$selected = ' selected';
+			$selected = ' selected="selected"';
 		return '<option' . $this->options . "$selected>";
 	}
 	/**

@@ -59,6 +59,18 @@ function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsa
 	return $js;
 }
 /**
+ * Load a javascript file from the local.
+ *
+ * @param string $source
+ * @param string $options
+ * @return string
+ * @author Justin Palmer
+ **/
+function javascript_include_tag($source, $options='')
+{
+	return new Script($source . '.js', $options);
+}
+/**
  * Set the content for a certain var from the view.
  * 
  * Use of this method will over right any vars set in the controller 
@@ -115,4 +127,17 @@ function flash_it($flash)
 			$flash = '<div class="flash">' . $flash . '</div>';
 	}
 	return $flash;
+}
+
+/**
+ * Cycle through to given strings
+ *
+ * @return string
+ * @author Justin Palmer
+ **/
+function cycle($one='one', $two='two')
+{
+	static $count;
+	$count ++;
+	return ($count % 2) ? $one : $two;
 }

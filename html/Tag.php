@@ -35,7 +35,7 @@ abstract class Tag
 	 **/
 	public function __construct($options=null)
 	{
-		$this->options = OptionsParser::toString($this->addOptions($options));
+		$this->options = OptionsParser::toHtmlProperties($this->addOptions($options));
 	}
 	/**
 	 * Start tag for the current tag.

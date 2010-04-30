@@ -18,9 +18,12 @@ class IntegerRangeRule extends Rule
 	 **/
 	public function __construct($min, $max, $message='%s should be between {min} and {max}.')
 	{
-		$this->length = $length;
+		$this->min = $min;
+		$this->max = $max;
 		$message = str_replace('{min}', $min, $message);
-		$this->message = str_replace('{max}', $max, $message);
+		$message = str_replace('{max}', $max, $message);
+		$this->message = '';
+		parent::__construct($message);
 	}
 	
 	/**

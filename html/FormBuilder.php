@@ -139,6 +139,32 @@ class FormBuilder
 		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id);
 	}
 	/**
+	 * Boolean select with yes and no as the options
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function yes_no_select($property, $options='')
+	{
+		$options = $this->checkForErrors($property, $options);
+		return new Select($this->getElementName($property), $this->getValue($property), new Option('Yes', '1'), new Option('No', 0), $options);
+	}
+	/**
+	 * Range select that will have numbers in the range that you provide
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function range_select($property, $start, $end, $options='')
+	{
+		$options = $this->checkForErrors($property, $options);
+		$array = array();
+		for($i=$start; $i <= $end; $i++)
+			$array[] = new Option($i);
+		return new ArraySelect($this->getElementName($property), $array, $this->getValue($property), $options);
+	}
+	
+	/**
 	 * Register a new object with FormBuilder
 	 *
 	 * @return void
