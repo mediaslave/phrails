@@ -16,7 +16,8 @@ class Request extends Hash
 	 */
 	public function __construct()
 	{	
-		parent::__construct($_ENV += $_SERVER += $_REQUEST += $_COOKIE += $_SESSION += $_FILES += $_GET += $_POST);							
+		parent::__construct($_ENV += $_SERVER += $_REQUEST += $_COOKIE += $_SESSION += $_FILES += $_GET += $_POST); 
+		//parent::__construct(array_merge($_ENV, $_SERVER, $_REQUEST, $_COOKIE, $_SESSION, $_FILES, $_GET, $_POST));							
 	}
 	/**
 	 * Get a value for the given key

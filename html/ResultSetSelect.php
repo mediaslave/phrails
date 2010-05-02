@@ -23,6 +23,7 @@ class ResultSetSelect extends Select
 		$this->optionDisplay = $optionDisplay;
 		$this->id = $id;
 		$options = $this->preparePrompt($options);
+		//$resultSet->rewind();
 		foreach($resultSet as $record){
 			//var_dump($record);
 			$optionDisplay = $this->optionDisplay;

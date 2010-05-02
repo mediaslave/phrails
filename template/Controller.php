@@ -248,6 +248,7 @@ class Controller
 	 **/
 	protected function params($key, $value=null)
 	{
-		return $this->pr_request->params($key, $value);
+		return ($key !== null) ? $this->pr_request->params($key, $value)
+							   : $this->pr_request;
 	}
 }

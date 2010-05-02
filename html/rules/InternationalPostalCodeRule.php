@@ -16,6 +16,6 @@ class InternationalPostalCodeRule extends AlphaExtraRule
 	 **/
 	public function __construct($message='%s should only include lowercase and capital letters, foreign language characters, hyphen and space.')
 	{
-		parent::__construct("0-9\s\-\pL", $message);
+		parent::__construct("0-9\s\-", $message);
 	}
 } // END class Rule

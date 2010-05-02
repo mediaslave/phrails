@@ -14,8 +14,8 @@ class UsSocialSecurityNumberRule extends PregRule
 	 * @return NameRule
 	 * @author Justin Palmer
 	 **/
-	public function __construct($message='%s should be in the format: ###-###-####.')
+	public function __construct($message='%s should be in the format: ###-##-####.')
 	{
-		parent::__construct("/^(\d{3})\-(\d{3})\-(\d{4})$/", $message);
+		parent::__construct("/^(\d{3})\-(\d{2})\-(\d{4})$/", $message);
 	}
 } // END class Rule

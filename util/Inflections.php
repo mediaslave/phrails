@@ -229,4 +229,27 @@ class Inflections
         else
             return $count . " " . self::pluralize($string);
     }
+
+	/**
+	 * Create a title out of string
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function titleize($string)
+	{
+		$restricted = array('and', 'but', 'or', 'yet', 'for', 'nor', 'so', 'as', 
+							'if', 'once', 'than', 'that', 'till', 'when',
+							'at', 'by', 'down', 'from', 'in', 'into', 'like', 'near', 'of', 
+							'off', 'on', 'onto', 'over', 'past', 'to', 'upon', 'with', 'a', 'an', 'the');
+		$array = explode(' ', $string);
+		for($i = 0; $i < sizeof($array); $i++){
+			if($i == 0 || !in_array($array[$i], $restricted) || $i == sizeof($array) - 1){
+				$string .= ucfirst($array[$i]) . ' ';
+			}else{
+				$string .= $array[$i] . ' ';
+			}
+		}
+		return trim($string);
+	}
 }

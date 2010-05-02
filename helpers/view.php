@@ -119,7 +119,6 @@ function has_content_for($key)
  **/
 function flash_it($flash)
 {
-	$flash = '';
 	if($flash instanceof Flash){
 		return $flash->display();
 	}else{
@@ -135,7 +134,7 @@ function flash_it($flash)
  * @return string
  * @author Justin Palmer
  **/
-function cycle($one='one', $two='two')
+function cycle($one='one', $two='')
 {
 	static $count;
 	$count ++;
