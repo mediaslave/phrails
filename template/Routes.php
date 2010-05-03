@@ -79,14 +79,13 @@ class Routes{
 	 * @author Justin Palmer
 	 */
 	public static function path($name, $options=null){
-		//$app_path = Registry::get('pr-install-path');
+		$app_path = Registry::get('pr-install-path');
 		$args = OptionsParser::toArray($options);
 		$path = preg_replace('/{([a-zA-Z\_\-])*}/i', '%s', self::$Hash->get($name,'path'));
 		$match = preg_match('/(\%s)/', $path);
 		if($match && empty($args))
 			throw new Exception("The path '$name' should be passed some arguments.");
-		//return vsprintf(rtrim($app_path, '/') . $path, $args);
-		return vsprintf($path,$args);
+		return vsprintf(rtrim($app_path, '/') . $path, $args);
 	}
 	/**
 	 * Get the current routes that are declared
