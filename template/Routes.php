@@ -63,11 +63,12 @@ class Routes{
 	function resources($name, $controller){
 		$path = '/' . $name;
 		$this->add($name, $path, $controller, 'index');
-		$this->add('edit-' . $name, $path . '/{id}/edit', $controller, 'edit');
-		$this->add('update-' . $name, $path . '/{id}/update', $controller, 'update');
-		$this->add('new-' . $name, $path . '/new', $controller, 'init');
-		$this->add('create-' . $name, $path . '/create', $controller, 'create');
-		$this->add('delete-' . $name, $path . '/{id}/delete', $controller, 'delete');
+		$this->add(Inflections::singularize($name), $path . '/{id}', $controller, 'view');
+		$this->add('edit-' . Inflections::singularize($name), $path . '/{id}/edit', $controller, 'edit');
+		$this->add('update-' . Inflections::singularize($name), $path . '/{id}/update', $controller, 'update');
+		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init');
+		$this->add('create-' . Inflections::singularize($name), $path . '/create', $controller, 'create');
+		$this->add('delete-' . Inflections::singularize($name), $path . '/{id}/delete', $controller, 'delete');
 	}
 	/**
 	 * Return the path for the given named route
@@ -80,7 +81,7 @@ class Routes{
 	public static function path($name, $options=null){
 		$app_path = Registry::get('pr-install-path');
 		$args = OptionsParser::toArray($options);
-		$path = preg_replace('/{([a-zA-Z])*}/i', '%s', self::$Hash->get($name,'path'));
+		$path = preg_replace('/{([a-zA-Z\_\-])*}/i', '%s', self::$Hash->get($name,'path'));
 		$match = preg_match('/(\%s)/', $path);
 		if($match && empty($args))
 			throw new Exception("The path '$name' should be passed some arguments.");

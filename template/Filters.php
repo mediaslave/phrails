@@ -46,7 +46,7 @@ class Filters
 		//Is the filter passed in already in the hash?
 		if($Set->isKey($filter)){
 			$array = $Set->get($filter);
-			$array = $array += $actions;
+			$array = array_merge($array, $actions);
 			$Set->set($filter, $array);
 		}else{
 			$Set->set($filter, $actions);
@@ -65,7 +65,8 @@ class Filters
 		$action = $this->controller->pr_action;
 		$for = $this->filters->get($type);
 		$except = $this->filters->get($this->exceptName($type));
-		
+		//new Dbug($for, '', false, __FILE__, __LINE__);
+		//new Dbug($except, '', false, __FILE__, __LINE__);
 		foreach($for->array as $filter => $actions){
 			//Make sure the except does not hold this action.
 			if($except->isKey($filter)){
@@ -172,6 +173,17 @@ class Filters
 	private function exceptName($type)
 	{
 		return $type . '-' . self::except;
+	}
+	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function filters()
+	{
+		return $this->filters;
 	}
 	
 }

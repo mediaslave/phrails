@@ -23,10 +23,10 @@ class InputCheckbox extends InputChecked
 	 * @param string or array $options 
 	 * @author Justin Palmer
 	 */
-	function __construct($name, $value, $checked=false, $options=null)
+	function __construct($name, $options=null, $checked_value=1, $unchecked_value=0)
 	{
-		$this->Hidden = new InputHidden($name, $value, $options);
-		parent::__construct($name, $value, $checked, $options);
+		$this->Hidden = new InputHidden($name, $unchecked_value, $options);
+		parent::__construct($name, $checked_value, $options);
 	}
 	
 	/**

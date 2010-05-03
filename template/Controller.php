@@ -79,12 +79,14 @@ class Controller
 	public function __construct()
 	{
 		$this->pr_controller = get_class($this);
-		$this->pr_get = new Hash($_GET);
-		$this->pr_post = new Hash($_POST);
-		$this->pr_server = new Hash($_SERVER);
-		$this->pr_params = new Hash($_POST += $_GET += $_SERVER);
+		$this->pr_request = new Request;
+		Registry::set('pr-request', $this->pr_request);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new Filters($this);
+		if(isset($_SESSION['pr_flash'])){
+			$this->flash = $_SESSION['pr_flash'];
+			unset($_SESSION['pr_flash']);
+		}
 	}
 	
 	/**
@@ -135,6 +137,9 @@ class Controller
 	 **/
 	protected function redirectTo($path)
 	{
+		if($this->flash !== ''){
+			$_SESSION['pr_flash'] = $this->flash;
+		}
 		$path = ltrim($path, '/');
 		header('LOCATION:' . Registry::get('pr-domain-uri') . $path);
 		exit();
@@ -241,8 +246,9 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function params($key)
+	protected function params($key, $value=null)
 	{
-		return $this->pr_params->get($key);
+		return ($key !== null) ? $this->pr_request->params($key, $value)
+							   : $this->pr_request;
 	}
 }

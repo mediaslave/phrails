@@ -155,7 +155,7 @@ class Router
 				$vroute = $route[$i];
 			if(isset($uri[$i]))
 				$vuri = $uri[$i];
-			$tag = (preg_match('/{([a-zA-Z])*}/i', $vroute));
+			$tag = (preg_match("/{([a-zA-Z\_\-])*}/i", $vroute));
 			if($tag == 1){
 				$count++;
 				$key = rtrim(ltrim($vroute, '{'), '}');

@@ -32,6 +32,16 @@ function stylesheet_link_tag($file, $options='')
 	return new LinkCss($file, $options);
 }
 /**
+ * Create an img tag.
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function image_tag($source, $options='')
+{
+	return new Img($source, $options);
+}
+/**
  * Load a javascript library from google.
  *
  * @param string $library
@@ -49,6 +59,18 @@ function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsa
 	return $js;
 }
 /**
+ * Load a javascript file from the local.
+ *
+ * @param string $source
+ * @param string $options
+ * @return string
+ * @author Justin Palmer
+ **/
+function javascript_include_tag($source, $options='')
+{
+	return new Script($source . '.js', $options);
+}
+/**
  * Set the content for a certain var from the view.
  * 
  * Use of this method will over right any vars set in the controller 
@@ -61,17 +83,29 @@ function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsa
  */
 function content_for($key, $value){
 	(isset(Template::$ContentFor->$key)) 
-					? Template::$ContentFor->$key = $value . Template::$ContentFor->$key
+					? Template::$ContentFor->$key = Template::$ContentFor->$key . $value
 					: Template::$ContentFor->$key = $value;
 }
 /**
  * Get the value of an existing content_for key.
  *
+ * @param string $key
  * @return string $key
  * @author Justin Palmer
  **/
 function get_content_for($key){
 	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
+}
+/**
+ * Is there content for the specified key?
+ *
+ * @param string $key
+ * @return boolean
+ * @author Justin Palmer
+ **/
+function has_content_for($key)
+{
+	return isset(Template::$ContentFor->$key);
 }
 
 /**
@@ -88,7 +122,21 @@ function flash_it($flash)
 	if($flash instanceof Flash){
 		return $flash->display();
 	}else{
-		$flash = '<div class="flash">' . $flash . '</div>';
+		if($flash != '')
+			$flash = '<div class="flash">' . $flash . '</div>';
 	}
 	return $flash;
+}
+
+/**
+ * Cycle through to given strings
+ *
+ * @return string
+ * @author Justin Palmer
+ **/
+function cycle($one='one', $two='')
+{
+	static $count;
+	$count ++;
+	return ($count % 2) ? $one : $two;
 }

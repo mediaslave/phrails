@@ -22,6 +22,11 @@ abstract class Model
 	 * @var string
 	 */
 	protected $table_name;
+	
+	/**
+	 * The database name for this project
+	 */
+	protected $database_name;
 	/**
 	 * The alias for the model.
 	 *
@@ -51,6 +56,13 @@ abstract class Model
 	 */	
 	protected $props;
 	/**
+	 * An array of properties that have changed.
+	 * 
+	 * @author Justin Palmer
+	 * @var array
+	 */
+	protected $props_changed;
+	/**
 	 * The valid columns for the model from the db.
 	 *
 	 * @author Justin Palmer
@@ -78,11 +90,17 @@ abstract class Model
 		//Generate the table name if it is not set.
 		if($this->table_name === null)
 			$this->table_name = Inflections::tableize(get_class($this));
+		
+		//
 		$this->schema = new Schema($this);
 		$this->alias = Inflections::singularize($this->table_name);
 		$this->errors = new Hash();
 		//Store the db adapter.
 		self::$db = new $Adapter($this);
+		//Set the default database name;
+		$config = $this->db()->getConfig();
+		$this->database_name = $config->database;
+		$this->props = new Hash();
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
 		$this->columns = $this->prepareShowColumns($this->showColumns());
 		$this->setProperties($array);
@@ -147,6 +165,11 @@ abstract class Model
 				$last_prop_name = $name;
 				$errors = array();
 			}
+			//if the value is null and it is not a required property then lets just 
+			//continue onto the next property, nothing to do here.
+			if($value == NULL && !in_array($name, $this->schema()->required)){
+				continue;
+			}
 			//If there are rules for the property let's go through them.
 			if($rules->isKey($name)){
 				//print $name . ':' . $value . '<br/><br/>';
@@ -203,7 +226,11 @@ abstract class Model
 	{
 		$array = array();
 		foreach($ResultSet as $value){
-			$array[$value->Field] = $value;
+			$key = $value->Field;
+			//Set the property to null to begin.
+			$this->props->set($key, null);
+			//add the key and value to the array.
+			$array[$key] = $value;
 		}
 		return new Hash($array);
 	}
@@ -248,6 +275,7 @@ abstract class Model
 	{
 		if(!$this->columns()->isKey($key))
 			throw new NoColumnInTableException($key, $this->table_name());
+		$this->props_changed[] = $key;
 		$this->props->set($key, $value);
 	}
 	/**
@@ -268,7 +296,6 @@ abstract class Model
 	 **/
 	private function setProperties($array)
 	{	
-		$this->props = new Hash();
 		if(is_array($array)){
 			foreach($array as $key => $value)
 				$this->$key = $value;
@@ -303,6 +330,16 @@ abstract class Model
 	public function props()
 	{
 		return $this->props;
+	}
+	/**
+	 * Get the properties that have changed since the object was constructed.
+	 *
+	 * @return array
+	 * @author Justin Palmer
+	 **/
+	public function props_changed()
+	{
+		return $this->props_changed;
 	}
 	/**
 	 * Get the schema object.
@@ -343,6 +380,16 @@ abstract class Model
 	public function table_name()
 	{
 		return $this->table_name;
+	}
+	/**
+	 * Get the table name.
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public function database_name()
+	{
+		return $this->database_name;
 	}
 	/**
 	 * Get the primary_key value

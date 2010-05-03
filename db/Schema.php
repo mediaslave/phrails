@@ -45,6 +45,12 @@ class Schema
 	 */
 	private $last_rule_column = null;
 	/**
+	 * The required elements
+	 * 
+	 * @var array
+	 */
+	public $required = array();
+	/**
 	 * Constructor
 	 *
 	 * @return void
@@ -66,6 +72,9 @@ class Schema
 	{
 		//Make sure the property exists.
 		$this->model->hasProperty($column);
+		if($rule instanceof RequiredRule){
+			$this->required[] = $column;
+		}
 		//Get the rules for this property.
 		$rules = $this->rules->get($column);
 		if($rules === null){
@@ -83,6 +92,21 @@ class Schema
 	public function rules()
 	{
 		return $this->rules;
+	}
+	/**
+	 * Add the required rule to all of the properties listed
+	 *
+	 * @params mixed
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function required($args)
+	{
+		$args = func_get_args();
+		foreach($args as $property){
+			$this->required[] = $property;
+			$this->rule($property, new RequiredRule());
+		}
 	}
 	/**
 	 * Set the table name for the current relationship explicitly.
@@ -171,8 +195,10 @@ class Schema
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
 		$options->$key = $value;
-		//Regenerate the on to see if there is anything that needs changed.
-		$options->on = $this->autoGenerateOn($options->name);
+		if($name != 'on'){
+			//Regenerate the on to see if there is anything that needs changed.
+			$options->on = $this->autoGenerateOn($options->name);
+		}
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
