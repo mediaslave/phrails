@@ -136,7 +136,7 @@ class Controller
 	protected function redirectTo($path)
 	{
 		$path = ltrim($path, '/');
-		header('LOCATION:' . Registry::get('pr-domain-uri') . Registry::get('pr-install-path') . $path);
+		header('LOCATION:' . Registry::get('pr-domain-uri') . $path);
 		exit();
 	}
 	/**
