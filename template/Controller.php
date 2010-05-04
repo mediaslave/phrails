@@ -141,7 +141,8 @@ class Controller
 			$_SESSION['pr_flash'] = $this->flash;
 		}
 		$path = ltrim($path, '/');
-		header('LOCATION:' . Registry::get('pr-domain-uri')  . '/' . str_replace(Registry::get('pr-install-path'), '', $path));
+		$install_path = str_replace("/", "\/", Registry::get('pr-install-path'));
+		header('LOCATION:' . Registry::get('pr-domain-uri')  . '/' . preg_replace("%^" . $install_path . "%", '', $path, 1));
 		exit();
 	}
 	/**
