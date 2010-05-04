@@ -162,7 +162,7 @@ class SqlBuilder
 						$this->has_many[] = $join;
 						break;
 					case 'has-one':
-						$joins .= " left JOIN `" . $join->table . "` AS " . $join->alias . 
+						$joins .= " LEFT JOIN `" . $join->table . "` AS " . $join->alias . 
 								  " ON " . $join->on . " ";
 						break;
 				}

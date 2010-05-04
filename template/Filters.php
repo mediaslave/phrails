@@ -41,6 +41,12 @@ class Filters
 	 **/
 	private function add($type, $filter, array $actions)
 	{
+		//If no actions were specified we will add all of the actions of this
+		//controller to the actions array.
+		if(empty($actions)){
+			$r = new Reflections($this->controller);
+			$actions = $r->getPublicChildMethods();
+		}
 		//Get the hash that has the correct type in it.
 		$Set = $this->filters->get($type);
 		//Is the filter passed in already in the hash?
