@@ -25,7 +25,8 @@ class ResultRow
 	 **/
 	public function __set($key, $value)
 	{
-		$value = stripslashes(String::escape($value));
+		if(!is_object($value))
+			$value = stripslashes(String::escape($value));
 		$this->$key = $value;
 	}
 	/**

@@ -19,15 +19,13 @@ class ResultFactory
 	public static function factory(PDOStatement $Statement, $set = false)
 	{
 		$count = $Statement->rowCount();
-		if($set)
+		if($set || $count > 1)
 			return new ResultSet($Statement);
 		switch($count){
 			case 0:
 				throw new RecordNotFoundException($Statement->queryString);
 			case 1:
 				return $Statement->fetchObject('ResultRow');
-			default:
-				return new ResultSet($Statement);
 		}
 	}
 } // END class DatabaseResultFactory

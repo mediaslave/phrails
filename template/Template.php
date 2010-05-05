@@ -174,7 +174,7 @@ class Template
 	private function displayNoLayout($path, $type)
 	{
 		if($type == 'json')
-			return json_encode($this->Controller->pr_view_types->get('json'));
+			return Json::encode($this->Controller->pr_view_types->get('json'));
 		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;
