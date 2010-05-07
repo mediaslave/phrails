@@ -135,6 +135,7 @@ abstract class Model
 	 **/
 	public function save()
 	{
+		self::$db->model = $this;
 		$boolean = $this->validate();
 		if($boolean){
 			return self::$db->saveNow();
@@ -245,8 +246,10 @@ abstract class Model
 		//print('we tried to call' . $method);
 		$object = null;
 		if(method_exists(self::$db, $method)){
+			self::$db->model = $this;
 			$object = self::$db;
 		}else if(method_exists(self::$db->builder, $method)){
+			self::$db->builder->model = $this;
 			$object = self::$db->builder;
 		}else{
 			throw new Exception('We do not have that method. Tried to call: ' . $method);

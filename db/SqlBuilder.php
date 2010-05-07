@@ -15,7 +15,7 @@ class SqlBuilder
 	 * @author Justin Palmer
 	 * @var Model
 	 */
-	private $model;
+	public $model;
 	/**
 	 * The select statement that should added to the query.
 	 *
