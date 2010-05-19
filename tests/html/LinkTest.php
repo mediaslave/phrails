@@ -3,10 +3,14 @@
 * 
 */
 class LinkTest extends PHPUnit_Framework_TestCase
-{
-
-	public function setUp()
+{	
+	/**
+	 * @test
+	 **/
+	public function Without_options()
 	{
-		$this->o = new Link;
+		$control = '<link href="/home" />';
+		$a = new Link('/home');
+		$this->assertEquals($control, $a->__toString());
 	}
 }

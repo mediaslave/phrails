@@ -90,3 +90,7 @@ Generate controllers and models
 To create documentation from the base folder run:
 
 	phpdoc -t docs -d . -ti Phrails -o HTML:frames:earthli -i .git/,tests/,*examples/,__view__/
+	
+To run tests from the tests folder in the base folder run:
+
+	phpunit --bootstrap bootstrap.php --colors . 
