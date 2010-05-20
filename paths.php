@@ -65,6 +65,17 @@ function add_include_directory($path)
 {
 	set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 }
+/**
+ * Initialize the plugin.
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function add_plugin($plugin)
+{
+	add_include_directory("vendor/plugins/$plugin");
+	include "vendor/plugins/$plugin/init.php";
+}
 
 /**
  * Set the install path.
