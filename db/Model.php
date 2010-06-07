@@ -76,7 +76,13 @@ abstract class Model
 	 * @var Hash
 	 */
 	protected $errors;
-	
+	/**
+	 * The filters for the model
+	 * 
+	 * @author Justin Palmer
+	 * @var ModelFilters
+	 */
+	protected $pr_filters;
 	/**
 	 * Constructor
 	 *
@@ -92,7 +98,7 @@ abstract class Model
 			$this->table_name = Inflections::tableize(get_class($this));
 		
 		//
-		$this->schema = new Schema($this);
+		
 		$this->alias = Inflections::singularize($this->table_name);
 		$this->errors = new Hash();
 		//Store the db adapter.
@@ -104,6 +110,9 @@ abstract class Model
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
 		$this->columns = $this->prepareShowColumns($this->showColumns());
 		$this->setProperties($array);
+		
+		$this->pr_filters = new ModelFilters($this);
+		$this->schema = new Schema($this);
 		$this->init();
 	}
 	/**
@@ -136,10 +145,15 @@ abstract class Model
 	public function save()
 	{
 		self::$db->model = $this;
+		$filters = $this->filters();
 		$boolean = $this->validate();
 		if($boolean){
-			return self::$db->saveNow();
+			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
+			$result = self::$db->saveNow();
+			$filters->run($filters->getName(ModelFilters::after, ModelFilters::save));
+			return $result;
 		}
+		return $boolean;
 	}
 	/**
 	 * Validate the model
@@ -403,6 +417,16 @@ abstract class Model
 	public function primary_key()
 	{
 		return $this->primary_key;
+	}
+	/**
+	 * Get the filters object to manipulate filters
+	 *
+	 * @return ModelFilters
+	 * @author Justin Palmer
+	 **/
+	protected function filters()
+	{
+		return $this->pr_filters;
 	}
 	/**
 	 * init

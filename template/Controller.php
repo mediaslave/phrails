@@ -55,7 +55,7 @@ class Controller
 	/**
 	 * Filters object
 	 *
-	 * @var Filters
+	 * @var ControllerFilters
 	 */
 	protected $pr_filters = null;
 	/**
@@ -82,7 +82,7 @@ class Controller
 		$this->pr_request = new Request;
 		Registry::set('pr-request', $this->pr_request);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
-		$this->pr_filters = new Filters($this);
+		$this->pr_filters = new ControllerFilters($this);
 		if(isset($_SESSION['pr_flash'])){
 			$this->flash = $_SESSION['pr_flash'];
 			unset($_SESSION['pr_flash']);
@@ -174,11 +174,11 @@ class Controller
 	private function prRunAction()
 	{
 		$action = $this->pr_action;
-		$this->filters()->run(Filters::before);
-		$this->filters()->run(Filters::around);
+		$this->filters()->run(ControllerFilters::before);
+		$this->filters()->run(ControllerFilters::around);
 		$this->$action();
-		$this->filters()->run(Filters::around);
-		$this->filters()->run(Filters::after);
+		$this->filters()->run(ControllerFilters::around);
+		$this->filters()->run(ControllerFilters::after);
 	}
 	
 	/**
