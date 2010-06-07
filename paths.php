@@ -30,7 +30,7 @@ spl_autoload_register('autoload');
  */
 function autoload($class_name)
 {
-	$file = $class_name . '.php';
+	$file = str_replace('\\', '/', $class_name) . '.php';
 	$included = include_once($file);
 	if($included === false){
 		//Declaring the class with eval is a hack

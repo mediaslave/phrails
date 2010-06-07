@@ -21,16 +21,7 @@ class Filters
 	function __construct(Controller $controller)
 	{
 		$this->controller = $controller;
-		$filters = new Hash;
-		$filters->set(self::before	, new Hash);
-		$filters->set($this->exceptName(self::before), new Hash);
-		
-		$filters->set(self::around	, new Hash);
-		$filters->set($this->exceptName(self::around), new Hash);
-		
-		$filters->set(self::after	, new Hash);
-		$filters->set($this->exceptName(self::after) , new Hash);
-		$this->filters = $filters;
+		$this->reset();
 	}
 	
 	/**
@@ -190,6 +181,19 @@ class Filters
 	public function filters()
 	{
 		return $this->filters;
+	}
+	
+	private function reset(){
+		$filters = new Hash;
+		$filters->set(self::before, new Hash);
+		$filters->set($this->exceptName(self::before), new Hash);
+		
+		$filters->set(self::around	, new Hash);
+		$filters->set($this->exceptName(self::around), new Hash);
+		
+		$filters->set(self::after	, new Hash);
+		$filters->set($this->exceptName(self::after) , new Hash);
+		$this->filters = $filters;
 	}
 	
 }
