@@ -39,9 +39,9 @@ class ModelFilters extends Filters
 		$for = $this->filters->get($type);
 		foreach($for->array as $filters => $filter){
 			$object = $this->object;
-			if(is_array($filters)){
-				$object = array_shift($filters);
-				$filter = array_shift($filters);
+			if(is_array($filter) && sizeof($filter) > 0){
+				$object = array_shift($filter);
+				$filters = array_shift($filter);
 				if(!is_object($this->object->$object))
 					throw new Exception("There is no object in model property: '$object'.");
 				$object = $this->object->$object;
@@ -90,7 +90,6 @@ class ModelFilters extends Filters
 		$filters->set($this->getName(self::after, self::save), new Hash);
 		
 		$this->filters = $filters;
-		//print 'reset modelfilters';
 	}
 	
 }

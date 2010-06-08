@@ -45,11 +45,15 @@ abstract class Filters
 		//Get the hash that has the correct type in it.
 		$Set = $this->filters->get($type);
 		//Is the filter passed in already in the hash?
-		if($Set->isKey($filter)){
+		if(!is_array($filter) && $Set->isKey($filter)){
 			$array = $Set->get($filter);
 			$array = array_merge($array, $actions);
 			$Set->set($filter, $array);
 		}else{
+			if(is_array($filter)){
+				$actions = $filter;
+				$filter = $filter[0];
+			}
 			$Set->set($filter, $actions);
 		}
 		$this->filters->set($type, $Set);
