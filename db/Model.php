@@ -150,7 +150,8 @@ abstract class Model
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			$result = self::$db->saveNow();
-			$filters->run($filters->getName(ModelFilters::after, ModelFilters::save));
+			if($result)
+				$filters->run($filters->getName(ModelFilters::after, ModelFilters::save));
 			return $result;
 		}
 		return $boolean;
