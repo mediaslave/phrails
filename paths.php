@@ -28,8 +28,7 @@ spl_autoload_register('autoload');
  * @package framework
  * @author Justin Palmer
  */
-function autoload($class_name)
-{
+function autoload($class_name){
 	$file = str_replace('\\', '/', $class_name) . '.php';
 	$included = include_once($file);
 	if($included === false){

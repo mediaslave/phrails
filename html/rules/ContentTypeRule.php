@@ -35,6 +35,6 @@ class ContentTypeRule extends PregRule
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		return parent::run(!preg_match($this->preg, $this->type));
+		return Rule::run(!preg_match($this->preg, $this->type));
 	 }
 } // END class Rule
