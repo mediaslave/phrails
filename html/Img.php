@@ -11,6 +11,13 @@ class Img extends Tag
 	 * @var boolean
 	 */
 	protected $hasEndTag = false;
+	
+	/**
+	 * The source of the url.
+	 * 
+	 * @var string
+	 */
+	protected $source;
 	/**
 	 * Return a linkCss object
 	 *
@@ -22,9 +29,11 @@ class Img extends Tag
 	function __construct($source, $options='')
 	{
 		$app_path = Registry::get('pr-install-path');
-		if($app_path != null)
+		$rule = new UriRule();
+		$rule->value = $source;
+		if($app_path != null && !$rule->run())
 			$source = $app_path . 'public/images/' . $source . '?' . time();
-				$this->options = "src:$source";
+		$this->source = $source;
 		parent::__construct($options);
 	}
 	/**
@@ -32,7 +41,7 @@ class Img extends Tag
 	 **/
 	public function start()
 	{
-		return '<img' . $this->options . '/>';
+		return '<img src="' . $this->source . '" ' . $this->options . '/>';
 	}
 	/**
 	 * @see Tag::start

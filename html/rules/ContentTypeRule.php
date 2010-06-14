@@ -9,7 +9,7 @@
 class ContentTypeRule extends PregRule
 {
 
-	private $name;
+	private $type;
 	
 	/**
 	 * Constructor
@@ -20,19 +20,21 @@ class ContentTypeRule extends PregRule
 	 * @return ContentTypeRule
 	 * @author Justin Palmer
 	 **/
-	public function __construct($name, $array, $message=null)
+	public function __construct($type, $array)
 	{
-		$this->name = $name;
+		$this->type = $type;
 		$types = str_replace('/', '\/', implode('|', $array));
-		$this->preg = "/^(" . $types . ")$/";
-		$this->message = $message;
-		parent::__construct();
+		if(sizeof($array) > 1)
+			$types = "($types)";
+		$preg = "/^" . $types . "$/";
+		$message = '%s should be one of the following file types: ' . implode(', ', $array) . ', type given: ' . $type;
+		parent::__construct($preg, $message);
 	}
 	
 	/**
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		return parent::run(!preg_match($this->preg, $_FILES[$this->name]['type']));
+		return parent::run(!preg_match($this->preg, $this->type));
 	 }
 } // END class Rule

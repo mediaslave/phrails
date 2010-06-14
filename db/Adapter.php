@@ -190,9 +190,7 @@ class Adapter extends PDO
 				$ret = true;
 				$this->model->$primary_key_name = $this->lastInsertId();
 			}else{
-				//print 'Houston<br/>';
-				//new Dbug($this->Statement->errorInfo());
-				$ret = (object)$this->Statement->errorInfo();
+				$ret = $this->Statement->errorInfo();
 			}
 			return $ret;
 		}else{

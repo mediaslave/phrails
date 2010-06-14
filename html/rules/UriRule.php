@@ -16,7 +16,7 @@ class UriRule extends PregRule
 	 **/
 	public function __construct($message='%s should be a valid web address.')
 	{
-		$preg = "/^((http|https|ftp):\/\/(www\.)?|www\.)[a-zA-Z0-9\_\-]+\.([a-zA-Z]{2,4}|[a-zA-Z]{2}\.[a-zA-Z]{2})(\/[a-zA-Z0-9\-\._\?\&=,'\+%\$#~]*)*$/";
+		$preg = "/^((http|https|ftp):\/\/(www\.)?|www\.)([a-zA-Z0-9\_\-]+\.)+([a-zA-Z]{2,4}|[a-zA-Z]{2}\.[a-zA-Z]{2})(\/[a-zA-Z0-9\-\._\?\&=,'\+%\$#~]*)*$/";
 		parent::__construct($preg, $message);
 	}
 } // END class Rule

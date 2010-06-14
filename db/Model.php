@@ -150,7 +150,7 @@ abstract class Model
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			$result = self::$db->saveNow();
-			if($result)
+			if($result === true)
 				$filters->run($filters->getName(ModelFilters::after, ModelFilters::save));
 			return $result;
 		}
@@ -425,7 +425,7 @@ abstract class Model
 	 * @return ModelFilters
 	 * @author Justin Palmer
 	 **/
-	protected function filters()
+	public function filters()
 	{
 		return $this->pr_filters;
 	}
