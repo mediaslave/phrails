@@ -30,7 +30,7 @@ class DateRule extends PregRule
 		
 		if($boolean){
 			//Split the date into an array via dashes.
-			$date = split('-', $this->value);
+			$date = preg_split('/\-/', $this->value);
 			//use the php checkdate function to see if the date is valid.
 			if(!checkdate($date['1'], $date['2'], $date['0'])) {
 				$boolean = FALSE;
