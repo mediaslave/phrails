@@ -29,10 +29,12 @@ class Img extends Tag
 	function __construct($source, $options='', $from_base=true)
 	{
 		$app_path = Registry::get('pr-install-path');
-		$rule = new UriRule();
-		$rule->value = $source;
-		if(!$from_base && $app_path != null && !$rule->run())
-			$source = $app_path . 'public/images/' . $source . '?' . time();
+		if($from_base){
+			$rule = new UriRule();
+			$rule->value = $source;
+			if($app_path != null && !$rule->run())
+				$source = $app_path . 'public/images/' . $source . '?' . time();
+		}
 		$this->source = $source;
 		parent::__construct($options);
 	}

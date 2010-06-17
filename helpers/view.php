@@ -37,9 +37,9 @@ function stylesheet_link_tag($file, $options='')
  * @return void
  * @author Justin Palmer
  **/
-function image_tag($source, $options='')
+function image_tag($source, $options='', $from_base=true)
 {
-	return new Img($source, $options);
+	return new Img($source, $options, $from_base);
 }
 /**
  * Load a javascript library from google.
