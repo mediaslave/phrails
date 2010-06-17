@@ -26,12 +26,12 @@ class Img extends Tag
 	 * @return LinkCss
 	 * @author Justin Palmer
 	 */
-	function __construct($source, $options='')
+	function __construct($source, $options='', $from_base=true)
 	{
 		$app_path = Registry::get('pr-install-path');
 		$rule = new UriRule();
 		$rule->value = $source;
-		if($app_path != null && !$rule->run())
+		if(!$from_base && $app_path != null && !$rule->run())
 			$source = $app_path . 'public/images/' . $source . '?' . time();
 		$this->source = $source;
 		parent::__construct($options);
