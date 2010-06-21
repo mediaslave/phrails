@@ -70,10 +70,13 @@ function add_include_directory($path)
  * @return void
  * @author Justin Palmer
  **/
-function add_plugin($plugin)
+function add_plugin($plugin, $alt_path=null)
 {
-	add_include_directory("vendor/plugins/$plugin");
-	include "vendor/plugins/$plugin/init.php";
+	$path = "vendor/plugins/$plugin";
+	if($alt_path !== null)
+		$path = "$alt_path/$plugin";
+	add_include_directory($path);
+	include $path . "/init.php";
 }
 
 /**

@@ -15,17 +15,14 @@ class Json
 	 **/
 	public static function encode($object)
 	{
+		if($object instanceof ResultSet)
+			return self::encodeResultSet(null, $object, true);
 		$ret = '{';
 		foreach($object as $key => $value){
 			$count = 0;
 			if($value instanceof ResultSet){
-				$ret .= '"' . $key . '":[';
-				foreach($value as $record){
-					//$count++;
-					//$ret .= '"' . $count . '":';
-					$ret .= json_encode($record) . ',';
-				}	
-				$ret = rtrim($ret, ',') . '],';
+				new Dbug($key, '', false, __FILE__, __LINE__);
+				$ret .= self::encodeResultSet($key, $value);
 			}elseif(is_array($value)){
 				$ret .= json_encode($value) . ',';
 			}else{
@@ -33,5 +30,25 @@ class Json
 			}
 		}
 		return rtrim($ret, ',') . '}';
+	}
+	
+	/**
+	 * Encode the result set
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	private static function encodeResultSet($key, $object, $only=false)
+	{
+		$ret = '"' . $key . '":[';
+		if($only)
+			$ret = '[';
+		foreach($object as $record){
+			//$count++;
+			//$ret .= '"' . $count . '":';
+			$ret .= json_encode($record) . ',';
+		}	
+		$ret = rtrim($ret, ',') . ']';
+		return ($only) ? $ret : $ret .= ',';
 	}
 } // END class Cache
