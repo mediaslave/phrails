@@ -9,10 +9,35 @@
  */
 class FormBuilder
 {
+	/**
+	 * The model that is currently being worked on.
+	 * 
+	 * @var Model
+	 */
 	protected $model;
+	/**
+	 * This can be set in the form initializer
+	 * 
+	 * @var string
+	 */
 	static protected $class = 'form-error';
+	/**
+	 * This can be set in the form initializer
+	 * 
+	 * @var string
+	 */
 	static protected $required_hint = '( Required ) ';
+	/**
+	 * These are special form builder objects that are loaded in the form initializer
+	 * 
+	 * @var Hash
+	 */
 	static protected $Registered;
+	/**
+	 * The Request object.
+	 * 
+	 * @var Request
+	 */
 	protected $request;
 	/**
 	 * Constructor
@@ -27,8 +52,6 @@ class FormBuilder
 			throw new Exception("Parameter one in 'FormBuilder' should be a 'Model' Object or null.");
 		$this->model = $model;
 		$this->request = Registry::get('pr-request');
-		//self::$class = $on_error_class;
-		//self::$Registered = new Hash();
 	}
 	/**
 	 * return a Label for a model property
@@ -144,10 +167,10 @@ class FormBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function yes_no_select($property, $options='')
+	public function yes_no_select($property, $options='', $yes=1, $no=0)
 	{
 		$options = $this->checkForErrors($property, $options);
-		return new Select($this->getElementName($property), $this->getValue($property), new Option('Yes', '1'), new Option('No', 0), $options);
+		return new Select($this->getElementName($property), $this->getValue($property), new Option('Yes', $yes), new Option('No', $no), $options);
 	}
 	/**
 	 * Range select that will have numbers in the range that you provide

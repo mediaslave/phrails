@@ -51,9 +51,11 @@ abstract class Tag
 	 * Return the display string
 	 * @return string
 	 */
-	public function display()
+	public function display($display = null)
 	{
-		return $this->display;
+		if($display === null)
+			return $this->display;
+		$this->display = $display;
 	}
 	/**
 	 * Return the tag
@@ -65,6 +67,16 @@ abstract class Tag
 		if($this->hasEndTag)
 			$end = $this->display() . $this->end();
 		return $this->start() . $end;
+	}
+	/**
+	 * Get the options for this tag
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function options()
+	{
+		return $this->options;
 	}
 	/**
 	 * Add an option to the options string

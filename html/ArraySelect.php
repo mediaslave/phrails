@@ -18,9 +18,6 @@ class ArraySelect extends Select
 	 */
 	function __construct($name, array $array, $selectedValue=null, $options=null)
 	{
-		$options = $this->preparePrompt($options);
-		foreach($array as $option)
-			$this->display .= $option;
-		parent::__construct($name, $selectedValue, null, $options);
+		parent::__construct($name, $selectedValue, $array, $options);
 	}
 }
