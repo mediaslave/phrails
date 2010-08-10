@@ -90,7 +90,7 @@ abstract class Model
 	 * @return Model
 	 * @author Justin Palmer
 	 **/
-	public function __construct($array=array())
+	public function __construct(array $array=array())
 	{
 		$Adapter = Adapter::getDriverClass();
 		//Generate the table name if it is not set.
@@ -273,7 +273,7 @@ abstract class Model
 	}
 
 	/**
-	 * __get data
+	 * __get model properties
 	 *
 	 * @return string
 	 * @author Justin Palmer
@@ -284,7 +284,7 @@ abstract class Model
 	}
 
 	/**
-	 * __set vars
+	 * __set model properties
 	 *
 	 * @return void
 	 * @author Justin Palmer
