@@ -54,7 +54,7 @@ class Adapter extends PDO
 		$this->parentConstruct($encoding);
 		//$this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('Statement', array($this)));
 		//Register the adapter with the builder.
-		$this->builder = new SqlBuilder($this->model);
+		$this->builder = new SqlBuilder($model);
 	}
 	
 	/**
