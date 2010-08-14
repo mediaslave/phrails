@@ -34,6 +34,12 @@ class Controller
 	 */
 	public $pr_view_types;
 	/**
+	 * The view path.  If you want to change the path to which the views live on
+	 * 
+	 * @var string
+	 */
+	public $pr_view_path;
+	/**
 	 * Should caching be performed on this method.
 	 *	
 	 * @var boolean

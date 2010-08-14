@@ -93,6 +93,9 @@ class Template
 		//json will not use a layout.
 		if($Route->view_type != 'html')
 			$this->Controller->pr_layout = null;
+		//Users can specify a direct view path.
+		if($this->Controller->pr_view_path !== null)
+			$path = rtrim($this->Controller->pr_view_path, '/') . '/' . $path;
 		//Save the sha of the file path.
 		$this->view_path = $path;
 	}
@@ -104,7 +107,7 @@ class Template
 	 */
 	public function display()
 	{
-			$this->prepare();
+		$this->prepare();
 		//Return the appropriate layout and view or view.
 		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path, $this->route->view_type) 
 													   : $this->displayWithLayout($this->view_path);
