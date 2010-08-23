@@ -153,7 +153,7 @@ class Adapter extends PDO
 	 **/
 	public function findAll($forceSet=true)
 	{
-			$database_name = $this->model->database_name();
+		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();

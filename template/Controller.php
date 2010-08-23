@@ -253,9 +253,9 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function params($key, $value=null)
+	protected function params($key=null, $value=null)
 	{
 		return ($key !== null) ? $this->pr_request->params($key, $value)
-							   : $this->pr_request;
+							     : $this->pr_request;
 	}
 }

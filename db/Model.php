@@ -345,9 +345,14 @@ abstract class Model
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function props()
+	public function props($props=array())
 	{
-		return $this->props;
+		if(empty($props)){
+			return $this->props;
+		}
+		foreach($props as $key => $value){
+			$this->$key = $value;
+		}
 	}
 	/**
 	 * Get the properties that have changed since the object was constructed.
