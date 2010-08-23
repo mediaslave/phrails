@@ -55,7 +55,7 @@ function google_javascript_include_tag($library='jquery', $version='1.4.2', $jsa
 	$js = '';
 	if($jsapi == true)
 		$js .= '<script src="https://www.google.com/jsapi"></script>' . "\n";
-	$js .= '<script language="JavaScript" type="text/javascript">google.load("' . $library . '", "' . $version . '");</script>' . "\n";
+	$js .= '<script type="text/javascript">google.load("' . $library . '", "' . $version . '");</script>' . "\n";
 	return $js;
 }
 /**
