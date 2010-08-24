@@ -16,7 +16,7 @@ class Request extends Hash
 	 */
 	public function __construct()
 	{	
-		parent::__construct($_ENV += $_SERVER += $_REQUEST += $_COOKIE += $_SESSION += $_FILES += $_GET += $_POST); 
+		parent::__construct($_ENV += $_SERVER += $_REQUEST += $_COOKIE += $_SESSION += $_FILES += $_GET += $_POST);
 		//parent::__construct(array_merge($_ENV, $_SERVER, $_REQUEST, $_COOKIE, $_SESSION, $_FILES, $_GET, $_POST));							
 	}
 	/**
@@ -31,7 +31,7 @@ class Request extends Hash
 		if($value !== null){
 			$this->set($key, $value);
 		}else{
-			return $this->stripSlashes($this->get($key));
+			return $this->stripSlashes(parent::get($key));
 		}
 	}
 	

@@ -54,7 +54,7 @@ class Adapter extends PDO
 		$this->parentConstruct($encoding);
 		//$this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('Statement', array($this)));
 		//Register the adapter with the builder.
-		$this->builder = new SqlBuilder($this->model);
+		$this->builder = new SqlBuilder($model);
 	}
 	
 	/**
@@ -153,7 +153,7 @@ class Adapter extends PDO
 	 **/
 	public function findAll($forceSet=true)
 	{
-			$database_name = $this->model->database_name();
+		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();

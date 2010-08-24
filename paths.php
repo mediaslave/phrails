@@ -49,7 +49,8 @@ function autoload($class_name){
  * @author Justin Palmer
  */
 function include_all_in_folder ($folder, $extension='.php') {
-    foreach (glob($folder . '/*' . $extension) as $file) {
+	$glob = $folder . '/*' . $extension;
+    foreach (glob($glob) as $file) {
         include $file;
     }
 }

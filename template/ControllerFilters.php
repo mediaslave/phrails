@@ -48,8 +48,6 @@ class ControllerFilters extends Filters
 		$action = $this->object->pr_action;
 		$for = $this->filters->get($type);
 		$except = $this->filters->get($this->exceptName($type));
-		//new Dbug($for, '', false, __FILE__, __LINE__);
-		//new Dbug($except, '', false, __FILE__, __LINE__);
 		foreach($for->array as $filter => $actions){
 			//Make sure the except does not hold this action.
 			if($except->isKey($filter)){

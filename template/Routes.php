@@ -20,7 +20,7 @@ class Routes{
 	 * @return Routes
 	 * @author Justin Palmer
 	 */
-	function __construct(){
+	public function __construct(){
 		self::$Hash = new RoutesHash();
 	}
 	

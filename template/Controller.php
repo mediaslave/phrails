@@ -34,6 +34,12 @@ class Controller
 	 */
 	public $pr_view_types;
 	/**
+	 * The view path.  If you want to change the path to which the views live on
+	 * 
+	 * @var string
+	 */
+	public $pr_view_path;
+	/**
 	 * Should caching be performed on this method.
 	 *	
 	 * @var boolean
@@ -247,9 +253,9 @@ class Controller
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function params($key, $value=null)
+	protected function params($key=null, $value=null)
 	{
 		return ($key !== null) ? $this->pr_request->params($key, $value)
-							   : $this->pr_request;
+							     : $this->pr_request;
 	}
 }

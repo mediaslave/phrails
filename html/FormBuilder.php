@@ -10,6 +10,18 @@
 class FormBuilder
 {
 	/**
+	 * Constant for the csrf key
+	 * 
+	 * @var constant
+	 */
+	const authenticity_token_key = 'phrails-form-authenticity-token';
+	/**
+	 * Authenticity error message;
+	 * 
+	 * @var string
+	 */
+	static private $authenticity_token_error_message = 'Phrails has detected a Cross Site Request Forgery, check it out wikipedia.  The form can not be submitted under these conditions.';
+	/**
 	 * The model that is currently being worked on.
 	 * 
 	 * @var Model
@@ -282,5 +294,51 @@ class FormBuilder
 	public function setRequiredHint($value)
 	{
 		self::$required_hint = $value;
+	}
+	
+	/**
+	 * Set/Get the form authenticity token this prevents cross site request forgery.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function authenticityToken()
+	{
+		if(isset($_SESSION[self::authenticity_token_key]))
+			return $_SESSION[self::authenticity_token_key];
+		$value = md5(mt_rand());
+		$_SESSION[self::authenticity_token_key] = $value;
+		return $value;
+	}
+	/**
+	 * Is the authenticity token valid?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function isValidAuthenticityToken()
+	{
+		$request = new Request();
+		return ($request->session(self::authenticity_token_key) == $request->post(self::authenticity_token_key));
+	}
+	/**
+	 * Get the authenticity error message.
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public static function getAuthenticityErrorMessage()
+	{
+		return self::$authenticity_token_error_message;
+	}
+	/**
+	 * Set the authenticity error message
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function setAuthenticityErrorMessage($value)
+	{
+		self::$authenticity_token_error_message = $value;
 	}
 }

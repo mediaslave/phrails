@@ -26,13 +26,10 @@ class FlashForm extends Flash
 	public function __construct($args, $title="Form Errors", $class='flash-form-errors')
 	{
 		$args = func_get_args();
-		
-		$class = $args[sizeof($args) - 1];
-		$this->class = $class;
-		unset($args[sizeof($args) - 1]);
-		
-		$this->title = $args[sizeof($args) - 1];
-		unset($args[sizeof($args) - 1]);
+		//Get the class and the title
+		$this->class = array_pop($args);
+		$this->title = array_pop($args);
+		//instantiate an array for the errors.
 		$array = array();
 		
 		foreach($args as $model){
@@ -61,14 +58,18 @@ class FlashForm extends Flash
 			$ret = '';
 			$lis = '';
 			$labels = self::$Labels;
-			//var_dump($labels);
 			if(!empty($this->array)){
 				$ret = '<div class="' . $this->class . '">
 							<div>' . $this->title . '</div>
 							<ul>';
 				foreach($this->array as $key => $value){
+					if(!is_array($value))
+						$value = array($value);
 					foreach($value as $message){
-						$ret .= '<li>' . sprintf($message, '<span class="form-element-description">' . $labels->get($key) . '</span>') . '</li>';
+						$label = '';
+						if($labels !== null && $labels->isKey($key))
+							$label = '<span class="form-element-description">' . $labels->get($key) . '</span>';
+						$ret .= '<li>' . sprintf($message, $label) . '</li>';
 					}
 				}
 				$ret .= '

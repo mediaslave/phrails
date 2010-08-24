@@ -173,6 +173,9 @@ abstract class Model
 		$rules = $this->schema->rules();
 		//var_dump($props);
 		//Loop through the set properties.
+		if(!FormBuilder::isValidAuthenticityToken())
+			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
+		
 		foreach($props as $name => $value){
 			if(empty($errors))
 				$last_prop_name = $name;
@@ -345,9 +348,14 @@ abstract class Model
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function props()
+	public function props($props=array())
 	{
-		return $this->props;
+		if(empty($props)){
+			return $this->props;
+		}
+		foreach($props as $key => $value){
+			$this->$key = $value;
+		}
 	}
 	/**
 	 * Get the properties that have changed since the object was constructed.

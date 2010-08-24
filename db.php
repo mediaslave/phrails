@@ -1,4 +1,5 @@
 <?php
+//@todo convert array to stdClass for pr-db-config
 //We seperate this from run so that we can run rake tasks and other items
 //when the app is not running.
 $db_config = parse_ini_file('database.ini', true);

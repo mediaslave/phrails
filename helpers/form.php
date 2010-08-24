@@ -34,7 +34,8 @@ function submit_tag($name, $value, $options='')
  **/
 function form_tag($action, $options='')
 {
-	return new Form($action, $options);
+	return new Form($action, $options) . 
+		   new InputHidden(FormBuilder::authenticity_token_key, FormBuilder::authenticityToken());
 }
 /**
  * Return the end form tag
