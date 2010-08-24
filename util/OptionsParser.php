@@ -15,9 +15,9 @@ class OptionsParser
 	 * @return string
 	 * @author Justin Palmer
 	 */
-	public static function toHtmlProperties($options)
+	public static function toHtmlProperties($options, array $optionExceptions=array())
 	{
-		return self::parse($options);
+		return self::parse($options, $optionExceptions);
 	}
 	/**
 	 * Parse and return an array of key/value pairs.
@@ -26,14 +26,14 @@ class OptionsParser
 	 * @return array
 	 * @author Justin Palmer
 	 */
-	public static function toArray($options)
+	public static function toArray($options, array $optionExceptions=array())
 	{
-		return self::parse($options, true);
+		return self::parse($options, $optionExceptions, true);
 	}
 	/**
 	 * @nodoc
 	 */
-	private function parse($options, $array=false)
+	private function parse($options, array $optionExceptions=array(), $array=false)
 	{	
 		//var_dump($options);
 		//Initialize return var
@@ -47,6 +47,8 @@ class OptionsParser
 				$option = explode(':', $value);
 				$key = trim($option[0]);
 				$value = trim($option[1]);
+				if(array_key_exists($key, $optionExceptions))
+					$key = $optionExceptions[$key];
 				//Set the option into the appropriate return type.
 				($array) ? $ret[$key] = $value
 						 : $ret .= ' ' . $key . '="' . $value . '"';

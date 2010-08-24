@@ -17,7 +17,7 @@ class A extends Tag
 	 */
 	function __construct($display, $path, $options=null)
 	{
-		parent::__construct($options);
+		parent::__construct($options, array('method'=>'data-method', 'remote'=>'data-remote', 'confirm'=>'data-confirm'));
 		$this->display = $display;
 		$this->href = $path;
 	}
