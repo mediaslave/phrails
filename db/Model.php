@@ -173,6 +173,9 @@ abstract class Model
 		$rules = $this->schema->rules();
 		//var_dump($props);
 		//Loop through the set properties.
+		if(!FormBuilder::isValidAuthenticityToken())
+			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
+		
 		foreach($props as $name => $value){
 			if(empty($errors))
 				$last_prop_name = $name;

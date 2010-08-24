@@ -140,3 +140,15 @@ function cycle($one='one', $two='')
 	$count ++;
 	return ($count % 2) ? $one : $two;
 }
+
+/**
+ * Meta tags to validate the form
+ *
+ * @return string
+ * @author Justin Palmer
+ **/
+function csrf_meta_tag()
+{
+	return new Meta('csrf-token', FormBuilder::authenticityToken()) . "\t" . 
+		   new Meta('csrf-param', FormBuilder::authenticity_token_key);
+}

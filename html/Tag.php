@@ -66,7 +66,7 @@ abstract class Tag
 		$end = '';
 		if($this->hasEndTag)
 			$end = $this->display() . $this->end();
-		return $this->start() . $end;
+		return $this->start() . $end . "\n";
 	}
 	/**
 	 * Get the options for this tag
