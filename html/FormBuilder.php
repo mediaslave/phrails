@@ -16,12 +16,6 @@ class FormBuilder
 	 */
 	const authenticity_token_key = 'phrails-form-authenticity-token';
 	/**
-	 * Stored authenticity_token value
-	 * 
-	 * @var string
-	 */
-	static public $authenticity_token_value = null;
-	/**
 	 * Authenticity error message;
 	 * 
 	 * @var string
@@ -313,7 +307,6 @@ class FormBuilder
 		if(isset($_SESSION[self::authenticity_token_key]))
 			return $_SESSION[self::authenticity_token_key];
 		$value = md5(mt_rand());
-		self::$authenticity_token_value = $value;
 		$_SESSION[self::authenticity_token_key] = $value;
 		return $value;
 	}
