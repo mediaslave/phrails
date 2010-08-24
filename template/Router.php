@@ -141,9 +141,6 @@ class Router
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
-		//var_dump($uri);
-		//var_dump($route);
-		//print $controller_action . '<br/>';
 		$ret = null;
 		$rsize = sizeof($route);
 		$size = sizeof($uri);
