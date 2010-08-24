@@ -14,8 +14,8 @@ abstract class Element extends Tag
 	 * @param string or array $options 
 	 * @author Justin Palmer
 	 */
-	function __construct($options=null)
+	function __construct($options=null, array $optionExceptions=array())
 	{
-		parent::__construct($options);
+		parent::__construct($options, $optionExceptions);
 	}
 }

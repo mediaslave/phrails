@@ -318,7 +318,8 @@ class FormBuilder
 	 **/
 	public static function isValidAuthenticityToken()
 	{
-		return ($this->request->session(self::authenticity_token_key) == $request->post(self::authenticity_token_key));
+		$request = Registry::get('pr-request');
+		return ($request->session(self::authenticity_token_key) == $request->post(self::authenticity_token_key));
 	}
 	/**
 	 * Get the authenticity error message.

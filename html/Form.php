@@ -18,7 +18,7 @@ class Form extends Element
 	function __construct($action, $options=null)
 	{
 		$this->options .= "action:$action";
-		parent::__construct($options);
+		parent::__construct($options, array('remote'=>'data-remote'));
 	}
 	/**
 	 * @see Tag::start()

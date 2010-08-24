@@ -33,9 +33,9 @@ abstract class Tag
 	 * @return Tag
 	 * @author Justin Palmer
 	 **/
-	public function __construct($options=null)
+	public function __construct($options=null, array $optionExceptions=array())
 	{
-		$this->options = OptionsParser::toHtmlProperties($this->addOptions($options));
+		$this->options = OptionsParser::toHtmlProperties($this->addOptions($options), $optionExceptions);
 	}
 	/**
 	 * Start tag for the current tag.
