@@ -17,11 +17,14 @@ class Json
 	{
 		if($object instanceof ResultSet)
 			return self::encodeResultSet(null, $object, true);
+		if($object instanceof Model){
+			return json_encode($object->props()->export());
+		}
 		$ret = '{';
 		foreach($object as $key => $value){
 			$count = 0;
 			if($value instanceof ResultSet){
-				new Dbug($key, '', false, __FILE__, __LINE__);
+				//new Dbug($key, '', false, __FILE__, __LINE__);
 				$ret .= self::encodeResultSet($key, $value);
 			}elseif(is_array($value)){
 				$ret .= json_encode($value) . ',';

@@ -306,20 +306,24 @@ class FormBuilder
 	{
 		if(isset($_SESSION[self::authenticity_token_key]))
 			return $_SESSION[self::authenticity_token_key];
-		$value = md5(mt_rand());
+		$value = md5(time());
 		$_SESSION[self::authenticity_token_key] = $value;
 		return $value;
 	}
 	/**
 	 * Is the authenticity token valid?
 	 *
+	 * @todo do we need to check authenticity token to GET, PUT AND DELETE?
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public static function isValidAuthenticityToken()
 	{
 		$request = Registry::get('pr-request');
-		return ($request->session(self::authenticity_token_key) == $request->post(self::authenticity_token_key));
+		if(!$request->has('post') && !$request->has('get') && !$request->has('put') && !$request->has('delete'))
+			return true;
+		return ($request->session(self::authenticity_token_key) == 
+				$request->post(self::authenticity_token_key));
 	}
 	/**
 	 * Get the authenticity error message.
