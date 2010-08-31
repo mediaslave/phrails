@@ -133,9 +133,7 @@ class Adapter extends PDO
 			$result = ResultFactory::factory($this->Statement);
 			foreach($query->query as $key => $query){
 				//print $key;
-				$key = Inflections::pluralize($key);
 				$stmt = $this->prepare($query);
-				//print $stmt->queryString . "<br/>";
 				//var_dump($query->params);
 				$stmt->execute($params);
 				$result->$key = ResultFactory::factory($stmt, true);
@@ -219,12 +217,8 @@ class Adapter extends PDO
 		$args = func_get_args();
 		//Shift out the sql var.
 		$sql = array_shift($args);
-		//Let's get the key of the forceSet var.
-		$force_set_key = sizeof($args) - 1;
 		//Set the forceSet var.
-		$forceSet = $args[$force_set_key];
-		//Unset the forceSet var, leaving us with just the args for execute().
-		unset($args[$force_set_key]);
+		$forceSet = array_pop($args);
 		//Prepare the sql.
 		$this->Statement = $this->prepare($sql);
 		//If the user passed in an array of args then well get the first one for the execute method.

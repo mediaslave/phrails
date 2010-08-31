@@ -215,10 +215,10 @@ class Schema
 		$options->type = $type;
 		$options->alias = Inflections::underscore(str_replace('-', '_', $name));
 		$options->table = Inflections::tableize($options->alias);
-		$options->foreign_key = Inflections::foreignKey(Inflections::singularize($this->model->table_name()));
+		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$this->relationships->set($name, $options);
 		$options->on = $this->autoGenerateOn($name);
-		$this->relationships->set($name, $options);		
+		$this->relationships->set($name, $options);	
 		return $this;
 	}
 	/**

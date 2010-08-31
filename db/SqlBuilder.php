@@ -171,16 +171,25 @@ class SqlBuilder
 		return $joins;
 	}
 	/**
-	 * Add the conditions
-	 *
-	 * @return Adapter
-	 * @author Justin Palmer
+	 * @deprecated
+	 * @see where
 	 **/
 	public function conditions($conditions)
 	{
+		return $this->where($conditions);
+	}	
+	/**
+	 * Add items to the where claus of the query
+	 *
+	 * @return Model
+	 * @author Justin Palmer
+	 **/
+	public function where($where)
+	{
 		$this->conditions = func_get_args();
 		return $this->model;
-	}	
+	}
+	
 	/**
 	* Add the order
 	*

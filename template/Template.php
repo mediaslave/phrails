@@ -27,7 +27,7 @@ class Template
 	 */
 	public static $current_view_path;
 	/**
-	 * Store the sha of the current view path;
+	 * Store the SHA of the current view path;
 	 *
 	 * @var string
 	 */
@@ -50,7 +50,6 @@ class Template
 	{
 		$this->Controller = $controller;
 		self::$ContentFor = new stdClass;
-		//$this->prepare();
 	}
 	/**
 	 * Sets the file path and route array.
@@ -120,8 +119,6 @@ class Template
 	 **/
 	private function checkViewType($route)
 	{
-		//var_dump($this->Controller->pr_view_types);
-		//var_dump($route->view_type);
 		if(!$this->Controller->pr_view_types->isKey($route->view_type))
 			throw new NoViewTypeException($this->Controller->pr_view_types, $route->view_type);
 	}
@@ -177,7 +174,11 @@ class Template
 	private function displayNoLayout($path, $type)
 	{
 		if($type == 'json')
-			return Json::encode($this->Controller->pr_view_types->get('json'));
+			$callback = null;
+			$jsonify = $this->Controller->pr_view_types->get('json');
+			if(isset($jsonify->callback))
+				$callback = $jsonify->callback;
+			return Json::encode($jsonify->json, $callback);
 		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;
