@@ -82,4 +82,4 @@ class Json
 		}
 		return rtrim($ret, ',') . '},';
 	}
-} // END class Cache
+}

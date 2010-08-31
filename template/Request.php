@@ -122,6 +122,30 @@ class Request extends Hash
 		return $this->perform('_ENV', $key, $value);
 	}
 	
+	/**
+	 * Does the app have a GLOBALS specified?
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function has($type)
+	{
+		$types = array('post'		=>'_POST',
+					   'env'		=>'_ENV',
+					   'server'		=>'_SERVER',
+					   'request'	=>'_REQUEST',
+					   'cookie'		=>'_COOKIE',
+					   'session'	=>'_SESSION',
+					   'files'		=>'_FILES',
+					   'get'		=>'_GET',
+					   'put'		=>'_PUT',
+					   'delete'		=>'_DELETE'
+					  );
+		if(!array_key_exists($type, $types))
+			$type = $types[$type];
+		return (isset($GLOBALS[$type]) && !empty($GLOBALS[$type]));
+	}
+	
 	private function perform($type, $key, $value)
 	{
 		//If we are setting a global then let's set it and return

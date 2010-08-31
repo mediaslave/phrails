@@ -345,6 +345,7 @@ abstract class Model
 	/**
 	 * Get the current properties set
 	 *
+	 * @param array $props - should be a key value paired array to set the props of the model.
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
@@ -353,9 +354,8 @@ abstract class Model
 		if(empty($props)){
 			return $this->props;
 		}
-		foreach($props as $key => $value){
-			$this->$key = $value;
-		}
+		//if $props (passed in a array)is not empty then we will set the properties of the model
+		$this->setProperties($props);
 	}
 	/**
 	 * Get the properties that have changed since the object was constructed.
