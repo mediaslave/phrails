@@ -173,12 +173,13 @@ class Template
 	 */
 	private function displayNoLayout($path, $type)
 	{
-		if($type == 'json')
+		if($type == 'json'){
 			$callback = null;
 			$jsonify = $this->Controller->pr_view_types->get('json');
 			if(isset($jsonify->callback))
 				$callback = $jsonify->callback;
 			return Json::encode($jsonify->json, $callback);
+		}
 		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;

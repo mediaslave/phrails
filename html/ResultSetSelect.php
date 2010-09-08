@@ -23,15 +23,13 @@ class ResultSetSelect extends Select
 		$this->optionDisplay = $optionDisplay;
 		$this->id = $id;
 		$options = $this->preparePrompt($options);
-		//$resultSet->rewind();
 		foreach($resultSet as $record){
-			//var_dump($record);
 			$optionDisplay = $this->optionDisplay;
 			$id = $this->id;
 			$select = false;
 			if($record->$id === $selectedValue)
 				$select = true;
-			$this->display .= new Option($record->$optionDisplay, $record->$id, $select) . "\n";
+			$this->display .= new Option($record->$optionDisplay, $record->$id, $select);
 		}
 		parent::__construct($name, $selectedValue, null, $options);
 	}
