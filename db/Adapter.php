@@ -222,7 +222,7 @@ class Adapter extends PDO
 		//Prepare the sql.
 		$this->Statement = $this->prepare($sql);
 		//If the user passed in an array of args then well get the first one for the execute method.
-		if(is_array($args[0]))
+		if(!empty($args) && is_array($args[0]))
 			$args = $args[0];
 		//Execute the query.
 		$this->Statement->execute($args);
