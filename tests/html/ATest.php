@@ -9,7 +9,7 @@ class ATest extends PHPUnit_Framework_TestCase
 	 **/
 	public function With_no_options()
 	{
-		$a = '<a href="/">home</a>';
+		$a = '<a href="/">home</a>' . "\n";
 		$o = new A('home', '/');
 		$this->assertEquals($a, $o->__toString());
 	}
@@ -18,7 +18,7 @@ class ATest extends PHPUnit_Framework_TestCase
 	 **/
 	public function With_options()
 	{
-		$a = '<a href="/" class="foo" id="bar">home</a>';
+		$a = '<a href="/" class="foo" id="bar">home</a>' . "\n";
 		$o = new A('home', '/', 'class:foo,id:bar');
 		$this->assertEquals($a, $o->__toString());
 	}

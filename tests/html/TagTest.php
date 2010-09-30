@@ -37,6 +37,6 @@ class TagTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('</a>', $stub->end());
 		
 		$stub->display('A Link!');
-		$this->assertEquals('<a>A Link!</a>', $stub->__toString());
+		$this->assertEquals('<a>A Link!</a>' . "\n", $stub->__toString());
 	}
 }
