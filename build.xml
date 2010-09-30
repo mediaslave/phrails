@@ -62,7 +62,7 @@
  <!-- Generate API documentation -->
  <target name="phpdoc">
   <exec executable="phpdoc">
-   <arg line="-d Object -t build/api" />
+   <arg line="-d . -ti Phrails -o HTML:frames:earthli -i .git/,tests/,*examples/,__view__/ -t build/api" />
   </exec>
  </target>
 
