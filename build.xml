@@ -34,7 +34,7 @@
  <!-- Generate jdepend.xml and software metrics charts -->
  <target name="pdepend">
   <exec executable="pdepend">
-   <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml --ignore=tests" />
+   <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml --ignore=tests ." />
   </exec>
  </target>
 
