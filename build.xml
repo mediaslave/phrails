@@ -49,7 +49,7 @@
  <target name="phpcpd">
   <exec executable="phpcpd">
    <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml 
-	 		  --exlude tests 
+	 		  --exclude tests 
 			  ." />
   </exec>
  </target>
