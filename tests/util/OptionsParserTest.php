@@ -15,13 +15,13 @@ class OptionsParserTest extends PHPUnit_Framework_TestCase
 	 */
 	public function Convert_toString()
 	{
-		$this->assertType('string', OptionsParser::toHtmlProperties($this->s));	
+		$this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, OptionsParser::toHtmlProperties($this->s));	
 	}
 	/**
 	 * @test
 	 */
 	public function Convert_toArray()
 	{
-		$this->assertType('array', OptionsParser::toArray($this->s));	
+		$this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, OptionsParser::toArray($this->s));	
 	}
 }
