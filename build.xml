@@ -23,7 +23,7 @@
  <target name="code-coverage">   
   <exec dir="${basedir}"
         executable="phpunit"
-        failonerror="true">
+        failonerror="false">
    <arg line="--bootstrap tests/bootstrap.php --coverage-html build/coverage ."/>
   </exec>
  </target>
