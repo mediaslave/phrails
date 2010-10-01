@@ -60,12 +60,12 @@
   </exec>
  </target>
 
- <!-- Generate checkstyle.xml -->
+ <!-- Generate checkstyle.xml
  <target name="phpcs">
   <exec executable="phpcs" output="/dev/null">
-   <arg line="--standard=MySource --extensions=php --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml ." />
+   <arg line="standard=MySource extensions=php report=checkstyle report-file=${basedir}/build/logs/checkstyle.xml ." />
   </exec>
- </target>
+ </target> -->
 
  <!-- Generate API documentation -->
  <target name="phpdoc">
