@@ -24,7 +24,7 @@
   <exec dir="${basedir}"
         executable="phpunit"
         failonerror="true">
-   <arg line="--coverage-html ${basedir}/build/coverage"/>
+   <arg line="--bootstrap tests/bootstrap.php --coverage-html build/coverage ."/>
   </exec>
  </target>
 
