@@ -13,7 +13,7 @@
 
  <!-- Run unit tests and generate junit.xml and clover.xml -->
  <target name="phpunit">
-  <exec dir="${basedir}" executable="phpunit" failonerror="false">
+  <exec dir="${basedir}" executable="phpunit" failonerror="true">
    <arg line="--bootstrap ${basedir}/tests/bootstrap.php 
 			  --log-junit ${basedir}/build/logs/junit.xml 
 			  --coverage-clover ${basedir}/build/logs/clover.xml tests"/>
@@ -23,7 +23,7 @@
  <target name="code-coverage">   
   <exec dir="${basedir}"
         executable="phpunit"
-        failonerror="false">
+        failonerror="true">
    <arg line="--bootstrap tests/bootstrap.php --coverage-html build/coverage ."/>
   </exec>
  </target>
