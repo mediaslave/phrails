@@ -20,6 +20,14 @@
   </exec>
  </target>
 
+ <target name="code-coverage">   
+  <exec dir="${basedir}"
+        executable="phpunit"
+        failonerror="true">
+   <arg line="--coverage-html ${basedir}/build/coverage"/>
+  </exec>
+ </target>
+
  <!-- Run pdepend, phpmd, phpcpd, and phpcs in parallel -->
  <target name="parallelTasks">
   <parallel>
@@ -48,9 +56,7 @@
  <!-- Generate pmd-cpd.xml -->
  <target name="phpcpd">
   <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml 
-	 		  --exclude tests 
-			  ." />
+   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --exclude tests ." />
   </exec>
  </target>
 
