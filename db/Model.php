@@ -195,7 +195,7 @@ abstract class Model
 				//Get the rules.
 				$prop_rules = $rules->get($name);
 				//var_dump($prop_rules);
-				foreach($prop_rules as $key => $rule){
+				foreach($prop_rules as $rule){
 					$rule->value = $value;
 					if(!$rule->run()){
 						if($boolean)

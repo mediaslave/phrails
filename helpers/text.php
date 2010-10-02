@@ -17,7 +17,7 @@ function h($string)
 /**
  * @see String::$decode()
  **/
-function decode()
+function decode($string)
 {
 	return String::decode($string);
 }

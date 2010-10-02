@@ -24,6 +24,7 @@ class HashTest extends PHPUnit_Framework_TestCase
 	public function Can_we_get()
 	{
 		$this->assertEquals('bar', $this->o->get('foo'));
+		$this->assertEquals('bar', $this->o->foo);
 	}
 	/**
 	 * @test
@@ -39,5 +40,15 @@ class HashTest extends PHPUnit_Framework_TestCase
 	public function Is_the_key_set()
 	{
 		$this->assertTrue($this->o->isKey('foo'));
+	}
+	/**
+	 * @test
+	 **/
+	public function Can_we_remove_and_is_empty()
+	{
+		$this->o->remove('foo');
+		$array = $this->o->export();
+		$this->assertTrue(empty($array));
+		$this->assertTrue($this->o->isEmpty());
 	}
 }

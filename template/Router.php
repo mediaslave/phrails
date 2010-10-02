@@ -116,7 +116,7 @@ class Router
 		$closeness = 0;
 		$ret = new stdClass;
 		$controller_action = null;
-		foreach($Routes->export() as $key => $value){
+		foreach($Routes->export() as $value){
 			//var_dump($Routes->export());
 			$value = (object) $value;
 			if($request_uri == $value->path){
@@ -142,7 +142,6 @@ class Router
 	private function verifyRoute($uri, $route, $controller_action)
 	{
 		$ret = null;
-		$rsize = sizeof($route);
 		$size = sizeof($uri);
 		$count = 0;
 		for($i = 0; $i < $size; $i++){

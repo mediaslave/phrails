@@ -155,7 +155,7 @@ class SqlBuilder
 	{
 		$joins = '';
 		if(!empty($this->relationships)){
-			foreach($this->relationships as $key => $join){
+			foreach($this->relationships as $join){
 				// $join->type . "<br/>";
 				switch($join->type){
 					case 'has-many':

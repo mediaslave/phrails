@@ -19,7 +19,6 @@ class Json
 			return self::encodeResultSet(null, $object, true, $callBack);
 		$ret = '{';
 		foreach($object as $key => $value){
-			$count = 0;
 			if($value instanceof ResultRow){
 				$ret .= self::encodeResultRow($key, $value);
 			}elseif($value instanceof ResultSet){

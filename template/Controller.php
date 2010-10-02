@@ -103,8 +103,6 @@ class Controller
 	 **/
 	public function prRun($is_valid_type, $is_cached)
 	{
-		//Has the action ran?
-		$action_ran = false;
 		//Is the cache type valid?
 		if($is_valid_type){
 			//Set the controller var to whether or not we need to cache.
