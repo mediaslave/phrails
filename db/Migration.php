@@ -13,7 +13,6 @@ abstract class Migration extends Model
 	private $alter_stack = array();
 	private $valid_options = array('limit'=>'', 'null'=>false, 'primary'=>false, 'auto'=>false, 'index'=>false, 'unique'=>false, 'default'=>'', 'after'=>false);
 	private $statement;
-	private $is_create = true;
 	private $config;
 	public $operations;
 	
@@ -46,7 +45,7 @@ abstract class Migration extends Model
 		$this->alter_stack = array();
 		$this->table = $name;
 		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(\n\t%s\n)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
-		$this->integer('id', 'auto:true');
+		$this->integer($primary, 'auto:true');
 	}
 	
 	/**
@@ -86,18 +85,15 @@ abstract class Migration extends Model
 			$columns = rtrim($columns, ',');
 			$query = sprintf($this->statement, $columns);
 			$stmt = $this->prepare($query);
-			$b = $stmt->execute();
-			//var_dump($b);
+			$stmt->execute();
+			
 			$this->log($query);
-			//print '<br/>' . '<br/>';
 		}
 		foreach($this->alter_stack as $query){
 			$stmt = $this->prepare($query);
-			$l = $stmt->execute();
-			//var_dump($l);
+			$stmt->execute();
+			
 			$this->log($query);
-			//print $query;
-			//print '<br/><br/>';
 		}
 		print $this->operations;
 		$this->operations = '';
@@ -156,6 +152,7 @@ abstract class Migration extends Model
 	/**
 	 * enum
 	 *
+	 * @todo implement
 	 * @return void
 	 * @author Justin Palmer
 	 **/
