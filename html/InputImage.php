@@ -15,9 +15,9 @@ class InputImage extends Input
 	 * @param string or array $options 
 	 * @author Justin Palmer
 	 */
-	function __construct($src, $alt, $options=null)
+	function __construct($name, $src, $alt, $options=null)
 	{
-		$this->options .= "src:$src,alt:$alt";
-		parent::__construct('', '', $options);
+		$this->options .= ",src:$src,alt:$alt";
+		parent::__construct($name, '', $options);
 	}
 }

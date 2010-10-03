@@ -12,9 +12,9 @@
  * @return string
  * @author Justin Palmer
  **/
-function image_submit_tag($src, $alt, $options='')
+function image_submit_tag($name, $src, $alt, $options='')
 {
-	return new InputImage($src, $alt, $options);
+	return new InputImage($name, $src, $alt, $options);
 }
 /**
  * Submit button

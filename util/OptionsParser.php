@@ -35,7 +35,6 @@ class OptionsParser
 	 */
 	private function parse($options, array $optionExceptions=array(), $array=false)
 	{	
-		//var_dump($options);
 		//Initialize return var
 		($array) ? $ret = array() : $ret = '';
 		//Do some processing if we actually have some options.
