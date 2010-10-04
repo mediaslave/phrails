@@ -18,25 +18,41 @@ Under Apache, add the following to virtual host:
 	    RewriteEngine off
 
 	    <Location /app>
-	        Order allow,deny
 	        Deny from all                
 	    </Location>
 
 	    <Location /config>
-	        Order allow,deny
 	        Deny from all
 	    </Location>
 
+	    <Location /db>
+	        Deny from all
+	    </Location>
+	
 	    <Location /framework>
-	        Order allow,deny
 	        Deny from all
 	    </Location>
 
 	    <Location /lib>
-	        Order allow,deny
 	        Deny from all
 	    </Location>
 
+	    <Location /script>
+	        Deny from all
+	    </Location>
+	
+	    <Location /test>
+	        Deny from all
+	    </Location>
+	
+	    <Location /tmp>
+	        Deny from all
+	    </Location>
+	
+	    <Location /vendor>
+	        Deny from all
+	    </Location>
+	
 	    <Location />
 	        RewriteEngine on      
 	        RewriteCond %{REQUEST_FILENAME} !-f
@@ -51,8 +67,10 @@ Under Apache, add the following to virtual host:
 Create a .htaccess file in:
 	app
 	config
+	db
 	lib
 	script
+	test
 	tmp
 	vendor
 		
@@ -100,3 +118,11 @@ To create documentation from the base folder run:
 To run tests from the tests folder in the base folder run:
 
 	phpunit --bootstrap bootstrap.php --colors . 
+	
+#Continuous Integration with Hudson
+
+We have set up CI using Hudson.  We will be adding other projects here that are related to Phrails (plugins, cmd tools, etc...).
+
+It can be found here:
+
+	http://173.203.202.197:8080/
