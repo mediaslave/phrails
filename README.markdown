@@ -78,7 +78,7 @@ The .htaccess should have 'deny from all' in the file.
 	
 In the base of the app (example: /blog/) put:
 	
-	#setenv is only supported in apache 1.3.7
+	#setenv is only supported in apache > 1.3.7
 	#within in a .htaccess file
 	setenv PHRAILS_ENV development
 	setenv PHRAILS_BASE_URI /path/to/sub/directory/install/
