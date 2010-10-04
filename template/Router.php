@@ -86,7 +86,6 @@ class Router
 		$close_route = $this->findClosestRoute($request_uri);
 		$ret = $close_route['ret'];
 		$test = (array)$ret;
-		//var_dump($test);
 		if(empty($test))
 			throw new NoRouteException();
 		//print $request_uri . '<br/>';
