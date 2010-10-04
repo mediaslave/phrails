@@ -123,6 +123,4 @@ To run tests from the tests folder in the base folder run:
 
 We have set up CI using Hudson.  We will be adding other projects here that are related to Phrails (plugins, cmd tools, etc...).
 
-It can be found here:
-
-	http://173.203.202.197:8080/
+[Go check it out.](http://173.203.202.197:8080/ "Hudson Install")
