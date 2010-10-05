@@ -80,21 +80,25 @@ class Template
 			$this->Controller->pr_layout = null;
 		}
 		//Get the current view path based off of the controller
-		self::$current_view_path = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller);
+		self::$current_view_path = preg_replace('%\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
+		//print self::$current_view_path . '<br/>';
+		//exit();
 		//Get the file to render from the action of the route.
 		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
 		//Concat the necassary items to complete the path.
-		$path = strtolower($file) . '.' . $Route->view_type . '.php';
+		$path = $file . '.' . $Route->view_type . '.php';
 		//Make sure the path is set
 		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
+			
+		$path = strtolower($path);
 		//If the view is not html then we will set the layout to null
 		//json will not use a layout.
 		if($Route->view_type != 'html')
 			$this->Controller->pr_layout = null;
 		//Users can specify a direct view path.
 		if($this->Controller->pr_view_path !== null)
-			$path = rtrim($this->Controller->pr_view_path, '/') . '/' . $path;
+			$path = rtrim($this->Controller->pr_view_path, '\\') . '/' . $path;
 		//Save the sha of the file path.
 		$this->view_path = $path;
 	}

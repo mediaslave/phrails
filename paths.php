@@ -29,8 +29,19 @@ spl_autoload_register('autoload');
  * @author Justin Palmer
  */
 function autoload($class_name){
-	$file = str_replace('\\', '/', $class_name) . '.php';
-	$included = include_once($file);
+	/*$string = explode('\\', $class_name);
+	$namespace = array_shift($string);
+	$klass = array_pop($string);
+	if($namespace == PR_APPLICATION_NAMESPACE){
+		$included = include_once($klass . '.php');
+	}else{
+		$file = str_replace('\\', '/', $class_name) . '.php';
+		$included = include_once($file);
+	}*/
+	$path = str_replace(PR_APPLICATION_NAMESPACE, '', $class_name);
+	//print $path . '<br/>';
+	$included = include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
+	
 	if($included === false){
 		//Declaring the class with eval is a hack
 		//__autoload exception throwing is not officially supported until 5.3
@@ -44,13 +55,21 @@ function autoload($class_name){
  *
  * @param string $folder
  * @param string $extension
+ * @param boolean $do_folders
  * @return void
  * @package framework
  * @author Justin Palmer
  */
-function include_all_in_folder ($folder, $extension='.php') {
+function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
 	$glob = $folder . '/*' . $extension;
-    foreach (glob($glob) as $file) {
+	$glob = glob($glob);
+	if($do_folders)
+		$glob = array_merge($glob, glob($folder . '/*', GLOB_ONLYDIR));
+	foreach ($glob as $file) {
+		if(is_dir($file)){
+			include_all_in_folder($file, $extension, $do_folders);
+			continue;
+		}
         include $file;
     }
 }

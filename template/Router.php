@@ -32,7 +32,7 @@ class Router
 			//Set the current routes information in the registry.
 			Registry::set('pr-route', $route);
 			//Create the controller vars for instantiation and calling.
-			$controller = $route->controller . 'Controller';
+			$controller = PR_APPLICATION_NAMESPACE . '\app\controllers\\' . str_replace('/', '\\', $route->controller) . 'Controller';
 			$action = $route->action;
 			//Instantiate the correct controller and call the action.
 			$Controller = new $controller();
@@ -122,17 +122,21 @@ class Router
 				$ret = $value;
 				break;
 			}
+			//print $request_uri . '<br/>';
+			//print $value->path . '<br/>';
 			$current = similar_text($request_uri, $value->path);
 			if($current > $closeness){
 				$closeness = $current;
 				$ret = $value;
 			}
 			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $value->controller);
+			
 			$first = $second = '/' . strtolower($controller) . '/' . $value->action;
 			$second = $second . '/';
 			if($first == $request_uri || $second == $request_uri)
 				$controller_action = $value;
 		}
+		//print $controller_action . '<br/>';
 		return array('ret' => $ret, 'controller-action' => $controller_action);
 	}
 	/**
