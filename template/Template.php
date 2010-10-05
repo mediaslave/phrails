@@ -80,7 +80,7 @@ class Template
 			$this->Controller->pr_layout = null;
 		}
 		//Get the current view path based off of the controller
-		self::$current_view_path = preg_replace('%\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
+		self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
 		//print self::$current_view_path . '<br/>';
 		//exit();
 		//Get the file to render from the action of the route.
