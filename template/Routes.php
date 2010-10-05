@@ -61,9 +61,24 @@ class Routes{
 	 * @author Justin Palmer
 	 */
 	function resources($name, $controller){
-		$path = '/' . $name;
-		$this->add($name, $path, $controller, 'index');
-		$this->add(Inflections::singularize($name), $path . '/{id}', $controller, 'view');
+		$pieces = explode('-', $name);
+		$name_for_path = '';
+		$name_for_path_end = array_pop($pieces);
+		if(sizeof($pieces) > 0){
+			foreach($pieces as $piece){
+				$id = '{' . Inflections::singularize($piece) . '_id}';
+				$name_for_path .= $piece . '/' . $id . '/';
+			}
+		}
+		$path = '/' . $name_for_path . $name_for_path_end;
+		
+		//If the singular and the plural are the same add -index to the index route.
+		$index = $name;
+		$singular = Inflections::singularize($name);
+		if($index == $singular)
+			$index .= '-index';
+		$this->add($index, $path, $controller, 'index');
+		$this->add($singular, $path . '/{id}', $controller, 'view');
 		$this->add('edit-' . Inflections::singularize($name), $path . '/{id}/edit', $controller, 'edit');
 		$this->add('update-' . Inflections::singularize($name), $path . '/{id}/update', $controller, 'update');
 		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init');
