@@ -11,6 +11,8 @@ $Route = Registry::get('pr-route');
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
+<h1>Action Not Found</h1>
+
 <p>We could not find the Action: <b><?= $Route->no_controller . '#' . $Route->no_action ?></b></p>
 	
 <p>Create the action (method) in <em>app/controllers/<?= $Route->no_controller?>.php</em></p>

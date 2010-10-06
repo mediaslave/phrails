@@ -14,8 +14,12 @@ $route_requested = '/' . str_replace($install_path, '', $Route->requested);
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
-</p>We could not find the route: <b><?= $route_requested ?></b></p>
+<h1>No Route Found</h1>
+
+<p><?= $Route->message ?></p>
 	
-<p>Add the route for <em><?= $route_requested ?></em> to config/routes.php</p>
+<p>The request route was: <b><?= $route_requested ?></b></p>
+	
+<p>If the route that was closest does not match, please add the route <em><?= $route_requested ?></em> to config/routes.php</p>
 </body>
 </html>

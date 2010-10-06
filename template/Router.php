@@ -46,7 +46,8 @@ class Router
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoRoute',
 											'requested' => $_SERVER['REQUEST_URI'],
-											'view_type' => 'html'));
+											'view_type' => 'html',
+											'message' => $e->getMessage()));
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoRoute';
@@ -116,14 +117,11 @@ class Router
 		$ret = new stdClass;
 		$controller_action = null;
 		foreach($Routes->export() as $value){
-			//var_dump($Routes->export());
 			$value = (object) $value;
 			if($request_uri == $value->path){
 				$ret = $value;
 				break;
 			}
-			//print $request_uri . '<br/>';
-			//print $value->path . '<br/>';
 			$current = similar_text($request_uri, $value->path);
 			if($current > $closeness){
 				$closeness = $current;
@@ -144,8 +142,13 @@ class Router
 	 */
 	private function verifyRoute($uri, $route, $controller_action)
 	{
+		$tag_expression = "/{([a-zA-Z\_\-])*?}/i";
 		$ret = null;
 		$size = sizeof($uri);
+		if($uri[0] == '')
+			array_shift($uri);
+		if($route[0] == '')
+			array_shift($route);
 		$count = 0;
 		for($i = 0; $i < $size; $i++){
 			$vroute = null;
@@ -154,7 +157,7 @@ class Router
 				$vroute = $route[$i];
 			if(isset($uri[$i]))
 				$vuri = $uri[$i];
-			$tag = (preg_match("/{([a-zA-Z\_\-])*}/i", $vroute));
+			$tag = (preg_match($tag_expression, $vroute));
 			if($tag == 1){
 				$count++;
 				$key = rtrim(ltrim($vroute, '{'), '}');
@@ -169,8 +172,30 @@ class Router
 		//otherwise throw a no route exception.
 		if($size !== $count){
 			$ret = $controller_action;
-			if($controller_action === null)
-				throw new NoRouteException();
+			if($controller_action === null){
+				//See if there any $_GET vars that were expected so that you can display the message.
+				$route = implode('/', $route);
+				preg_match_all($tag_expression, $route, $tags);
+				$get = '';
+				$get_vars = '';
+				if(!empty($tags[0])){
+					$size = sizeof($tags[0]);
+					$count = 0;
+					foreach($tags[0] as $tag){
+						$tag = ltrim(rtrim($tag, '}'), '{');
+						$tagm = $tag . ' ,';
+						$count++;
+						if($count == $size){
+							$tagm = ' and ' . $tag;
+							$get_vars = rtrim($get_vars, ',');
+						}
+						$get_vars .= $tagm;
+					}
+					$get = ', this route expects the $_GET vars: <em>' . $get_vars . '</em>';
+				}
+				throw new NoRouteException('The route specified does not exist. 
+											The closest route we could find is <b>' . $route . '</b>' . $get);
+			}
 		}
 		return $ret;
 	}

@@ -6,8 +6,8 @@
 class NoRouteException extends Exception
 {
 	
-	function __construct()
+	function __construct($message="The route specified does not exist.")
 	{
-		parent::__construct("The route specified does not exist.");
+		parent::__construct($message);
 	}
 }
