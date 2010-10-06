@@ -14,7 +14,7 @@ $route_requested = '/' . str_replace($install_path, '', $Route->requested);
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
-<h1>No Route Found</h1>
+<h1>Route Not Found</h1>
 
 <p><?= $Route->message ?></p>
 	
