@@ -68,7 +68,7 @@ class Routes{
 		$name_for_path_end = array_pop($pieces);
 		if(sizeof($pieces) > 0){
 			foreach($pieces as $piece){
-				$id = '{' . Inflections::singularize($piece) . '_id}';
+				$id = '{' . str_replace('-', '_', Inflections::singularize($piece)) . '_id}';
 				$name_for_path .= $piece . '/' . $id . '/';
 			}
 		}

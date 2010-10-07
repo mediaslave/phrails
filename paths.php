@@ -29,17 +29,16 @@ spl_autoload_register('autoload');
  * @author Justin Palmer
  */
 function autoload($class_name){
-	/*$string = explode('\\', $class_name);
-	$namespace = array_shift($string);
-	$klass = array_pop($string);
-	if($namespace == PR_APPLICATION_NAMESPACE){
-		$included = include_once($klass . '.php');
-	}else{
-		$file = str_replace('\\', '/', $class_name) . '.php';
-		$included = include_once($file);
-	}*/
 	$path = str_replace(PR_APPLICATION_NAMESPACE, '', $class_name);
-	//print $path . '<br/>';
+	$separated = explode('\\', $path);
+	$class_name = array_pop($separated);
+	if(sizeof($separated) > 0){
+		$path = implode('\\', $separated);
+		$path = strtolower(preg_replace('%\\\\-%', '\\', preg_replace('/([^\s])([A-Z])/', '\1-\2', $path))) . '\\' . $class_name;
+	}else{
+		$path = $class_name;
+	}
+	
 	$included = include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
 	
 	if($included === false){

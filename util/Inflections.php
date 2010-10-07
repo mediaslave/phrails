@@ -135,7 +135,7 @@ class Inflections
 	 **/
 	public static function underscore($string)
 	{
-		return strtolower(preg_replace('/([^\s])([A-Z])/', '\1_\2', $string));
+		return strtolower(preg_replace('/([^\s])([A-Z\-])/', '\1_\2', $string));
 	}
 	/**
 	 * Make a table name out of string

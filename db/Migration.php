@@ -39,6 +39,7 @@ abstract class Migration extends Model
 	 **/
 	public function createTable($name, $primary='id', $engine='INNODB', $charset='utf8', $collation='utf8_general_ci')
 	{
+		$name = Inflections::tableize($name);
 		$this->migrate();
 		$this->operations .= "\033[0;36;1m$name\033[0m | \033[0;35;1m$engine\033[0m | \033[0;36;1m$charset\033[0m | \033[0;35;1m$collation\033[0m\n";
 		$this->stack = array();
@@ -66,7 +67,7 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
-		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` ADD \n\t%s\n $operation";
+		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` ADD \n\t%s\n $operation";
 	}
 	
 	/**
