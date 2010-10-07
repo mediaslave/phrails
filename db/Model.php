@@ -94,9 +94,10 @@ abstract class Model
 	{
 		$Adapter = Adapter::getDriverClass();
 		//Generate the table name if it is not set.
-		if($this->table_name === null)
-			$this->table_name = Inflections::tableize(get_class($this));
-		
+		if($this->table_name === null){
+			$klass = explode('\\', get_class($this));
+			$this->table_name = Inflections::tableize(array_pop($klass));
+		}
 		//
 		
 		$this->alias = Inflections::singularize($this->table_name);
