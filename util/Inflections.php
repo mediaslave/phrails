@@ -119,7 +119,12 @@ class Inflections
 	public static function classify($string)
 	{
 		$string = Inflections::singularize($string);
+		//if it is underscored class.
 		$string = str_replace('_', ' ', $string);
+		//if it it is a lower case namespaced class.
+		$string = str_replace('\\', ' ', $string);
+		//if it is hyphen class
+		$string = str_replace('-', ' ', $string);
 		return str_replace(' ', '', ucwords($string));
 	}
 	/**

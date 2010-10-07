@@ -60,8 +60,10 @@ class Routes{
 	 * @return void
 	 * @author Justin Palmer
 	 */
-	function resources($name, $controller){
-		$pieces = explode('-', $name);
+	function resources($name, $controller=null){
+		$pieces = explode('\\', $name);
+		if($controller === null)
+			$controller = $name;
 		$name_for_path = '';
 		$name_for_path_end = array_pop($pieces);
 		if(sizeof($pieces) > 0){
@@ -70,10 +72,10 @@ class Routes{
 				$name_for_path .= $piece . '/' . $id . '/';
 			}
 		}
-		$path = '/' . $name_for_path . $name_for_path_end;
+		$path = strtolower('/' . $name_for_path . $name_for_path_end);
 		
 		//If the singular and the plural are the same add -index to the index route.
-		$index = $name;
+		$index = $name = str_replace('\\', '-', $name);
 		$singular = Inflections::singularize($name);
 		if($index == $singular)
 			$index .= '-index';
