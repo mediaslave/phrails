@@ -136,6 +136,17 @@ abstract class Migration extends Model
 		$this->add('FLOAT', $name, $options, $invalid);
 	}
 	
+	/**
+	 * float
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function decimal($name, $options='')
+	{
+		$invalid = array('auto');
+		$this->add('DECIMAL', $name, $options, $invalid);
+	}
 	
 	
 	/**
@@ -251,7 +262,7 @@ abstract class Migration extends Model
 	 **/
 	public function references($table, $options='')
 	{
-		$column = Inflections::tableize($table) . '_id';
+		$column = Inflections::underscore($table) . '_id';
 		$this->integer($column, $options);
 		$this->index($this->table, $column);
 	}
@@ -275,7 +286,7 @@ abstract class Migration extends Model
 		//Add to the string the bits needed.
 		$bit = "`$name` $datatype";
 		if(isset($options['limit'])){
-			$bit .= "(" . $options['limit'] . ")";
+			$bit .= "(" . str_replace('.', ',', $options['limit']) . ")";
 		}elseif($datatype == 'VARCHAR'){
 			$bit .= "(255)";
 		}
