@@ -75,7 +75,7 @@ class Routes{
 		$path = strtolower('/' . $name_for_path . $name_for_path_end);
 		
 		//If the singular and the plural are the same add -index to the index route.
-		$index = $name = str_replace('\\', '-', $name);
+		$index = $name = strtolower(str_replace('\\', '-', $name));
 		$singular = Inflections::singularize($name);
 		if($index == $singular)
 			$index .= '-index';

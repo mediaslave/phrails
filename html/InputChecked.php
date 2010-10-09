@@ -36,7 +36,7 @@ class InputChecked extends Input
 	 **/
 	public function start()
 	{
-		return '<input' . $this->options . ' ' . $this->checked . '/>';
+		return '<input value="' . $this->value . '"' . $this->options . ' ' . $this->checked . '/>';
 	}
 	
 	/**

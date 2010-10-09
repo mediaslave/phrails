@@ -32,11 +32,12 @@ class Select extends FormElement
 			$args[] = $options;
 			$options = null;
 		}
+		//If args is an array it could be an array of options.
+		if(is_array($args[0]))
+			$args = $args[0];
 		//$args is now the optionTags after stripping out $name, $selectedValue and $options off of the 
 		//func_get_args array.
 		if($args[0] !== null){
-			if(is_array($args[0]))
-				$args = $args[0];
 			foreach($args as $option){
 				if(!($option instanceof Option))
 					throw new Exception("Invalid tag for element 'Select'.  Only 'Option' elements may be passed.");
@@ -45,7 +46,7 @@ class Select extends FormElement
 				$this->display .= $option . "\n";
 			}
 		}
-		parent::__construct($name, null, $options);
+		parent::__construct($name, null, $options, array('method'=>'data-method', 'action'=>'data-action', 'remote'=>'data-remote'));
 	}
 	/**
 	 * Check to see if we need to include a prompt.

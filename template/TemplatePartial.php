@@ -34,7 +34,7 @@ class TemplatePartial
 		if(!empty($array))
 			extract($array);
 		ob_start();
-		$included = @include $file;
+		$included = include $file;
 		if($included === false)
 			throw new Exception("The template at the path '$file' does not exist.");
 		return ob_get_clean();

@@ -185,6 +185,20 @@ class FormBuilder
 		return new Select($this->getElementName($property), $this->getValue($property), new Option('Yes', $yes), new Option('No', $no), $options);
 	}
 	/**
+	 * Create a select
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function select($property, $optionTags, $options='')
+	{		
+		$args = func_get_args();
+		$property = array_shift($args);
+		$options = array_pop($args);
+		$options = $this->checkForErrors($property, $options);
+		return new Select($this->getElementName($property), $this->getValue($property), $args, $options);
+	}
+	/**
 	 * Range select that will have numbers in the range that you provide
 	 *
 	 * @return void
@@ -344,5 +358,15 @@ class FormBuilder
 	public static function setAuthenticityErrorMessage($value)
 	{
 		self::$authenticity_token_error_message = $value;
+	}
+	/**
+	 * Get the model that is in the FormBuilder
+	 *
+	 * @return Model
+	 * @author Justin Palmer
+	 **/
+	public function model()
+	{
+		return $this->model;
 	}
 }

@@ -14,7 +14,7 @@ class Input extends FormElement
 	 */
 	public function start()
 	{
-		return '<input' . $this->options . ' />';
+		return '<input' . $this->options . ' value="' . $this->value . '" />';
 	}
 	/**
 	 * @see Tag::end();
