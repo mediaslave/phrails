@@ -116,7 +116,17 @@ class Schema
 	 **/
 	public function className($table)
 	{
-		return $this->addOption(array('table' => Inflections::tableize($table)), 'table');
+		return $this->prop(Inflections::underscore($table) . '_id')->addOption(array('table' => Inflections::tableize($table)), 'table');
+	}
+	/**
+	 * Set the property to access when doing the where
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function prop($prop)
+	{
+		return $this->addOption(array('prop' => $prop), 'prop');
 	}
 	/**
 	 * The alias that the last relationship should be, this will be used in the join query.
@@ -156,8 +166,8 @@ class Schema
 	 **/
 	public function belongsTo($name)
 	{	
-		$this->last_relationship = $name;
-		return $this->addRelationship($name, 'belongs-to');
+		$this->last_relationship = strtolower($name);
+		return $this->prop($name)->addRelationship($name, 'belongs-to');
 	}
 	/**
 	 * has many
@@ -167,7 +177,7 @@ class Schema
 	 **/
 	public function hasMany($name)
 	{	
-		$this->last_relationship = $name;
+		$this->last_relationship = strtolower($name);
 		return $this->addRelationship($name, 'has-many');
 	}
 	/**
@@ -178,8 +188,8 @@ class Schema
 	 **/
 	public function hasOne($name)
 	{	
-		$this->last_relationship = $name;
-		return $this->addRelationship($name, 'has-one');
+		$this->last_relationship = strtolower($name);
+		return $this->addRelationship($name, 'has-one');	
 	}
 	/**
 	 * Add the option to the last relationship.
@@ -197,7 +207,7 @@ class Schema
 		$options->$key = $value;
 		if($name != 'on'){
 			//Regenerate the on to see if there is anything that needs changed.
-			$options->on = $this->autoGenerateOn($options->name);
+			$options->on = $this->autoGenerateOn(strtolower($options->name));
 		}
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
@@ -216,9 +226,10 @@ class Schema
 		$options->alias = Inflections::underscore(str_replace('-', '_', $name));
 		$options->table = Inflections::tableize($options->alias);
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
-		$this->relationships->set($name, $options);
-		$options->on = $this->autoGenerateOn($name);
-		$this->relationships->set($name, $options);	
+		$this->relationships->set(strtolower($name), $options);
+		$options->on = $this->autoGenerateOn(strtolower($name));
+		$this->relationships->set(strtolower($name), $options);
+		$this->prop(Inflections::underscore($name) . '_id');
 		return $this;
 	}
 	/**
@@ -233,7 +244,8 @@ class Schema
 		$ret = '';
 		switch($options->type){
 			case 'has-one':
-				$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
+				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
+				$ret = $options->table . '.' . $this->model->primary_key() . ' = ?';
 				break;
 			case 'has-many':
 				$ret = $options->table . "." . $options->foreign_key . " = ?";

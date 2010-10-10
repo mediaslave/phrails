@@ -133,10 +133,10 @@ class Adapter extends PDO
 			$result = ResultFactory::factory($this->Statement);
 			foreach($query->query as $key => $query){
 				//print $key;
-				$stmt = $this->prepare($query);
-				//var_dump($query->params);
-				$stmt->execute($params);
-				$result->$key = ResultFactory::factory($stmt, true);
+				$prop = $query->prop;
+				$stmt = $this->prepare($query->query);
+				$stmt->execute(array($result->$prop));
+				$result->$key = ResultFactory::factory($stmt);
 			}
 		}catch(RecordNotFoundException $e){
 			throw $e;

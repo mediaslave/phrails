@@ -94,7 +94,7 @@ class SqlBuilder
 		$query .= ' AS ' . $this->model->alias();
 			
 		//build all of the joins that are called by join()
-		$query .= $this->buildAllJoins();
+		//$query .= $this->buildAllJoins();
 		//class to hold the query and the params to return.
 		$result = new stdClass;
 		//any conditions?
@@ -111,8 +111,11 @@ class SqlBuilder
 		}
 		$result->params = array_merge($this->conditions, $this->order);
 		$result->query[] = $query;
-		foreach($this->has_many as $many){
-			$result->query[$many->alias] = "SELECT * FROM `" . $many->table . "` WHERE " . $many->on; 
+		foreach($this->relationships as $joins){
+			$o = new stdClass;
+			$o->prop = $joins->prop;
+			$o->query = "SELECT * FROM `" . $joins->table . "` WHERE " . $joins->on; 
+			$result->query[$joins->alias] = $o;
 		}
 		return $result;
 	}
@@ -145,31 +148,7 @@ class SqlBuilder
 		}
 		return $this->model;
 	}
-	/**
-	 * Build out the join
-	 *
-	 * @return string
-	 * @author Justin Palmer
-	 **/
-	private function buildAllJoins()
-	{
-		$joins = '';
-		if(!empty($this->relationships)){
-			foreach($this->relationships as $join){
-				// $join->type . "<br/>";
-				switch($join->type){
-					case 'has-many':
-						$this->has_many[] = $join;
-						break;
-					case 'has-one':
-						$joins .= " LEFT JOIN `" . $join->table . "` AS " . $join->alias . 
-								  " ON " . $join->on . " ";
-						break;
-				}
-			}
-		}
-		return $joins;
-	}
+
 	/**
 	 * @deprecated
 	 * @see where
