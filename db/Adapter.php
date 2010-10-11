@@ -8,7 +8,7 @@
  * @package db
  * @author Justin Palmer
  */				
-class Adapter extends PDO
+class Adapter
 {	
 	/**
 	 * Implemented drivers
@@ -40,6 +40,8 @@ class Adapter extends PDO
 	 */
 	public $model;
 	
+	private $pdo;
+	
 	/**
 	 * Constructor
 	 *
@@ -51,7 +53,7 @@ class Adapter extends PDO
 		
 		//var_dump(PDO::getAvailableDrivers());
 		$this->model = $model;
-		$this->parentConstruct($encoding);
+		$this->createPdo($encoding);
 		//$this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('Statement', array($this)));
 		//Register the adapter with the builder.
 		$this->builder = new SqlBuilder($model);
@@ -63,7 +65,7 @@ class Adapter extends PDO
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function parentConstruct($encoding)
+	public function createPdo($encoding)
 	{
 		self::getConfig();
 		self::getDriverClass();
@@ -74,10 +76,10 @@ class Adapter extends PDO
 				break;
 			*/
 			case 'mysql':
-				parent::__construct(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
-									self::$Config->username, 
-									self::$Config->password, 
-									$encoding);
+				$this->pdo = new PDO(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
+									 self::$Config->username, 
+									 self::$Config->password, 
+									 $encoding);
 				break;
 			default:
 				throw new Exception("Database driver: '" . self::$Config->driver . "' is unknown.");
@@ -91,7 +93,7 @@ class Adapter extends PDO
 	 **/
 	public function showColumns($query)
 	{
-		$this->Statement = $this->prepare($query);
+		$this->Statement = $this->pdo->prepare($query);
 		$this->Statement->setFetchMode(PDO::FETCH_OBJ);
 		$this->Statement->execute();
 		return $this->Statement->fetchAll();
@@ -126,17 +128,15 @@ class Adapter extends PDO
 		$this->builder->conditions[] = $id;
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
-		$this->Statement = $this->prepare(array_shift($query->query));
+		$this->Statement = $this->pdo->prepare(array_shift($query->query));
 		$params = $query->params;
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute($query->params);
-		try{
 			$model = get_class($this->model);
-			$result = $this->Statement->fetch();//ResultFactory::factory($this->Statement, $model);
+			$result = $this->Statement->fetch();
+			if(!$result)
+				throw new RecordNotFoundException($this->lastPreparedQuery());
 			$result = $this->addJoins($result, $query->query);
-		}catch(RecordNotFoundException $e){
-			throw $e;
-		}
 		return $result;
 	}
 	/**
@@ -149,11 +149,13 @@ class Adapter extends PDO
 	{	
 		foreach($joins as $key => $query){
 			$prop = $query->prop;
-			$stmt = $this->prepare("SELECT * FROM `" . $query->table . "` WHERE " . $query->on);
+			$stmt = $this->pdo->prepare("SELECT * FROM `" . $query->table . "` WHERE " . $query->on);
 			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
 			$stmt->execute(array($result->$prop));
 			if($query->type == 'has-one' || $query->type == 'belongs-to'){
 				$result->$key = $stmt->fetch();
+				//if no record is found then set null
+				if(!$result->$key) $result->$key = null;
 			}else{
 				$result->$key = $stmt->fetchAll();
 			}
@@ -173,7 +175,7 @@ class Adapter extends PDO
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
-		$this->Statement = $this->prepare(array_shift($query->query));
+		$this->Statement = $this->pdo->prepare(array_shift($query->query));
 		
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute(array_values($query->params));
@@ -202,12 +204,12 @@ class Adapter extends PDO
 			$props = $this->model->props()->export();
 			$columns = $this->getInsertColumnNames($props);
 			$marks = $this->getValues($props);
-			$this->Statement = $this->prepare(sprintf("INSERT INTO `$database_name`.`$table_name` (%s) values (%s)", $columns, $marks));
+			$this->Statement = $this->pdo->prepare(sprintf("INSERT INTO `$database_name`.`$table_name` (%s) values (%s)", $columns, $marks));
 			
 			$params = array_values($this->model->props()->export());
 			if($this->Statement->execute($params)){
 				$ret = true;
-				$this->model->$primary_key_name = $this->lastInsertId();
+				$this->model->$primary_key_name = $this->pdo->lastInsertId();
 			}else{
 				$ret = $this->Statement->errorInfo();
 			}
@@ -222,7 +224,7 @@ class Adapter extends PDO
 			//Get the props before setting the primary key for the UpdateSet method
 			$props = $this->model->props()->export();
 			$query = "UPDATE `$database_name`.`$table_name` SET %s WHERE `$primary_key_name` = ?";	
-			$this->Statement = $this->prepare(sprintf($query, $this->getUpdateSet($props)));
+			$this->Statement = $this->pdo->prepare(sprintf($query, $this->getUpdateSet($props)));
 			$this->model->$primary_key_name = $id;
 			return ($this->Statement->execute($this->getUpdateValues())) ? true : false;
 		}
@@ -241,7 +243,7 @@ class Adapter extends PDO
 		//Set the forceSet var.
 		$forceSet = array_pop($args);
 		//Prepare the sql.
-		$this->Statement = $this->prepare($sql);
+		$this->Statement = $this->pdo->prepare($sql);
 		//If the user passed in an array of args then well get the first one for the execute method.
 		if(!empty($args) && is_array($args[0]))
 			$args = $args[0];

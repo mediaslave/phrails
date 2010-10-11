@@ -295,20 +295,19 @@ abstract class Model
 				return $this->$key;
 			}
 		}
-		//Otherwise just return the class level property value.
-		//return $this->$key;
 	}
 
 	/**
 	 * __set model properties
 	 *
-	 * @todo Second throw statement should throw NoRlationshipException($key, $this->table_name());
+	 * @todo Second throw statement should throw NoModelRelationshipException($key, $this->table_name());
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function __set($key, $value)
 	{
-		if(!$this->columns->isKey($key))
+		if(!$this->columns->isKey($key) && 
+		   !($this->schema->relationships instanceof Hash))
 			throw new NoColumnInTableException($key, $this->table_name());
 			
 		if($this->columns->isKey($key)){
