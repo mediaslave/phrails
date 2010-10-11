@@ -186,7 +186,7 @@ class Inflections
 	 **/
 	public static function foreignKey($string)
 	{
-		return self::underscore($string) . '_id';
+		return self::underscore(self::singularize($string)) . '_id';
 	}
 	/**
 	 * Change a string to singular

@@ -92,8 +92,9 @@ class Adapter extends PDO
 	public function showColumns($query)
 	{
 		$this->Statement = $this->prepare($query);
+		$this->Statement->setFetchMode(PDO::FETCH_OBJ);
 		$this->Statement->execute();
-		return ResultFactory::factory($this->Statement, true);
+		return $this->Statement->fetchAll();
 	}
 	/**
 	 * Find by primary key
@@ -127,22 +128,39 @@ class Adapter extends PDO
 		$this->builder->reset();
 		$this->Statement = $this->prepare(array_shift($query->query));
 		$params = $query->params;
+		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute($query->params);
 		try{
-			//$model = get_class($this->model);
-			$result = ResultFactory::factory($this->Statement);
-			foreach($query->query as $key => $query){
-				//print $key;
-				$prop = $query->prop;
-				$stmt = $this->prepare($query->query);
-				$stmt->execute(array($result->$prop));
-				$result->$key = ResultFactory::factory($stmt);
-			}
+			$model = get_class($this->model);
+			$result = $this->Statement->fetch();//ResultFactory::factory($this->Statement, $model);
+			$result = $this->addJoins($result, $query->query);
 		}catch(RecordNotFoundException $e){
 			throw $e;
 		}
 		return $result;
 	}
+	/**
+	 * Add the joins to the result
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function addJoins($result, $joins, $isLazy=false)
+	{	
+		foreach($joins as $key => $query){
+			$prop = $query->prop;
+			$stmt = $this->prepare("SELECT * FROM `" . $query->table . "` WHERE " . $query->on);
+			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
+			$stmt->execute(array($result->$prop));
+			if($query->type == 'has-one' || $query->type == 'belongs-to'){
+				$result->$key = $stmt->fetch();
+			}else{
+				$result->$key = $stmt->fetchAll();
+			}
+		}
+		return ($isLazy) ? $result->$key : $result;
+	}
+	
 	/**
 	 * undocumented function
 	 *
@@ -156,8 +174,10 @@ class Adapter extends PDO
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->prepare(array_shift($query->query));
+		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute(array_values($query->params));
-		return ResultFactory::factory($this->Statement, $forceSet);
+		return $this->Statement->fetchAll();
+		
 	}
 	
 	/**

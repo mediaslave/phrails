@@ -242,7 +242,7 @@ abstract class Model
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function prepareShowColumns(ResultSet $ResultSet)
+	public function prepareShowColumns(Array $ResultSet)
 	{
 		$array = array();
 		foreach($ResultSet as $value){
@@ -284,7 +284,19 @@ abstract class Model
 	 **/
 	public function __get($key)
 	{
-		return $this->props->get($key);
+		//if there is a property with this key in the model return the value.
+		if($this->props->isKey($key)){
+			return $this->props->get($key);
+		}
+		//If it is a relationship that is not set then run the query and return the key.
+		if (!isset($this->$key)){
+			if($this->schema()->relationships->isKey($key)) {
+				$this->$key = $this->addJoins($this, array($key=>$this->schema->relationships->get($key)), true);
+				return $this->$key;
+			}
+		}
+		//Otherwise just return the class level property value.
+		//return $this->$key;
 	}
 
 	/**
@@ -295,10 +307,16 @@ abstract class Model
 	 **/
 	public function __set($key, $value)
 	{
-		if(!$this->columns()->isKey($key))
+		if(!$this->columns()->isKey($key) && 
+		   !$this->schema()->relationships->isKey($key))
 			throw new NoColumnInTableException($key, $this->table_name());
-		$this->props_changed[] = $key;
-		$this->props->set($key, $value);
+			
+		if($this->columns()->isKey($key)){
+			$this->props_changed[] = $key;
+			return $this->props->set($key, $value);
+		}
+		
+		$this->$key = $value;
 	}
 	/**
 	 * Close the connection

@@ -111,11 +111,8 @@ class SqlBuilder
 		}
 		$result->params = array_merge($this->conditions, $this->order);
 		$result->query[] = $query;
-		foreach($this->relationships as $joins){
-			$o = new stdClass;
-			$o->prop = $joins->prop;
-			$o->query = "SELECT * FROM `" . $joins->table . "` WHERE " . $joins->on; 
-			$result->query[$joins->alias] = $o;
+		foreach($this->relationships as $join){
+			$result->query[$join->alias] = $join;
 		}
 		return $result;
 	}

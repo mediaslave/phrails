@@ -116,7 +116,9 @@ class Schema
 	 **/
 	public function className($table)
 	{
-		return $this->prop(Inflections::underscore($table) . '_id')->addOption(array('table' => Inflections::tableize($table)), 'table');
+		return $this->prop(Inflections::underscore($table) . '_id')
+					->addOption(array('table' => Inflections::tableize($table)), 'table')
+					->addOption(array('klass' => PR_APPLICATION_NAMESPACE . '\App\Models\\' . $table), 'klass');
 	}
 	/**
 	 * Set the property to access when doing the where
@@ -204,6 +206,10 @@ class Schema
 		$options = $this->relationships->get($this->last_relationship);
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
+		
+		if($name == 'prop' && $options->type == 'has-many'){
+			$value = $this->model->primary_key();
+		}
 		$options->$key = $value;
 		if($name != 'on'){
 			//Regenerate the on to see if there is anything that needs changed.
@@ -223,13 +229,13 @@ class Schema
 		$options = new stdClass;
 		$options->name = $name;
 		$options->type = $type;
+		$options->klass = PR_APPLICATION_NAMESPACE . '\App\Models\\' . $name;
 		$options->alias = Inflections::underscore(str_replace('-', '_', $name));
 		$options->table = Inflections::tableize($options->alias);
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);
-		$this->prop(Inflections::underscore($name) . '_id');
 		return $this;
 	}
 	/**
