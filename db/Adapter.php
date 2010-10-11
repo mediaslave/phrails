@@ -174,6 +174,7 @@ class Adapter extends PDO
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->prepare(array_shift($query->query));
+		
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute(array_values($query->params));
 		return $this->Statement->fetchAll();

@@ -49,6 +49,7 @@ class ControllerFilters extends Filters
 		$for = $this->filters->get($type);
 		$except = $this->filters->get($this->exceptName($type));
 		foreach($for->array as $filter => $actions){
+			$run = true;
 			//Make sure the except does not hold this action.
 			if($except->isKey($filter)){
 				if(in_array($action, $except->get($filter), true))
@@ -61,8 +62,9 @@ class ControllerFilters extends Filters
 			if(!method_exists($this->object, $filter))
 				throw new Exception("The filter: '$filter()' does not exist please create it in your controller.");
 			//Can we run the filter? Then run it.
-			if($run)
+			if($run){
 				$this->object->$filter();
+			}
 		}
 	}
 	

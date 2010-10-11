@@ -39,9 +39,8 @@ abstract class Filters
 	 **/
 	protected function add($type, $filter, array $actions=array())
 	{
-		//print $type . '<br/>';
-		//print $filter . '<br/>';
 		$actions = $this->addToMethods($actions);
+		//new Dbug($actions, '', false, __FILE__, __LINE__);
 		//Get the hash that has the correct type in it.
 		$Set = $this->filters->get($type);
 		//Is the filter passed in already in the hash?

@@ -242,10 +242,10 @@ abstract class Model
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function prepareShowColumns(Array $ResultSet)
+	public function prepareShowColumns(Array $columns)
 	{
 		$array = array();
-		foreach($ResultSet as $value){
+		foreach($columns as $value){
 			$key = $value->Field;
 			//Set the property to null to begin.
 			$this->props->set($key, null);
@@ -290,7 +290,7 @@ abstract class Model
 		}
 		//If it is a relationship that is not set then run the query and return the key.
 		if (!isset($this->$key)){
-			if($this->schema()->relationships->isKey($key)) {
+			if($this->schema->relationships->isKey($key)) {
 				$this->$key = $this->addJoins($this, array($key=>$this->schema->relationships->get($key)), true);
 				return $this->$key;
 			}
@@ -302,18 +302,21 @@ abstract class Model
 	/**
 	 * __set model properties
 	 *
+	 * @todo Second throw statement should throw NoRlationshipException($key, $this->table_name());
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function __set($key, $value)
 	{
-		if(!$this->columns()->isKey($key) && 
-		   !$this->schema()->relationships->isKey($key))
+		if(!$this->columns->isKey($key))
 			throw new NoColumnInTableException($key, $this->table_name());
 			
-		if($this->columns()->isKey($key)){
+		if($this->columns->isKey($key)){
 			$this->props_changed[] = $key;
 			return $this->props->set($key, $value);
+		}
+		if (!$this->schema->relationships->isKey($key)) {
+			throw NoColumnInTableException($key, $this->table_name());
 		}
 		
 		$this->$key = $value;
@@ -334,12 +337,10 @@ abstract class Model
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function setProperties($array)
-	{	
-		if(is_array($array)){
-			foreach($array as $key => $value)
-				$this->$key = $value;
-		}
+	private function setProperties(array $array)
+	{
+		foreach($array as $key => $value)
+			$this->$key = $value;
 	}
 	/**
 	 * Get the error array
