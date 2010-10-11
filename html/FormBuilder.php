@@ -168,7 +168,7 @@ class FormBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function result_set_select($property, ResultSet $set, $options='', $optionDisplay='name', $id='id')
+	public function result_set_select($property, array $set, $options='', $optionDisplay='name', $id='id')
 	{
 		$options = $this->checkForErrors($property, $options);
 		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id);

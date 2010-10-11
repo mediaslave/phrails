@@ -135,7 +135,7 @@ class Adapter
 			$model = get_class($this->model);
 			$result = $this->Statement->fetch();
 			if(!$result)
-				throw new RecordNotFoundException($this->lastPreparedQuery());
+				throw new RecordNotFoundException($this->lastPreparedQuery(), $query->params);
 			$result = $this->addJoins($result, $query->query);
 		return $result;
 	}

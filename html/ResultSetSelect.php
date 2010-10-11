@@ -18,7 +18,7 @@ class ResultSetSelect extends Select
 	 * @param string or array $options 
 	 * @author Justin Palmer
 	 */
-	function __construct($name, ResultSet $resultSet, $selectedValue=null, $options=null, $optionDisplay='name', $id='id')
+	function __construct($name, array $resultSet, $selectedValue=null, $options=null, $optionDisplay='name', $id='id')
 	{
 		$this->optionDisplay = $optionDisplay;
 		$this->id = $id;
