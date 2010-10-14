@@ -306,8 +306,8 @@ abstract class Model
 	 **/
 	public function __set($key, $value)
 	{
-		if(!$this->columns->isKey($key) && 
-		   !($this->schema->relationships instanceof Hash))
+		//new Dbug($this->schema, '', false, __FILE__, __LINE__);
+		if(!$this->columns->isKey($key) && !($this->schema->relationships instanceof Hash))
 			throw new NoColumnInTableException($key, $this->table_name());
 			
 		if($this->columns->isKey($key)){

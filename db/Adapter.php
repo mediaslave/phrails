@@ -40,7 +40,7 @@ class Adapter
 	 */
 	public $model;
 	
-	private $pdo;
+	public $pdo;
 	
 	/**
 	 * Constructor
@@ -149,7 +149,7 @@ class Adapter
 	{	
 		foreach($joins as $key => $query){
 			$prop = $query->prop;
-			$stmt = $this->pdo->prepare("SELECT * FROM `" . $query->table . "` WHERE " . $query->on);
+			$stmt = $this->pdo->prepare("SELECT * FROM `" . $query->table . "` WHERE " . $query->where . $query->on);
 			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
 			$stmt->execute(array($result->$prop));
 			if($query->type == 'has-one' || $query->type == 'belongs-to'){
@@ -169,7 +169,7 @@ class Adapter
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function findAll($forceSet=true)
+	public function findAll()
 	{
 		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();

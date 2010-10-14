@@ -131,6 +131,19 @@ class Schema
 		return $this->addOption(array('prop' => $prop), 'prop');
 	}
 	/**
+	 * Where claus no dynamic
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function where($clause)
+	{
+		$options = $this->relationships->get($this->last_relationship);
+		$options->where .= $clause . ' AND ';
+		$this->relationships->set($this->last_relationship, $options);
+		return $this;
+	}
+	/**
 	 * The alias that the last relationship should be, this will be used in the join query.
 	 *
 	 * @return Schema
@@ -169,7 +182,7 @@ class Schema
 	public function belongsTo($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->prop($name)->addRelationship($name, 'belongs-to');
+		return $this->addRelationship($name, 'belongs-to')->prop($name);
 	}
 	/**
 	 * has many
@@ -233,6 +246,7 @@ class Schema
 		$options->alias = Inflections::underscore(str_replace('-', '_', $name));
 		$options->table = Inflections::tableize($options->alias);
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
+		$options->where = '';
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);
@@ -249,7 +263,7 @@ class Schema
 		$options = $this->relationships->get($name);
 		$ret = '';
 		switch($options->type){
-			case 'has-one':
+			case 'has-one' || 'belongs-to':
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
 				$ret = $options->table . '.' . $this->model->primary_key() . ' = ?';
 				break;

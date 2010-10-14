@@ -85,13 +85,13 @@ abstract class Migration extends Model
 			}
 			$columns = rtrim($columns, ',');
 			$query = sprintf($this->statement, $columns);
-			$stmt = $this->prepare($query);
+			$stmt = $this->db()->pdo->prepare($query);
 			$stmt->execute();
 			
 			$this->log($query);
 		}
 		foreach($this->alter_stack as $query){
-			$stmt = $this->prepare($query);
+			$stmt = $this->db()->pdo->prepare($query);
 			$stmt->execute();
 			
 			$this->log($query);
