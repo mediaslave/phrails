@@ -133,13 +133,27 @@ class Schema
 	/**
 	 * Where claus no dynamic
 	 *
-	 * @return void
+	 * @return string $clause
 	 * @author Justin Palmer
 	 **/
 	public function where($clause)
 	{
 		$options = $this->relationships->get($this->last_relationship);
 		$options->where .= $clause . ' AND ';
+		$this->relationships->set($this->last_relationship, $options);
+		return $this;
+	}
+	
+	/**
+	 * Set the order by for a relationship
+	 *
+	 * @return string $order
+	 * @author Justin Palmer
+	 **/
+	public function order($order)
+	{
+		$options = $this->relationships->get($this->last_relationship);
+		$options->order_by = ' ORDER BY ' . $order;
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
@@ -182,7 +196,7 @@ class Schema
 	public function belongsTo($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'belongs-to')->prop($name);
+		return $this->addRelationship($name, 'belongs-to')->className($name);
 	}
 	/**
 	 * has many
@@ -193,7 +207,7 @@ class Schema
 	public function hasMany($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'has-many');
+		return $this->addRelationship($name, 'has-many')->className($name);
 	}
 	/**
 	 * has one
@@ -204,7 +218,7 @@ class Schema
 	public function hasOne($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'has-one');	
+		return $this->addRelationship($name, 'has-one')->className($name);	
 	}
 	/**
 	 * Add the option to the last relationship.
@@ -247,6 +261,7 @@ class Schema
 		$options->table = Inflections::tableize($options->alias);
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$options->where = '';
+		$options->order_by = '';
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);
@@ -263,7 +278,7 @@ class Schema
 		$options = $this->relationships->get($name);
 		$ret = '';
 		switch($options->type){
-			case 'has-one' || 'belongs-to':
+			case ($options->type =='has-one' || $options->type == 'belongs-to'):
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
 				$ret = $options->table . '.' . $this->model->primary_key() . ' = ?';
 				break;
