@@ -248,11 +248,12 @@ class Inflections
 							'at', 'by', 'down', 'from', 'in', 'into', 'like', 'near', 'of', 
 							'off', 'on', 'onto', 'over', 'past', 'to', 'upon', 'with', 'a', 'an', 'the');
 		$array = explode(' ', $string);
+		$string = '';
 		for($i = 0; $i < sizeof($array); $i++){
 			if($i == 0 || !in_array($array[$i], $restricted) || $i == sizeof($array) - 1){
-				$string .= ucfirst($array[$i]) . ' ';
+				$string .= ucfirst(strtolower($array[$i])) . ' ';
 			}else{
-				$string .= $array[$i] . ' ';
+				$string .= strtolower($array[$i]) . ' ';
 			}
 		}
 		return trim($string);

@@ -234,7 +234,7 @@ class Schema
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
 		
-		if($name == 'prop' && $options->type == 'has-many'){
+		if($name == 'prop' && ($options->type == 'has-many' || $options->type == 'belongs-to')){
 			$value = $this->model->primary_key();
 		}
 		$options->$key = $value;
@@ -278,11 +278,11 @@ class Schema
 		$options = $this->relationships->get($name);
 		$ret = '';
 		switch($options->type){
-			case ($options->type =='has-one' || $options->type == 'belongs-to'):
+			case ($options->type =='has-one' ):
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
 				$ret = $options->table . '.' . $this->model->primary_key() . ' = ?';
 				break;
-			case 'has-many':
+			case ($options->type == 'has-many'|| $options->type == 'belongs-to'):
 				$ret = $options->table . "." . $options->foreign_key . " = ?";
 				break;
 		}

@@ -148,7 +148,6 @@ class Adapter
 	public function addJoins($result, $joins, $isLazy=false)
 	{	
 		foreach($joins as $key => $query){
-			//new Dbug($query, '', false, __FILE__, __LINE__);
 			$prop = $query->prop;
 			$prepare = "SELECT * FROM `" . $query->table . "` WHERE " . $query->where . $query->on . $query->order_by;
 			$stmt = $this->pdo->prepare($prepare);
