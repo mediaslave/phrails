@@ -29,6 +29,6 @@ class FormTest extends PHPUnit_Framework_TestCase
 	{
 		$end = '</form>';
 		$o = new Form('home', 'class:foo,remote:true');
-		$this->assertEquals($a, $o->end());
+		$this->assertEquals($end, $o->end());
 	}
 }
