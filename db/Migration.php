@@ -15,6 +15,10 @@ abstract class Migration extends Model
 	private $statement;
 	private $config;
 	public $operations;
+	/**
+	 * The type relects if we are doing alter or create.
+	 */
+	private $type;
 	
 	/**
 	 * Migration class.
@@ -39,6 +43,7 @@ abstract class Migration extends Model
 	 **/
 	public function createTable($name, $primary='id', $engine='INNODB', $charset='utf8', $collation='utf8_general_ci')
 	{
+		$this->type = 'create';
 		$name = Inflections::tableize($name);
 		$this->migrate();
 		$this->operations .= "\033[0;36;1m$name\033[0m | \033[0;35;1m$engine\033[0m | \033[0;36;1m$charset\033[0m | \033[0;35;1m$collation\033[0m\n";
@@ -57,6 +62,7 @@ abstract class Migration extends Model
 	 **/
 	public function alterTable($name, $engine=null, $charset=null, $collation=null)
 	{
+		$this->type = 'alter';
 		$this->migrate();
 		$this->stack = array();
 		$this->alter_stack = array();
@@ -67,7 +73,7 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
-		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` ADD \n\t%s\n $operation";
+		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` \n\t%s\n $operation";
 	}
 	
 	/**
@@ -81,6 +87,8 @@ abstract class Migration extends Model
 		if(!empty($this->stack)){
 			$columns = '';
 			foreach($this->stack as $value){
+				if($this->type == 'alter')
+					$value = ' ADD ' . $value;
 				$columns .= $value . ',';
 			}
 			$columns = rtrim($columns, ',');
