@@ -129,14 +129,12 @@ class Adapter
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->pdo->prepare(array_shift($query->query));
-		$params = $query->params;
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute($query->params);
-			$model = get_class($this->model);
-			$result = $this->Statement->fetch();
-			if(!$result)
-				throw new RecordNotFoundException($this->lastPreparedQuery(), $query->params);
-			$result = $this->addJoins($result, $query->query);
+		$result = $this->Statement->fetch();
+		if(!$result)
+			throw new RecordNotFoundException($this->lastPreparedQuery(), $query->params);
+		$result = $this->addJoins($result, $query->query);
 		return $result;
 	}
 	/**
@@ -299,7 +297,7 @@ class Adapter
 	private function getInsertColumnNames($props)
 	{
 		$return = '';
-		foreach($props as $key => $value){
+		foreach(array_keys($props) as $key){
 			$return .= "`$key`,";
 		}
 		return rtrim($return, ',');

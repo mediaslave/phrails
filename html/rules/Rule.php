@@ -45,6 +45,7 @@ class Rule
 	/**
 	 * Run the rule
 	 *
+	 * @param boolean $comparison
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/

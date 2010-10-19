@@ -192,11 +192,11 @@ class FormBuilder
 	 **/
 	public function select($property, $optionTags, $options='')
 	{		
-		$args = func_get_args();
-		$property = array_shift($args);
-		$options = array_pop($args);
+		$optionTags = func_get_args();
+		$property = array_shift($optionTags);
+		$options = array_pop($optionTags);
 		$options = $this->checkForErrors($property, $options);
-		return new Select($this->getElementName($property), $this->getValue($property), $args, $options);
+		return new Select($this->getElementName($property), $this->getValue($property), $optionTags, $options);
 	}
 	/**
 	 * Range select that will have numbers in the range that you provide

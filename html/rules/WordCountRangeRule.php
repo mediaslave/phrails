@@ -8,10 +8,18 @@
  **/
 class WordCountRangeRule extends Rule
 {
+	/**
+	 * Min and Max word count
+	 * 
+	 * @var integer
+	 */
 	private $min, $max;
 	/**
 	 * constructor
 	 *
+	 * @param integer $min The minimum number of words
+	 * @param integer $max The maximum number of words
+	 * @param string $message The message for an invalid rule run
 	 * @return NameRule
 	 * @author Justin Palmer
 	 **/
@@ -27,7 +35,7 @@ class WordCountRangeRule extends Rule
 	/**
 	 * Run the rule
 	 *
-	 * @return void
+	 * @return boolean
 	 * @author Justin Palmer
 	 **/
 	public function run()

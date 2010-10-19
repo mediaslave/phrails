@@ -8,14 +8,6 @@
 class InputCheckbox extends InputChecked
 {	
 	protected $options = 'type:checkbox';
-	
-	/**
-	 * We have the InputHidden print before the checkbox so that if it is not checked
-	 * we will still have a post value
-	 *
-	 * @var string
-	 */
-	private $Hidden;
 	/**
 	 * Constructor
 	 *

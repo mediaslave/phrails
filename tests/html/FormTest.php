@@ -22,4 +22,13 @@ class FormTest extends PHPUnit_Framework_TestCase
 		$o = new Form('home', 'class:foo,remote:true');
 		$this->assertEquals($a, $o->__toString());
 	}
+	/**
+	 * @test
+	 **/
+	public function Get_end_tag()
+	{
+		$end = '</form>';
+		$o = new Form('home', 'class:foo,remote:true');
+		$this->assertEquals($a, $o->end());
+	}
 }

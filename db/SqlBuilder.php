@@ -162,7 +162,8 @@ class SqlBuilder
 	 **/
 	public function where($where)
 	{
-		$this->conditions = func_get_args();
+		$where = func_get_args();
+		$this->conditions = $where;
 		return $this->model;
 	}
 	
@@ -174,7 +175,8 @@ class SqlBuilder
 	**/
 	public function order($order)
 	{
-		$this->order = func_get_args();
+		$order = func_get_args();
+		$this->order = $order;
 		return $this->model;
 	}	
 	/**

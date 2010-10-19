@@ -39,12 +39,6 @@ class Schema
 	 */
 	private $last_relationship = null;
 	/**
-	 * The last column that a rule was added to.
-	 *
-	 * @var string
-	 */
-	private $last_rule_column = null;
-	/**
 	 * The required elements
 	 * 
 	 * @var array
