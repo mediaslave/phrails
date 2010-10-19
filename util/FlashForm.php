@@ -2,6 +2,8 @@
 /**
  * The flash for the view.
  *
+ * @todo Create a way to set the FlashForm::class through the 'form.php' initializer.  FlashForm::setClass('form-errors); (Static $class)
+ * 
  * @package util
  * @author Justin Palmer
  **/
@@ -23,11 +25,10 @@ class FlashForm extends Flash
 	 * @return Flash
 	 * @author Justin Palmer
 	 **/
-	public function __construct($args, $title="Form Errors", $class='flash-form-errors')
+	public function __construct($args, $title="Form Errors")
 	{
 		$args = func_get_args();
 		//Get the class and the title
-		$this->class = array_pop($args);
 		$this->title = array_pop($args);
 		//instantiate an array for the errors.
 		$array = array();
@@ -54,7 +55,6 @@ class FlashForm extends Flash
 	 **/
 	public function display()
 	{
-			//var_dump($this->array);
 			$ret = '';
 			$lis = '';
 			$labels = self::$Labels;
