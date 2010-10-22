@@ -51,6 +51,19 @@ class FormBuilder
 	 * @var Request
 	 */
 	protected $request;
+	
+	/**
+	 * Does this element need to be array.
+	 * 
+	 * @var boolean
+	 */
+	private $array_it = false;
+	/**
+	 * Does this array_it have a value?
+	 * 
+	 * @var string
+	 */
+	private $array_it_value = '';
 	/**
 	 * Constructor
 	 *
@@ -81,9 +94,9 @@ class FormBuilder
 		//var_dump($this->model->schema()->required);
 		if($this->model !== null && in_array($property, $this->model->schema()->required))
 			$hint = self::$required_hint;
-		$id = ($this->model !== null) ? $this->model->alias() . "_$property" : $property;
+		$id = FormElement::getId($this->getElementName($property));
 			
-		return new Span($hint, "class:" . self::$class) . new Label($text, $id . "_id", $options);
+		return new Span($hint, "class:" . self::$class) . new Label($text, $id, $options);
 	}
 	/**
 	 * return a InputText for a model property
@@ -250,6 +263,7 @@ class FormBuilder
 		//if we are working with out a model then just return the options.
 		if($this->model === null)
 			return $options;
+		$array_it = $this->array_it;
 		//if we have a model then let's see if there are errors and if so set
 		//the css class to the correct thing.
 		if($this->model->errors()->isKey($this->getElementName($property))){
@@ -257,6 +271,7 @@ class FormBuilder
 				$options .= ',';
 			$options .= 'class:' . self::$class;
 		}
+		$this->array_it = $array_it;
 		return $options;
 	}
 	/**
@@ -272,7 +287,30 @@ class FormBuilder
 			return $property;
 		//Create the element name based off of the model.
 		$this->model->hasProperty($property);
-		return $this->model->alias() . "[$property]";
+		$name = $this->model->alias() . "[$property]";
+		
+		if($this->array_it){
+			if($this->array_it_value != ''){
+				$name .= '[' . $this->array_it_value . ']';
+			}else{
+				$name .= '[]';
+			}
+		}
+		return $name;
+	}
+	
+	/**
+	 * Should this element be an array of elements
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function arrayIt($value = null)
+	{
+		$this->array_it = true;
+		if($value !== null)
+			$this->array_it_value = $value;
+		return $this;
 	}
 	
 	/**

@@ -222,7 +222,7 @@ class Adapter
 			$this->model->removeProperty($primary_key_name);
 			//Get the props before setting the primary key for the UpdateSet method
 			$props = $this->model->props()->export();
-			$query = "UPDATE `$database_name`.`$table_name` SET %s WHERE `$primary_key_name` = ?";	
+			$query = "UPDATE `$database_name`.`$table_name` SET %s WHERE `$primary_key_name` = ?";
 			$this->Statement = $this->pdo->prepare(sprintf($query, $this->getUpdateSet($props)));
 			$this->model->$primary_key_name = $id;
 			return ($this->Statement->execute($this->getUpdateValues())) ? true : false;

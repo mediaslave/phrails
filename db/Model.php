@@ -148,6 +148,7 @@ abstract class Model
 		self::$db->model = $this;
 		$filters = $this->filters();
 		$boolean = $this->validate();
+		//new Dbug($this->errors(), '', false, __FILE__, __LINE__);
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			$result = self::$db->saveNow();
@@ -187,7 +188,9 @@ abstract class Model
 			}
 			//if the value is null and it is not a required property then lets just 
 			//continue onto the next property, nothing to do here.
-			if($value == NULL && !in_array($name, $this->schema()->required)){
+			if(($value instanceof Expression) || 
+				$value == null && 
+				!in_array($name, $this->schema()->required)){
 				continue;
 			}
 			//If there are rules for the property let's go through them.

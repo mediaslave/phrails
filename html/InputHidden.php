@@ -8,6 +8,8 @@
 class InputHidden extends Input
 {
 	protected $options = 'type:hidden';
+	
+	protected $is_hidden = true;
 	/**
 	 * Constructor
 	 *
