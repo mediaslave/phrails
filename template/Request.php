@@ -163,6 +163,10 @@ class Request extends Hash
 		if(is_array($var)){
 			$ret = array();
 			foreach($var as $key => $value){
+				if(is_array($value)){
+					$ret[$key] = $this->stripSlashes($value);
+					continue;
+				}
 				$ret[$key] = trim(stripslashes($value));
 			}
 		}else{

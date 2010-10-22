@@ -190,7 +190,7 @@ class Schema
 	public function belongsTo($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'belongs-to')->className($name);
+		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));
 	}
 	/**
 	 * has many
@@ -201,7 +201,7 @@ class Schema
 	public function hasMany($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'has-many')->className($name);
+		return $this->addRelationship($name, 'has-many')->className(Inflections::singularize($name));
 	}
 	/**
 	 * has one
@@ -212,7 +212,7 @@ class Schema
 	public function hasOne($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'has-one')->className($name);	
+		return $this->addRelationship($name, 'has-one')->className(Inflections::singularize($name));	
 	}
 	/**
 	 * Add the option to the last relationship.
