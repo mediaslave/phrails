@@ -1,3 +1,7 @@
+#Phrails
+
+A PHP 5.3 framework for developing applications fast.  A comfortable framework for Ruby on Rails developers that only have a PHP environment.
+
 #Create a Project
 
 To create a new project using phrails please go to the phrails-bin project:
