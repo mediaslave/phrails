@@ -39,8 +39,11 @@ abstract class FormElement extends Element
 	{
 		$id = $name . '_id';
 		$matches = array();
-		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-z_]*)\]\[(?P<array>[a-z0-9A-Z_\-\.]*)\]/i", $id, $matches))
-			$id = $matches['table'] . '_' . $matches['id'] . '_' . $matches['array'] . '_id';
+		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-zA-Z_]*)\](\[(?P<array>[a-z0-9A-Z_\-\.]*)\])*/i", $id, $matches))
+			$id = $matches['table'] . '_' . $matches['id'] . '_';
+		if(isset($matches['array']))
+			$id .= $matches['array'] . '_';
+		$id .= 'id';
 		return $id;
 	}
 }
