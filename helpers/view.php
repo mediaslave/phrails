@@ -117,15 +117,27 @@ function has_content_for($key)
  * @return string
  * @author Justin Palmer
  **/
-function flash_it($flash)
+function flash_it(HashArray $flash)
 {
-	if($flash instanceof Flash){
-		return $flash->display();
-	}else{
-		if($flash != '')
-			$flash = '<div class="flash">' . $flash . '</div>';
-	}
-	return $flash;
+	$ret = '';
+	foreach($flash->export() as $key => $value){
+		$div_value = '';
+		foreach($value as $val){
+			if($val instanceof Flash){
+				$ret .= $val->display();
+			}else{
+				if($val != '')
+					$div_value .=  '<li>' . $val . '</li>';
+			}
+		}
+		if($div_value != '')
+			$ret .= '<div class="' . $key . '">
+						<ul>' . 
+							$div_value . 
+						'</ul>
+					</div>';
+	}	
+	return $ret;
 }
 
 /**

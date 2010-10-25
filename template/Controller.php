@@ -71,11 +71,11 @@ class Controller
 	 */
 	public $pr_from_cache_message = '<!-- pr_from_cache -->';
 	/**
-	 * Holds the flash for the current view.
+	 * Holds the flash object for the current view.
 	 * 
-	 * @var string
+	 * @var HashArray
 	 */
-	public $flash = '';
+	public $flash = null;
 	/**
 	 * Initialize some vars
 	 *
@@ -89,8 +89,9 @@ class Controller
 		Registry::set('pr-request', $this->pr_request);
 		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new ControllerFilters($this);
-		if(isset($_SESSION['pr_flash'])){
-			$this->flash = $_SESSION['pr_flash'];
+		$this->flash = new HashArray();
+		if(isset($_SESSION['pr_flash']) && $_SESSION['pr_flash'] instanceof HashArray){
+			$this->flash->array = $_SESSION['pr_flash']->export();
 			unset($_SESSION['pr_flash']);
 		}
 	}
@@ -247,6 +248,21 @@ class Controller
 	protected function filters()
 	{
 		return $this->pr_filters;
+	}
+	
+	/**
+	 * Flash the view with items.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function flash($key=null, $value=null)
+	{
+		if($key !== null && $value === null)
+			return $this->flash->set('default', $key);
+		if($key !== null && $value !== null)
+			return $this->flash->set($key, $value);	
+		return $this->flash;
 	}
 	/**
 	 * Return request params
