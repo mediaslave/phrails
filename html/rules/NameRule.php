@@ -16,6 +16,6 @@ class NameRule extends AlphaExtraRule
 	 **/
 	public function __construct($message='%s should only include lowercase and capital letters, foreign language characters, hyphen, period, space and apostrophe.')
 	{
-		parent::__construct("\,\-\.\s'\pL", $message);
+		parent::__construct("\,\-\.\s\'\pL", $message);
 	}
 } // END class Rule
