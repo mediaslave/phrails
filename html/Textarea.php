@@ -5,7 +5,7 @@
  * @author Justin Palmer
  * @package html
  */
-class Textarea extends Element
+class Textarea extends FormElement
 {
 	/**
 	 * Constructor
@@ -16,9 +16,8 @@ class Textarea extends Element
 	 */
 	function __construct($name, $value, $options=null)
 	{
-		$this->options = "name:$name";
 		$this->display = $value;
-		parent::__construct($options);
+		parent::__construct($name, null, $options);
 	}
 	/**
 	 * @see Tag::start()

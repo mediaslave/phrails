@@ -168,7 +168,7 @@ class Adapter
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function findAll()
+	public function findAll($forceArray = true)
 	{
 		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
@@ -178,7 +178,11 @@ class Adapter
 		
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute(array_values($query->params));
-		return $this->Statement->fetchAll();
+		$ret = $this->Statement->fetchAll();
+		if($forceArray == false && sizeof($ret) == 1){
+			return $ret[0];
+		}
+		return $ret;
 		
 	}
 	

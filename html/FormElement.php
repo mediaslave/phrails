@@ -42,7 +42,7 @@ abstract class FormElement extends Element
 		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-zA-Z_]*)\](\[(?P<array>[a-z0-9A-Z_\-\.]*)\])*/i", $id, $matches) 
 							&& sizeof($matches) > 0){
 			$id = $matches['table'] . '_' . $matches['id'] . '_';
-			if(isset($matches['array']))
+			if(isset($matches['array']) && $matches['array'] != '')
 				$id .= $matches['array'] . '_';
 			$id .= 'id';
 		}
