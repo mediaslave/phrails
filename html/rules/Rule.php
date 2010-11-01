@@ -50,6 +50,8 @@ class Rule
 	 * @author Justin Palmer
 	 **/
 	 public function run($comparison){
+		if($this->value === null)
+			return true;
 		$boolean = true;
 		if($comparison)
 		{
