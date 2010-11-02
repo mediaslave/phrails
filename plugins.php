@@ -7,11 +7,13 @@ foreach (glob($plugin_inis) as $filename) {
 		$rkey = str_replace('config/', '', $filename);
 		$rkey = str_replace('.ini', '', $rkey);
 		$obj = new stdClass;
+		
 		if(isset($ini[Registry::get('pr-environment')])){
-			foreach($ini[Registry::get('pr-environment')] as $key => $value){
-				$obj->$key = $value;
-			}
-			Registry::set('pr-plugin-' . $rkey, $obj);
+			$obj = (object) $ini[Registry::get('pr-environment')];
 		}
+		if(isset($ini['global'])){
+			$obj->{'global'} = (object) $ini['global'];
+		}
+		Registry::set('pr-plugin-' . $rkey, $obj);
 	}
 }

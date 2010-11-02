@@ -214,7 +214,9 @@ class Adapter
 				$ret = true;
 				$this->model->$primary_key_name = $this->pdo->lastInsertId();
 			}else{
-				$ret = $this->Statement->errorInfo();
+				$ret = false;
+				$error = $this->Statement->errorInfo();
+				throw new Exception('Error: ' . $error[0] . ' - ' . $error[2]);
 			}
 			return $ret;
 		}else{
