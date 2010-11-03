@@ -267,7 +267,7 @@ class Adapter
 	{
 		$return = '';
 		foreach($props as $key => $value){
-			if(in_array($key, $this->model->props_changed())){
+			if(in_array($key, $this->model->props_changed()) && $value !== null){
 				if($value instanceof Expression){
 					$return .= "`$key` = $value,";
 					$this->model->props()->remove($key);
@@ -289,7 +289,7 @@ class Adapter
 		$ret = array();
 		$params = $this->model->props()->export();
 		foreach($params as $key => $value){
-			if(in_array($key, $this->model->props_changed()))
+			if(in_array($key, $this->model->props_changed()) && $value !== null)
 				$ret[] = $value;
 		}
 		return $ret;

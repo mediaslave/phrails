@@ -15,12 +15,40 @@ class Json
 	 **/
 	public static function encode($object, $callBack=null)
 	{
+		if($object instanceof stdClass){
+			$ret = '{';
+			foreach($object as $key => $value){
+				$ret .= '"' . $key . '":';
+				if($value instanceof stdClass){
+					$ret .= json_encode($value) . ',';
+				}
+				if(is_array($value)){
+					$ret .= '[';
+					foreach($value as $ikey => $ivalue){
+						if($ivalue instanceof Model){
+							$ret .= json_encode($ivalue->props()->export()) . ',';
+						}
+					}
+					$ret = rtrim($ret, ',') . ']';
+				}
+			}
+			
+			return rtrim($ret, ',') . '}';
+		
+		}
+		/*
+		{
+		"status":
+			{"status":200,"div":"quick-partners-id"},
+		"results":
+			[{},{}]
+		}
+		*/
 		//new Dbug($object, '', false, __FILE__, __LINE__);
 		if(is_array($object)){
 			$ret = '[';
 			foreach($object as $value){
 				if($value instanceof Model){
-					//print 'var' . '<br/>';
 					$ret .= json_encode($value->props()->export()) . ',';
 				}
 			}

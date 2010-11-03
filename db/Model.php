@@ -314,7 +314,9 @@ abstract class Model
 			throw new NoColumnInTableException($key, $this->table_name());
 			
 		if($this->columns->isKey($key)){
-			$this->props_changed[] = $key;
+			if($value != ''){
+				$this->props_changed[] = $key;
+			}
 			return $this->props->set($key, $value);
 		}
 		if (!$this->schema->relationships->isKey($key)) {
@@ -458,6 +460,17 @@ abstract class Model
 	public function filters()
 	{
 		return $this->pr_filters;
+	}
+	
+	/**
+	 * To string returns the props
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function __toString()
+	{
+		return $this->props()->export();
 	}
 	/**
 	 * init
