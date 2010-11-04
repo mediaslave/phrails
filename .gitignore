@@ -5,3 +5,4 @@ lib
 public
 vendor
 index.php
+docs/*
