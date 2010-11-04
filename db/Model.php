@@ -83,6 +83,8 @@ abstract class Model
 	 * @var ModelFilters
 	 */
 	protected $pr_filters;
+	
+	private static $table_schema = null;
 	/**
 	 * Constructor
 	 *
@@ -93,6 +95,8 @@ abstract class Model
 	public function __construct(array $array=array())
 	{
 		$Adapter = Adapter::getDriverClass();
+		if(self::$table_schema === null)
+			self::$table_schema = new Hash();
 		//Generate the table name if it is not set.
 		if($this->table_name === null){
 			$klass = explode('\\', get_class($this));
@@ -109,7 +113,13 @@ abstract class Model
 		$this->database_name = $config->database;
 		$this->props = new Hash();
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
-		$this->columns = $this->prepareShowColumns($this->showColumns());
+		if(self::$table_schema->isKey(get_class($this))){
+			$this->columns = $this->prepareShowColumns(self::$table_schema->get(get_class($this)));
+		}else{
+			$cols = $this->showColumns();
+			$this->columns = $this->prepareShowColumns($cols);
+			self::$table_schema->set(get_class($this), $cols);	
+		}
 		$this->setProperties($array);
 		
 		$this->pr_filters = new ModelFilters($this);
