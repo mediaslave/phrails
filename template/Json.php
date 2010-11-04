@@ -2,6 +2,7 @@
 /**
  * Json
  *
+ * @refactor
  * @package template
  * @author Justin Palmer
  **/
@@ -24,7 +25,7 @@ class Json
 				}
 				if(is_array($value)){
 					$ret .= '[';
-					foreach($value as $ikey => $ivalue){
+					foreach(array_values($value) as $ivalue){
 						if($ivalue instanceof Model){
 							$ret .= json_encode($ivalue->props()->export()) . ',';
 						}
