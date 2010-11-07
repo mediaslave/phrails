@@ -5,7 +5,7 @@
  * @package template
  * @author Justin Palmer
  */
-class Template
+abstract class Template
 {
 	/**
 	 * The current controller.
@@ -39,6 +39,8 @@ class Template
 	 */
 	protected $route;
 	
+	protected $layouts_path = 'layouts/';
+	
 	/**
 	 * Create a new Template
 	 *
@@ -49,7 +51,7 @@ class Template
 	public function __construct($controller)
 	{
 		$this->Controller = $controller;
-		self::$ContentFor = new stdClass;
+		$this->init();
 	}
 	/**
 	 * Sets the file path and route array.
@@ -58,50 +60,7 @@ class Template
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function prepare()
-	{
-		//Get the current route.
-		$Route = $this->route = Registry::get('pr-route');
-		//Check to make sure that the view type (html/json) is a registered view
-		//through $controller->respond_to
-		try{
-			$this->checkViewType($Route);
-		}catch(NoViewTypeException $e){
-			//If it is not a view type then we will change the route to
-			//change the view to the prNoViewType
-			$Route->controller = '';
-			$Route->action = 'prNoViewType';
-			$Route->requested = $e->getMessage();
-			$Route->view_type = 'html';
-			$this->route = $Route;
-			//Set the route
-			Registry::set('pr-route', $Route);
-			//Set the layout to null
-			$this->Controller->pr_layout = null;
-		}
-		//Get the current view path based off of the controller
-		self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
-		//print self::$current_view_path . '<br/>';
-		//exit();
-		//Get the file to render from the action of the route.
-		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
-		//Concat the necassary items to complete the path.
-		$path = $file . '.' . $Route->view_type . '.php';
-		//Make sure the path is set
-		if(self::getCurrentViewPath() !== '')
-			$path = self::getCurrentViewPath() . '/' . $path;
-			
-		$path = strtolower($path);
-		//If the view is not html then we will set the layout to null
-		//json will not use a layout.
-		if($Route->view_type != 'html')
-			$this->Controller->pr_layout = null;
-		//Users can specify a direct view path.
-		if($this->Controller->pr_view_path !== null)
-			$path = rtrim($this->Controller->pr_view_path, '\\') . '/' . $path;
-		//Save the sha of the file path.
-		$this->view_path = $path;
-	}
+	abstract protected function prepare();
 	/**
 	 * Return the template in a string.
 	 *	
@@ -121,7 +80,7 @@ class Template
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function checkViewType($route)
+	protected function checkViewType($route)
 	{
 		if(!$this->Controller->pr_view_types->isKey($route->view_type))
 			throw new NoViewTypeException($this->Controller->pr_view_types, $route->view_type);
@@ -161,15 +120,15 @@ class Template
 	 */
 	private function displayWithLayout($path)
 	{
-		//var_dump($path);
 		ob_start();
 			extract($this->objectVars($this->Controller), EXTR_REFS);
-			include $path;
+			$t = include $path;
 			$pr_view = ob_get_contents();
 		ob_clean();
 			extract($this->objectVars(self::$ContentFor), EXTR_REFS);
-			include 'layouts/' . $this->Controller->pr_layout . '.html.php';
+			include $this->layouts_path . '/' . $this->Controller->pr_layout . '.html.php';
 			$content = ob_get_clean();
+		$this->init();
 		return $content;
 	}
 	/**
@@ -187,6 +146,19 @@ class Template
 		extract($this->vars(), EXTR_REFS);
 		ob_start();
 		include $path;
-		return ob_get_clean();
+		$content = ob_get_clean();
+		$this->init();
+		return $content;
+	}
+	
+	/**
+	 * init
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function init()
+	{
+		self::$ContentFor = new stdClass;
 	}
 }

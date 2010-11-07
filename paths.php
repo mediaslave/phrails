@@ -7,6 +7,7 @@ add_include_directory(dirname(__FILE__) . '/db');
 add_include_directory(dirname(__FILE__) . '/exceptions');
 add_include_directory(dirname(__FILE__) . '/html');
 add_include_directory(dirname(__FILE__) . '/html/rules');
+add_include_directory(dirname(__FILE__) . '/mail');
 add_include_directory(dirname(__FILE__) . '/template');
 add_include_directory(dirname(__FILE__) . '/util');
 

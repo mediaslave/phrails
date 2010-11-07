@@ -1,0 +1,3 @@
+[submodule "mail"]
+	path = mail
+	url = ./mail

@@ -6,7 +6,7 @@
  * @package template
  * @author Justin Palmer
  */
-class TemplateCache extends Template
+abstract class TemplateCache extends Template
 {
 	/**
 	 * Valid cache types
@@ -58,7 +58,6 @@ class TemplateCache extends Template
 	 **/
 	public function display()
 	{		
-		//var_dump($this->Controller);
 		//If the cache type is null just return the template.
 		//Or, if the cache_type is not one of the supported cache_types
 		if($this->view_path === null  || 

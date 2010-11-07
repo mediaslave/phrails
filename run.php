@@ -16,7 +16,7 @@ $Router = new Router;
 $Controller = $Router->route();
 
 //Register the controller with the Template.
-$Template = new TemplateCache($Controller);
+$Template = new ControllerTemplate($Controller);
 
 //Does this template have a cache?
 $is_valid_type = $Template->isValidCacheType();
