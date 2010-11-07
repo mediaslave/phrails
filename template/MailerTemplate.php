@@ -26,9 +26,9 @@ class MailerTemplate extends TemplateCache
 	{
 		$explode = explode('\Mailers\\', get_class($this->Controller));
 		
-		$explode = explode('\\', array_pop($explode));
+		$mailer = rtrim(array_pop($explode), 'Mailer');
 		
-		$path = 'mailers/' . strtolower(rtrim(implode('/', $explode), 'Mailer'));
+		$path = 'mailers/' . strtolower(preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $mailer)));
 		
 		$this->view_path = $path . '/' . $this->method . '.html.php';
 	}
