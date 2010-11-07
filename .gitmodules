@@ -1,3 +1,4 @@
 [submodule "mail"]
 	path = mail
-	url = ./mail
+        url = http://github.com/mediaslave/phrails-mailer.git
+
