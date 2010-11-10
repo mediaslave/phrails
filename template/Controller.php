@@ -77,6 +77,14 @@ class Controller
 	 */
 	public $flash = null;
 	/**
+	 * This is so that you can set static vars that will be public upon instantiation.
+	 * 
+	 * Helpful for setting controller vars when in an initializer.
+	 * 
+	 * @var Hash
+	 */
+	private static $public_vars = null;
+	/**
 	 * Initialize some vars
 	 *
 	 * @return Controller
@@ -94,6 +102,7 @@ class Controller
 			$this->flash->array = $_SESSION['pr_flash']->export();
 			unset($_SESSION['pr_flash']);
 		}
+		$this->setStaticPublicVars();
 	}
 	
 	/**
@@ -208,6 +217,34 @@ class Controller
 			return false;
 		//All else fails don't cache.
 		return true;
+	}
+	/**
+	 * Statically set vars for the controller
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function set($key, $value=null)
+	{
+		if(self::$public_vars === null)
+			self::$public_vars = new Hash;
+		if($value === null)
+			return self::$public_vars->$key;
+		self::$public_vars->$key = $value;
+	}
+	/**
+	 * Set the public vars in to the controller scope
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function setStaticPublicVars()
+	{
+		if(self::$public_vars == null)
+			return;
+		foreach(self::$public_vars->export() as $key => $value){
+			$this->$key = $value;
+		}
 	}
 	/**
 	 * No route action.

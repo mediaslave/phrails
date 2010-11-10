@@ -40,7 +40,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function post($key, $value=null)
+	public function post($key=null, $value=null)
 	{
 		return $this->perform('_POST', $key, $value);
 	}
@@ -51,7 +51,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function get($key, $value=null)
+	public function get($key=null, $value=null)
 	{
 		return $this->perform('_GET', $key, $value);
 	}
@@ -62,7 +62,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function files($key, $value=null)
+	public function files($key=null, $value=null)
 	{
 		return $this->perform('_FILES', $key, $value);
 	}
@@ -73,7 +73,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function session($key, $value=null)
+	public function session($key=null, $value=null)
 	{
 		return $this->perform('_SESSION', $key, $value);
 	}
@@ -84,7 +84,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function cookie($key, $value=null)
+	public function cookie($key=null, $value=null)
 	{
 		return $this->perform('_COOKIE', $key, $value);
 	}
@@ -95,7 +95,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function request($key, $value=null)
+	public function request($key=null, $value=null)
 	{
 		return $this->perform('_REQUEST', $key, $value);
 	}
@@ -106,7 +106,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function server($key, $value=null)
+	public function server($key=null, $value=null)
 	{
 		return $this->perform('_SERVER', $key, $value);
 	}
@@ -117,7 +117,7 @@ class Request extends Hash
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function env($key, $value=null)
+	public function env($key=null, $value=null)
 	{
 		return $this->perform('_ENV', $key, $value);
 	}
@@ -148,13 +148,14 @@ class Request extends Hash
 	
 	private function perform($type, $key, $value)
 	{
+		if($key === null && $value === null)
+			return $GLOBALS[$type];
 		//If we are setting a global then let's set it and return
 		if($value !== null){
 			$GLOBALS[$type][$key] = $value;
 			return;
 		}
-		//If there is no type then we will get or set from the combined hash.
-		//Otherwise get it and return it.
+		//get the var specified, if it is not set then return null
 		$var = (isset($GLOBALS[$type][$key])) ? $GLOBALS[$type][$key] : null;
 		return $this->stripSlashes($var);
 	}

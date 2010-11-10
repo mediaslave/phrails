@@ -19,7 +19,7 @@ class Mailer extends PHPMailer
 			$this->$key = $value;
 		}
 		parent::__construct($exceptions);
-		$this->init();
+		$this->settings();
 	}
 	
 	/**
@@ -181,7 +181,7 @@ class Mailer extends PHPMailer
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function init()
+	private function settings()
 	{
 		foreach(self::$settings as $key => $val){
 			$this->$key($val);
