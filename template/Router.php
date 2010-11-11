@@ -105,37 +105,47 @@ class Router
 		$Routes = Routes::routes();
 		$ret = new stdClass;
 		$controller_action = null;
-		foreach($Routes->export() as $value){
-			$value = (object) $value;
-			if($request_uri == $value->path){
-				$ret = $value;
+		foreach($Routes->export() as $route){
+			$route = (object) $route;
+			if($request_uri == $route->path){
+				$ret = $route;
 				break;
 			}
-			$current = explode('/', $value->path);
-			$request = explode('/', $request_uri);
-			$diff = array_diff($current, $request);
-			foreach($diff as $key => $val){
-				if(isset($request[$key]) && preg_match($this->tag_expression, $val)){
-					$current[$key] = $request[$key];
-					$get = ltrim(rtrim($val, '}'), '{');
-					$r = new Request();
-					$r->get($get, $request[$key]);
-				}
-			}
-			$actual_path = implode('/', $current);
-			if($request_uri == $actual_path){
-				$ret = $value;
+			if($this->isActualPath($route, $request_uri)){
+				$ret = $route;
 				break;
 			}
-			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $value->controller);
+			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $route->controller);
 			
-			$first = $second = '/' . strtolower($controller) . '/' . $value->action;
+			$first = $second = '/' . strtolower($controller) . '/' . $route->action;
 			$second = $second . '/';
 			if($first == $request_uri || $second == $request_uri)
-				$controller_action = $value;
+				$controller_action = $route;
 		}
 		//print $controller_action . '<br/>';
 		return array('ret' => $ret, 'controller-action' => $controller_action);
+	}
+	/**
+	 * Is it the actual path compared to the request uri?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function isActualPath($route, $request_uri)
+	{
+		$current = explode('/', $route->path);
+		$request = explode('/', $request_uri);
+		$diff = array_diff($current, $request);
+		foreach($diff as $key => $val){
+			if(isset($request[$key]) && preg_match($this->tag_expression, $val)){
+				$current[$key] = $request[$key];
+				$get = ltrim(rtrim($val, '}'), '{');
+				$r = new Request();
+				$r->get($get, $request[$key]);
+			}
+		}
+		$actual_path = implode('/', $current);
+		return $request_uri == $actual_path;
 	}
 	/**
 	 * Get the request uri for comparison.
