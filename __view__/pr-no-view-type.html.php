@@ -11,7 +11,7 @@ $Route = Registry::get('pr-route');
 	<meta name="author" content="Justin Palmer">
 </head>
 <body>
-<h1>No Respond to View Type
+<h1>No Respond to View Type</h1>
 
 <p>We could not verify your respond to type.</p>
 	

@@ -14,6 +14,8 @@ class Router
 	 */
 	private $extension = "html";
 	
+	private $tag_expression = "/{([a-zA-Z\_\-])*?}/i";
+	
 	/**
 	 * Route the request
 	 *
@@ -84,24 +86,11 @@ class Router
 		$request_uri = $this->requestUri();
 		//print $request_uri . '<br/>';
 		//Find the closest route
-		$close_route = $this->findClosestRoute($request_uri);
+		$close_route = $this->findRoute($request_uri);
 		$ret = $close_route['ret'];
 		$test = (array)$ret;
 		if(empty($test))
 			throw new NoRouteException();
-		//print $request_uri . '<br/>';
-		//print $ret->path . '<br/>';
-		//Create two arrays one for the route and one for the request_uri
-		$uri   = explode('/', $request_uri);
-		//print 'uri-findByPath:' . '<br/>';
-		//var_dump($uri);
-		$route = explode('/', $ret->path);
-		//print 'route-findByPath<br/>';
-		//var_dump($route);
-		//verify that the route exists. This method will throw an exception if there is a problem.
-		$verified = $this->verifyRoute($uri, $route, $close_route['controller-action']);
-		if($verified !== null)
-			$ret = $verified;
 		//the view_type extension
 		$ret->view_type = $this->extension;
 		//Return the route array
@@ -110,22 +99,31 @@ class Router
 	/**
 	 * Find the route that matches the closest.
 	 */
-	private function findClosestRoute($request_uri)
+	private function findRoute($request_uri)
 	{
+		$request_uri = rtrim($request_uri, '/');
 		$Routes = Routes::routes();
-		$closeness = 0;
 		$ret = new stdClass;
 		$controller_action = null;
 		foreach($Routes->export() as $value){
 			$value = (object) $value;
+			//new Dbug($request_uri, '', false, __FILE__, __LINE__);
+			//new Dbug($value->path, '', false, __FILE__, __LINE__);
 			if($request_uri == $value->path){
 				$ret = $value;
 				break;
 			}
-			$current = similar_text($request_uri, $value->path);
-			if($current > $closeness){
-				$closeness = $current;
+			$current = explode('/', $value->path);
+			$request = explode('/', $request_uri);
+			$diff = array_diff($current, $request);
+			foreach($diff as $key => $val){
+				if(isset($request[$key]) && preg_match($this->tag_expression, $val))
+					$current[$key] = $request[$key];
+			}
+			$actual_path = implode('/', $current);
+			if($request_uri == $actual_path){
 				$ret = $value;
+				break;
 			}
 			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $value->controller);
 			
@@ -136,68 +134,6 @@ class Router
 		}
 		//print $controller_action . '<br/>';
 		return array('ret' => $ret, 'controller-action' => $controller_action);
-	}
-	/**
-	 * Verify that the route that is the closest, is actually a real route.
-	 */
-	private function verifyRoute($uri, $route, $controller_action)
-	{
-		$tag_expression = "/{([a-zA-Z\_\-])*?}/i";
-		$ret = null;
-		$size = sizeof($uri);
-		if($uri[0] == '')
-			array_shift($uri);
-		if($route[0] == '')
-			array_shift($route);
-		$count = 0;
-		for($i = 0; $i < $size; $i++){
-			$vroute = null;
-			$vuri = null;
-			if(isset($route[$i]))
-				$vroute = $route[$i];
-			if(isset($uri[$i]))
-				$vuri = $uri[$i];
-			$tag = (preg_match($tag_expression, $vroute));
-			if($tag == 1){
-				$count++;
-				$key = rtrim(ltrim($vroute, '{'), '}');
-				$_GET[$key] = $vuri;
-			}else{
-				if($vuri == $vroute){
-					$count++;
-				}
-			}
-		}
-		//If they don't match let's see if they are requesting by controller/action
-		//otherwise throw a no route exception.
-		if($size !== $count){
-			$ret = $controller_action;
-			if($controller_action === null){
-				//See if there any $_GET vars that were expected so that you can display the message.
-				$route = implode('/', $route);
-				preg_match_all($tag_expression, $route, $tags);
-				$get = '';
-				$get_vars = '';
-				if(!empty($tags[0])){
-					$size = sizeof($tags[0]);
-					$count = 0;
-					foreach($tags[0] as $tag){
-						$tag = ltrim(rtrim($tag, '}'), '{');
-						$tagm = $tag . ' ,';
-						$count++;
-						if($count == $size){
-							$tagm = ' and ' . $tag;
-							$get_vars = rtrim($get_vars, ',');
-						}
-						$get_vars .= $tagm;
-					}
-					$get = ', this route expects the $_GET vars: <em>' . $get_vars . '</em>';
-				}
-				throw new NoRouteException('The route specified does not exist. 
-											The closest route we could find is <b>' . $route . '</b>' . $get);
-			}
-		}
-		return $ret;
 	}
 	/**
 	 * Get the request uri for comparison.

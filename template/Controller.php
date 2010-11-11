@@ -98,8 +98,8 @@ class Controller
 		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new ControllerFilters($this);
 		$this->flash = new HashArray();
-		if(isset($_SESSION['pr_flash']) && $_SESSION['pr_flash'] instanceof HashArray){
-			$this->flash->array = $_SESSION['pr_flash']->export();
+		if($this->pr_request->session('pr_flash') instanceof HashArray){
+			$this->flash->array = $this->pr_request->session('pr_flash')->export();
 			unset($_SESSION['pr_flash']);
 		}
 		$this->setStaticPublicVars();
@@ -152,7 +152,7 @@ class Controller
 	protected function redirectTo($path)
 	{
 		if($this->flash !== ''){
-			$_SESSION['pr_flash'] = $this->flash;
+			$this->pr_request->session('pr_flash', $this->flash);
 		}
 		$path = ltrim($path, '/');
 		$install_path = str_replace("/", "\/", Registry::get('pr-install-path'));

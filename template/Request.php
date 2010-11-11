@@ -7,6 +7,7 @@
  */
 class Request extends Hash
 {
+	private $do_unset = false;
 	/**
 	 * Constructor
 	 *
@@ -123,6 +124,17 @@ class Request extends Hash
 	}
 	
 	/**
+	 * Prepare for an unset.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function del()
+	{
+		$this->do_unset = true;
+		return $this;
+	}
+	/**
 	 * Does the app have a GLOBALS specified?
 	 *
 	 * @return boolean
@@ -141,13 +153,19 @@ class Request extends Hash
 					   'put'		=>'_PUT',
 					   'delete'		=>'_DELETE'
 					  );
-		if(!array_key_exists($type, $types))
+		if(array_key_exists($type, $types))
 			$type = $types[$type];
 		return (isset($GLOBALS[$type]) && !empty($GLOBALS[$type]));
 	}
 	
 	private function perform($type, $key, $value)
 	{
+		if($this->do_unset){
+			$this->do_unset = false;
+			if(isset($GLOBALS[$type][$key])){
+				unset($GLOBALS[$type][$key]);
+			}
+		}
 		if($key === null && $value === null)
 			return $GLOBALS[$type];
 		//If we are setting a global then let's set it and return
@@ -168,10 +186,10 @@ class Request extends Hash
 					$ret[$key] = $this->stripSlashes($value);
 					continue;
 				}
-				$ret[$key] = trim(stripslashes($value));
+				$ret[$key] = (is_object($value)) ? $value : trim(stripslashes($value));
 			}
 		}else{
-			$ret = trim(stripslashes($var));
+			$ret = (is_object($var)) ? $var : trim(stripslashes($var));
 		}
 		return $ret;
 	}

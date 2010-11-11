@@ -108,6 +108,9 @@ abstract class Model
 		$this->errors = new Hash();
 		//Store the db adapter.
 		self::$db = new $Adapter($this);
+		
+			//print '<pre>' . '<br/>';
+			//var_dump(self::$db);
 		//Set the default database name;
 		$config = $this->db()->getConfig();
 		$this->database_name = $config->database;

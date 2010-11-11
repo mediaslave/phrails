@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 //Load all of the helper methods
 include_all_in_folder(dirname(__FILE__) . '/helpers');
@@ -26,4 +26,3 @@ if($is_valid_type)
 
 //Call the action
 $Controller->prRun($is_valid_type, $is_cached);
-session_start();

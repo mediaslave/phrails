@@ -25,8 +25,7 @@ class MailerTemplate extends TemplateCache
 	protected function prepare()
 	{
 		$explode = explode('\Mailers\\', get_class($this->Controller));
-		
-		$mailer = rtrim(array_pop($explode), 'Mailer');
+		$mailer = preg_replace('%Mailer$%', '', array_pop($explode));
 		
 		$path = 'mailers/' . strtolower(preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $mailer)));
 		

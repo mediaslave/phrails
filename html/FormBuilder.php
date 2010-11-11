@@ -98,6 +98,18 @@ class FormBuilder
 			
 		return new Span($hint, "class:" . self::$class) . new Label($text, $id, $options);
 	}
+		/**
+		 * return a InputText for a model property
+		 *
+		 * @see InputText
+		 * @return InputText
+		 * @author Justin Palmer
+		 **/
+		public function text_field($property, $options='')
+		{	
+			$options = $this->checkForErrors($property, $options);
+			return new InputText($this->getElementName($property), $this->getValue($property), $options);
+		}
 	/**
 	 * return a InputText for a model property
 	 *
@@ -105,11 +117,11 @@ class FormBuilder
 	 * @return InputText
 	 * @author Justin Palmer
 	 **/
-	public function text_field($property, $options='')
+	public function password_field($property, $options='')
 	{	
 		$options = $this->checkForErrors($property, $options);
-		return new InputText($this->getElementName($property), $this->getValue($property), $options);
-	}	
+		return new InputPassword($this->getElementName($property), $this->getValue($property), $options);
+	}
 	/**
 	 * return a InputHidden for a model property
 	 *
