@@ -161,7 +161,7 @@ abstract class Model
 		self::$db->model = $this;
 		$filters = $this->filters();
 		$boolean = $this->validate();
-		//new Dbug($this->errors(), '', false, __FILE__, __LINE__);
+		new Dbug($this->errors(), '', false, __FILE__, __LINE__);
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			$result = self::$db->saveNow();

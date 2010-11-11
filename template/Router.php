@@ -101,14 +101,12 @@ class Router
 	 */
 	private function findRoute($request_uri)
 	{
-		$request_uri = rtrim($request_uri, '/');
+		$request_uri = ($request_uri == '/') ? '/' : rtrim($request_uri, '/');
 		$Routes = Routes::routes();
 		$ret = new stdClass;
 		$controller_action = null;
 		foreach($Routes->export() as $value){
 			$value = (object) $value;
-			//new Dbug($request_uri, '', false, __FILE__, __LINE__);
-			//new Dbug($value->path, '', false, __FILE__, __LINE__);
 			if($request_uri == $value->path){
 				$ret = $value;
 				break;
@@ -117,8 +115,12 @@ class Router
 			$request = explode('/', $request_uri);
 			$diff = array_diff($current, $request);
 			foreach($diff as $key => $val){
-				if(isset($request[$key]) && preg_match($this->tag_expression, $val))
+				if(isset($request[$key]) && preg_match($this->tag_expression, $val)){
 					$current[$key] = $request[$key];
+					$get = ltrim(rtrim($val, '}'), '{');
+					$r = new Request();
+					$r->get($get, $request[$key]);
+				}
 			}
 			$actual_path = implode('/', $current);
 			if($request_uri == $actual_path){

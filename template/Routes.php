@@ -80,11 +80,11 @@ class Routes{
 		if($index == $singular)
 			$index .= '-index';
 		$this->add($index, $path, $controller, 'index');
+		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init');
+		$this->add('create-' . Inflections::singularize($name), $path . '/create', $controller, 'create');
 		$this->add($singular, $path . '/{id}', $controller, 'view');
 		$this->add('edit-' . Inflections::singularize($name), $path . '/{id}/edit', $controller, 'edit');
 		$this->add('update-' . Inflections::singularize($name), $path . '/{id}/update', $controller, 'update');
-		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init');
-		$this->add('create-' . Inflections::singularize($name), $path . '/create', $controller, 'create');
 		$this->add('delete-' . Inflections::singularize($name), $path . '/{id}/delete', $controller, 'delete');
 	}
 	/**

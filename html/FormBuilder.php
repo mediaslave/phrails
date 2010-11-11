@@ -383,8 +383,8 @@ class FormBuilder
 	 **/
 	public static function isValidAuthenticityToken()
 	{
-		$request = Registry::get('pr-request');
-		if(!$request->has('post') && !$request->has('get') && !$request->has('put') && !$request->has('delete'))
+		$request = new Request();
+		if(!$request->has('post') && !$request->has('get') && !$request->has('delete'))
 			return true;
 		return ($request->session(self::authenticity_token_key) == 
 				$request->post(self::authenticity_token_key));
