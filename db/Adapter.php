@@ -178,12 +178,10 @@ class Adapter
 		
 		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
 		$this->Statement->execute(array_values($query->params));
-		$ret = $this->Statement->fetchAll();
-		if($forceArray == false && sizeof($ret) == 1){
-			return $ret[0];
+		if($forceArray == false && $this->Statement->rowCount() == 1){
+			return $this->Statement->fetch();
 		}
-		return $ret;
-		
+		return $this->Statement->fetchAll();
 	}
 	
 	/**

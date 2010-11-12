@@ -21,6 +21,17 @@ function path($name, $options=null)
 {
 	return Routes::path($name, $options);
 }
+
+/**
+ * Get the full url with pr-domain-uri
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function url($name, $options=null)
+{
+	return Registry::get('pr-domain-uri') . path($name, $options);
+}
 /**
  * This will create a link.
  *

@@ -161,7 +161,6 @@ abstract class Model
 		self::$db->model = $this;
 		$filters = $this->filters();
 		$boolean = $this->validate();
-		new Dbug($this->errors(), '', false, __FILE__, __LINE__);
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			$result = self::$db->saveNow();
@@ -170,6 +169,25 @@ abstract class Model
 			return $result;
 		}
 		return $boolean;
+	}
+	/**
+	 * Update only the attributes passed in.
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function update($args)
+	{
+		$args = func_get_args();
+		$array = array();
+		$primary = $this->primary_key;
+		$array[$primary] = $this->$primary;
+		foreach(array_values($args) as $key){
+			$array[$key] = $this->$key;
+		}
+		$klass = get_class($this);
+		$obj = new $klass($array);
+		return $obj->save();
 	}
 	/**
 	 * Validate the model
