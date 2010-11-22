@@ -108,11 +108,15 @@ class Schema
 	 * @return Schema
 	 * @author Justin Palmer
 	 **/
-	public function className($table)
+	public function className($table, $is_global_class=false)
 	{
+		$namespace = '';
+		if(!$is_global_class){
+			$namespace = PR_APPLICATION_NAMESPACE . '\App\Models\\';
+		}
 		return $this->prop(Inflections::underscore($table) . '_id')
 					->addOption(array('table' => Inflections::tableize($table)), 'table')
-					->addOption(array('klass' => PR_APPLICATION_NAMESPACE . '\App\Models\\' . $table), 'klass');
+					->addOption(array('klass' => $namespace . $table), 'klass');
 	}
 	/**
 	 * Set the property to access when doing the where
@@ -161,6 +165,21 @@ class Schema
 	{
 		return $this->addOption(array('alias'=>$alias), 'alias');
 	}
+	/**
+	 * Indicate a relationship is through another class.
+	 *
+	 * @return Schema
+	 * @author Justin Palmer
+	 **/
+	public function thru($klass, $is_global_class=false)
+	{
+		$namespace = '';
+		if(!$is_global_class){
+			$namespace = PR_APPLICATION_NAMESPACE . '\App\Models\\';
+		}
+		return $this->addOption(array('thru'=>$namespace . $klass), 'thru');
+	}
+	public function through($klass){return $this->thru($klass);}
 	/**
 	 * How the join should be preformed(base.id = alias_table.id).
 	 *
@@ -256,6 +275,8 @@ class Schema
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$options->where = '';
 		$options->order_by = '';
+		$options->thru = null;
+		$options->join = null;
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);
@@ -274,11 +295,18 @@ class Schema
 		switch($options->type){
 			case ($options->type =='has-one' ):
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
-				$ret = $options->table . '.' . $this->model->primary_key() . ' = ?';
+				$ret = $options->alias . '.' . $this->model->primary_key() . ' = ?';
+				break; 
+			case ($options->type == 'has-many' || $options->type == 'belongs-to'):
+				$ret = $options->alias . "." . $options->foreign_key . " = ?";
 				break;
-			case ($options->type == 'has-many'|| $options->type == 'belongs-to'):
-				$ret = $options->table . "." . $options->foreign_key . " = ?";
-				break;
+		}
+		if($options->thru != ''){
+			$klass = $options->thru;
+			$klass = new $klass;
+			$options->join = ' INNER JOIN `' . $klass->table_name() . '` AS ' . $klass->alias() . ' 
+									ON ' . $klass->alias() . '.' . Inflections::foreignKey($options->table) . ' = ' . $options->alias . '.id';
+			$ret = $klass->alias() . '.' . $options->foreign_key . ' = ?';
 		}
 		return $ret;
 	}

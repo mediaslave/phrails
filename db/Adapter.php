@@ -146,8 +146,11 @@ class Adapter
 	public function addJoins($result, $joins, $isLazy=false)
 	{	
 		foreach($joins as $key => $query){
+			//new Dbug($query, '', false, __FILE__, __LINE__);
 			$prop = $query->prop;
-			$prepare = "SELECT * FROM `" . $query->table . "` WHERE " . $query->where . $query->on . $query->order_by;
+			$prepare = "SELECT " . $query->alias . ".* FROM `" . $query->table . "` as " . $query->alias . " " . $query->join . " 
+								WHERE " . $query->where . $query->on . $query->order_by;
+			//new Dbug($prepare, '', false, __FILE__, __LINE__);
 			$stmt = $this->pdo->prepare($prepare);
 			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
 			$stmt->execute(array($result->$prop));
