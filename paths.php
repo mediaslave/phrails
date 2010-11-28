@@ -40,9 +40,10 @@ function autoload($class_name){
 		$path = $class_name;
 	}
 	
-	$included = include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
+	$included = @include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
 	
 	if($included === false){
+		//die($class_name);
 		//Declaring the class with eval is a hack
 		//__autoload exception throwing is not officially supported until 5.3
 		eval("class $class_name{};");

@@ -145,6 +145,8 @@ class Inflections
 	 **/
 	public static function tableize($string)
 	{
+		$ex = explode('\\', $string);
+		$string = array_pop($ex);
 		return self::pluralize(self::underscore($string));
 	}
 	/**
