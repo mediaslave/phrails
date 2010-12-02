@@ -179,7 +179,7 @@ class Schema
 		}
 		return $this->addOption(array('thru'=>$namespace . $klass), 'thru');
 	}
-	public function through($klass){return $this->thru($klass);}
+	public function through($klass, $is_global_class=false){return $this->thru($klass, $is_global_class);}
 	/**
 	 * How the join should be preformed(base.id = alias_table.id).
 	 *
@@ -275,8 +275,8 @@ class Schema
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$options->where = '';
 		$options->order_by = '';
-		$options->thru = null;
-		$options->join = null;
+		$options->thru = '';
+		$options->join = '';
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);

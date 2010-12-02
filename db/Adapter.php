@@ -42,6 +42,8 @@ class Adapter
 	
 	public $pdo;
 	
+	public $raw=false;
+	
 	/**
 	 * Constructor
 	 *
@@ -98,6 +100,23 @@ class Adapter
 		$this->Statement->execute();
 		return $this->Statement->fetchAll();
 	}
+	
+	/**
+	 * Set the fetchmode for the prepare query.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function setFetchMode()
+	{
+		if($this->raw){
+			$this->Statement->setFetchMode(PDO::FETCH_OBJ);
+		}else{
+			$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
+		}
+		//return raw to it's original state.
+		$this->raw(false);
+	}
 	/**
 	 * Find by primary key
 	 * 
@@ -107,6 +126,7 @@ class Adapter
 	 **/
 	public function find($id=null)
 	{
+		$this->builder->model = $this->model;
 		if($id == null){
 			$primary_key = $this->model->primary_key();
 			if($this->model->$primary_key == null){
@@ -129,7 +149,7 @@ class Adapter
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->pdo->prepare(array_shift($query->query));
-		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
+		$this->setFetchMode();
 		$this->Statement->execute($query->params);
 		$result = $this->Statement->fetch();
 		if(!$result)
@@ -150,7 +170,6 @@ class Adapter
 			$prop = $query->prop;
 			$prepare = "SELECT " . $query->alias . ".* FROM `" . $query->table . "` as " . $query->alias . " " . $query->join . " 
 								WHERE " . $query->where . $query->on . $query->order_by;
-			//new Dbug($prepare, '', false, __FILE__, __LINE__);
 			$stmt = $this->pdo->prepare($prepare);
 			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
 			$stmt->execute(array($result->$prop));
@@ -178,8 +197,7 @@ class Adapter
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
 		$this->builder->reset();
 		$this->Statement = $this->pdo->prepare(array_shift($query->query));
-		
-		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this->model));
+		$this->setFetchMode();
 		$this->Statement->execute(array_values($query->params));
 		if($forceArray == false && $this->Statement->rowCount() == 1){
 			return $this->Statement->fetch();
@@ -337,6 +355,19 @@ class Adapter
 	public function lastPreparedQuery()
 	{
 		return $this->Statement->queryString;
+	}
+	/**
+	 * Set the fetchmode to take into account the class or not
+	 * 
+	 * If not, it will return the raw results from the pdo
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function raw($value=true)
+	{
+		$this->raw = $value;
+		return $this;
 	}
 	/**
 	 * Confirm that the driver is a valid driver.

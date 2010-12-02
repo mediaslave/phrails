@@ -375,6 +375,17 @@ abstract class Migration extends Model
 	}
 	
 	/**
+	 * Get the current table
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function table()
+	{
+		return $this->table;
+	}
+	
+	/**
 	 * up
 	 *
 	 * @return void
