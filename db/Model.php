@@ -187,7 +187,8 @@ abstract class Model
 		}
 		$klass = get_class($this);
 		$obj = new $klass($array);
-		return $obj->save();
+		$boolean = $obj->save();
+		return $boolean;
 	}
 	/**
 	 * Validate the model
@@ -197,7 +198,6 @@ abstract class Model
 	 **/
 	public function validate()
 	{
-		//print '<pre>';
 		$boolean = true;
 		$errors = array();
 		$last_prop_name = '';

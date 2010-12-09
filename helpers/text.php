@@ -44,6 +44,15 @@ function truncate($string, $limit, $pad='...', $break='.')
 {
 	return String::truncate($string, $limit, $pad, $break);
 }
+
+/**
+ * @see Inflections::$titleize()
+ **/
+function titleize($string)
+{
+	return Inflections::titleize($string);
+}
+
 function markdown($string) {
 #
 # Initialize the parser and return the result of its transform method.

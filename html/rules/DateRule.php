@@ -26,6 +26,8 @@ class DateRule extends PregRule
 	 **/
 	public function run()
 	{
+		if($this->value === null)
+			return true;
 		$boolean = parent::run();
 		
 		if($boolean){

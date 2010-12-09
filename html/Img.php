@@ -32,8 +32,9 @@ class Img extends Tag
 		if($from_base){
 			$rule = new UriRule();
 			$rule->value = $source;
-			if($app_path != null && !$rule->run())
+			if($app_path != null && !$rule->run()){
 				$source = $app_path . 'public/images/' . $source . '?' . time();
+			}
 		}
 		$this->source = $source;
 		parent::__construct($options);
