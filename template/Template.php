@@ -41,6 +41,8 @@ abstract class Template
 	
 	protected $layouts_path = 'layouts/';
 	
+	private $request;
+	
 	/**
 	 * Create a new Template
 	 *
@@ -51,6 +53,7 @@ abstract class Template
 	public function __construct($controller)
 	{
 		$this->Controller = $controller;
+		$this->request = new Request;
 		$this->init();
 	}
 	/**
@@ -160,5 +163,16 @@ abstract class Template
 	private function init()
 	{
 		self::$ContentFor = new stdClass;
+	}
+	
+	/**
+	 * The params that the server knows about
+	 *
+	 * @return mixed
+	 * @author Justin Palmer
+	 **/
+	public function params($key=null)
+	{
+		return ($key === null) ? $this->request->export() : $this->request->$key;
 	}
 }

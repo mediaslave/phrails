@@ -193,10 +193,10 @@ class FormBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function result_set_select($property, array $set, $options='', $optionDisplay='name', $id='id')
+	public function result_set_select($property, array $set, $options='', $optionDisplay='name', $id='id', $optgroup='optgroup')
 	{
 		$options = $this->checkForErrors($property, $options);
-		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id);
+		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id, $optgroup);
 	}
 	/**
 	 * Boolean select with yes and no as the options

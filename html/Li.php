@@ -24,7 +24,7 @@ class Li extends Tag
 	 */
 	public function start()
 	{
-		return '<li>';
+		return '<li' . $this->options . '>';
 	}
 	/**
 	 * @see Tag::end()

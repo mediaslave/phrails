@@ -325,7 +325,7 @@ abstract class Model
 		//If it is a relationship that is not set then run the query and return the key.
 		if (!isset($this->$key)){
 			if($this->schema->relationships->isKey($key)) {
-				$this->$key = $this->addJoins($this, array($key=>$this->schema->relationships->get($key)), true);
+				$this->$key = $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
 				return $this->$key;
 			}
 		}

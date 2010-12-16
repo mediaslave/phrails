@@ -147,6 +147,8 @@ class Adapter
 		}
 		$this->builder->conditions[] = $id;
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
+		if($this->builder->isRawMode())
+			$this->raw();
 		$this->builder->reset();
 		$this->Statement = $this->pdo->prepare(array_shift($query->query));
 		$this->setFetchMode();
@@ -154,7 +156,7 @@ class Adapter
 		$result = $this->Statement->fetch();
 		if(!$result)
 			throw new RecordNotFoundException($this->lastPreparedQuery(), $query->params);
-		$result = $this->addJoins($result, $query->query);
+		$result = $this->lazy($result, $query->query);
 		return $result;
 	}
 	/**
@@ -163,13 +165,14 @@ class Adapter
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function addJoins($result, $joins, $isLazy=false)
+	public function lazy($result, $joins, $isLazy=false)
 	{	
 		foreach($joins as $key => $query){
 			//new Dbug($query, '', false, __FILE__, __LINE__);
 			$prop = $query->prop;
 			$prepare = "SELECT " . $query->alias . ".* FROM `" . $query->table . "` as " . $query->alias . " " . $query->join . " 
 								WHERE " . $query->where . $query->on . $query->order_by;
+			//new Dbug($prepare, '', false, __FILE__, __LINE__);
 			$stmt = $this->pdo->prepare($prepare);
 			$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $query->klass);
 			$stmt->execute(array($result->$prop));
@@ -185,6 +188,22 @@ class Adapter
 	}
 	
 	/**
+	 * Count the number of records
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function count($column='*', $isDistinct=false, $as='count')
+	{
+		$select = 'COUNT(' . $column . ')';
+		if($isDistinct)
+			$select = 'COUNT(DISTINCT ' . $column . ')';
+		$this->raw();
+		$this->builder->select($select . ' AS ' . $as);
+		return $this->model;
+	}
+	
+	/**
 	 * undocumented function
 	 *
 	 * @return void
@@ -195,6 +214,8 @@ class Adapter
 		$database_name = $this->model->database_name();
 		$table_name = $this->model->table_name();
 		$query = $this->builder->build("SELECT ? FROM `$database_name`.`$table_name`");
+		if($this->builder->isRawMode())
+			$this->raw();
 		$this->builder->reset();
 		$this->Statement = $this->pdo->prepare(array_shift($query->query));
 		$this->setFetchMode();
@@ -367,7 +388,7 @@ class Adapter
 	public function raw($value=true)
 	{
 		$this->raw = $value;
-		return $this;
+		return $this->model;
 	}
 	/**
 	 * Confirm that the driver is a valid driver.

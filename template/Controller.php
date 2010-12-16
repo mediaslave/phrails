@@ -87,6 +87,8 @@ class Controller
 	/**
 	 * Initialize some vars
 	 *
+	 * @todo $pr_request should be private, template now has access.
+	 * 
 	 * @return Controller
 	 * @author Justin Palmer
 	 */

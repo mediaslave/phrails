@@ -134,10 +134,10 @@ class Schema
 	 * @return string $clause
 	 * @author Justin Palmer
 	 **/
-	public function where($clause)
+	public function where($clause, $operand='AND')
 	{
 		$options = $this->relationships->get($this->last_relationship);
-		$options->where .= $clause . ' AND ';
+		$options->where .= $clause . ' ' . $operand . ' ';
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}

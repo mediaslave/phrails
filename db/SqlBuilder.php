@@ -58,6 +58,8 @@ class SqlBuilder
 	 * @var array
 	 */
 	private $has_many;
+	
+	private $is_raw_mode = false;
 	/**
 	 * what to do this this?
 	 */
@@ -94,7 +96,7 @@ class SqlBuilder
 		$query .= ' AS ' . $this->model->alias();
 			
 		//build all of the joins that are called by join()
-		//$query .= $this->buildAllJoins();
+		$query .= $this->buildOneToOneJoins();
 		//class to hold the query and the params to return.
 		$result = new stdClass;
 		//any conditions?
@@ -111,8 +113,10 @@ class SqlBuilder
 		}
 		$result->params = array_merge($this->conditions, $this->order);
 		$result->query[] = $query;
-		foreach($this->relationships as $join){
-			$result->query[$join->alias] = $join;
+		foreach($this->has_many as $many){
+			$klass = $many->klass;
+			$obj = new $klass;
+			$result->query[$many->alias] = $many;
 		}
 		return $result;
 	}
@@ -145,7 +149,48 @@ class SqlBuilder
 		}
 		return $this->model;
 	}
+	
+	/**
+	 * Build all the one to one joins as inners
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	private function buildOneToOneJoins()
+	{
+		$joins = '';
+		if(!empty($this->relationships)){
+			foreach($this->relationships as $join){
+				
+				switch($join->type){
+					case 'has-many':
+						$this->has_many[] = $join;
+						break;
+					case 'has-one' || 'belongs-to':
+						$this->is_raw_mode = true;
+						$klass = $join->klass;
+						$obj = new $klass;
+						$on = str_replace('?', $this->model->alias() . "." . $join->prop, $join->on);
+						$joins .= " INNER JOIN `" . $obj->database_name() . "`.`" . $join->table . "` 
+									 AS " . $join->alias . " 
+									  ON " . $on . " ";
+						break;
+				}
+			}
+		}
+		return $joins;
+	}
 
+	/**
+	 * Is the builder forcing the Adapter into raw mode?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function isRawMode()
+	{
+		return ($this->is_raw_mode);
+	}
 	/**
 	 * @deprecated
 	 * @see where
@@ -207,5 +252,6 @@ class SqlBuilder
 		$this->limit = '';
 		$this->relationships = array();
 		$this->has_many = array();
+		$this->is_raw_mode = false;
 	}
 }

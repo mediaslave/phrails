@@ -14,7 +14,7 @@ class Router
 	 */
 	private $extension = "html";
 	
-	private $tag_expression = "/{([a-zA-Z\_\-])*?}/i";
+	static private $tag_expression = "/{([a-zA-Z\_\-]*?)}/i";
 	
 	/**
 	 * Route the request
@@ -137,7 +137,7 @@ class Router
 		$request = explode('/', $request_uri);
 		$diff = array_diff($current, $request);
 		foreach($diff as $key => $val){
-			if(isset($request[$key]) && preg_match($this->tag_expression, $val)){
+			if(isset($request[$key]) && preg_match($this->getTagExpression(), $val)){
 				$current[$key] = $request[$key];
 				$get = ltrim(rtrim($val, '}'), '{');
 				$r = new Request();
@@ -179,5 +179,16 @@ class Router
 		//print $this->extension . '<br/>';
 		//print $extension[0] . '<br/>';
 		return str_replace('.' . $this->extension, '', $extension[0]);
+	}
+	
+	/**
+	 * Get the tag expression
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	static public function getTagExpression()
+	{
+		return self::$tag_expression;
 	}
 }
