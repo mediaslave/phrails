@@ -72,7 +72,8 @@ class Routes{
 				$name_for_path .= $piece . '/' . $id . '/';
 			}
 		}
-		$path = strtolower('/' . $name_for_path . $name_for_path_end);
+		$path = preg_replace('/([a-z])([A-Z])/', '$1-$2', $name_for_path . $name_for_path_end);
+		$path = strtolower('/' . $path);
 		
 		//If the singular and the plural are the same add -index to the index route.
 		$index = $name = strtolower(str_replace('\\', '-', $name));

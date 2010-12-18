@@ -264,6 +264,21 @@ class FormBuilder
 		$object = self::$Registered->get($name);
 		return new $object($this->getElementName($property),  $this->getValue($property), $options);
 	}
+	
+	/**
+	 * Load dynamic form fields
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public function __call($name, $args)
+	{
+		$klass = Inflections::classify($name);
+		$property = array_shift($args);
+		$options = array_shift($args);
+		$options = $this->checkForErrors($property, $options);
+		return new $klass($this->getElementName($property), $this->getValue($property), $options);		
+	}
 	/**
 	 * Check to see if the model has errors registered for this element.
 	 *

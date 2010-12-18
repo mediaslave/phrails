@@ -340,10 +340,8 @@ abstract class Model
 	 **/
 	public function __set($key, $value)
 	{
-		//new Dbug($this->schema, '', false, __FILE__, __LINE__);
 		if(!$this->columns->isKey($key) && !($this->schema->relationships instanceof Hash))
 			throw new NoColumnInTableException($key, $this->table_name());
-			
 		if($this->columns->isKey($key)){
 			if($value != ''){
 				$this->props_changed[] = $key;
@@ -355,6 +353,21 @@ abstract class Model
 		}
 		
 		$this->$key = $value;
+	}
+	/**
+	 * Try to return a datatype object for the specified column
+	 *
+	 * @return DataType
+	 * @author Justin Palmer
+	 **/
+	public function objectify($key)
+	{
+		//if there is a property with this key in the model return the value.
+		if($this->props->isKey($key)){
+			$column = $this->columns->get($key);
+			return DataTypeFactory::process($column->Type,$this->props->get($key));
+		}
+		return $this->$key;
 	}
 	/**
 	 * Close the connection

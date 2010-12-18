@@ -4,6 +4,7 @@
  */
 add_include_directory(dirname(__FILE__) . '/__view__');				
 add_include_directory(dirname(__FILE__) . '/db');
+add_include_directory(dirname(__FILE__) . '/db/datatypes');
 add_include_directory(dirname(__FILE__) . '/exceptions');
 add_include_directory(dirname(__FILE__) . '/html');
 add_include_directory(dirname(__FILE__) . '/html/rules');
@@ -44,10 +45,12 @@ function autoload($class_name){
 	
 	if($included === false){
 		//die($class_name);
-		//Declaring the class with eval is a hack
-		//__autoload exception throwing is not officially supported until 5.3
-		eval("class $class_name{};");
-		throw new NoControllerException();
+		if(substr($class_name, -10) == 'Controller'){
+			eval("class $class_name{};");
+			throw new NoControllerException();
+		}else{
+			throw new AutoloadException($class_name);
+		}
 	}
 }
 
