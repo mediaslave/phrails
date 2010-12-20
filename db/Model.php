@@ -163,7 +163,11 @@ abstract class Model
 		$boolean = $this->validate();
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
-			$result = self::$db->saveNow();
+			try{
+				$result = self::$db->saveNow();
+			}catch(SqlException $e){
+				throw $e;
+			}
 			if($result === true)
 				$filters->run($filters->getName(ModelFilters::after, ModelFilters::save));
 			return $result;
@@ -363,9 +367,9 @@ abstract class Model
 	public function objectify($key)
 	{
 		//if there is a property with this key in the model return the value.
-		if($this->props->isKey($key)){
+		if($this->columns->isKey($key)){
 			$column = $this->columns->get($key);
-			return DataTypeFactory::process($column->Type,$this->props->get($key));
+			return DataTypeFactory::process($column->Type, $this->props->get($key));
 		}
 		return $this->$key;
 	}

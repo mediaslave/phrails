@@ -256,7 +256,7 @@ class Adapter
 			}else{
 				$ret = false;
 				$error = $this->Statement->errorInfo();
-				throw new Exception('Error: ' . $error[0] . ' - ' . $error[2]);
+				throw new SqlException('Error: ' . $error[0] . ' - ' . $error[2], $error[0]);
 			}
 			return $ret;
 		}else{

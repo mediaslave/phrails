@@ -402,7 +402,9 @@ class FormBuilder
 		if(!$request->has('post') && !$request->has('get') && !$request->has('delete'))
 			return true;
 		return ($request->session(self::authenticity_token_key) == 
-				$request->post(self::authenticity_token_key));
+				$request->post(self::authenticity_token_key) ||
+				$request->session(self::authenticity_token_key) == 
+				$request->get(self::authenticity_token_key));
 	}
 	/**
 	 * Get the authenticity error message.

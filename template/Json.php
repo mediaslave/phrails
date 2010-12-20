@@ -23,7 +23,7 @@ class Json
 		if(is_array($object)){
 			$ret = '[';
 			foreach($object as $value){
-				new Dbug($value, '', false, __FILE__, __LINE__);
+				//new Dbug($value, '', false, __FILE__, __LINE__);
 				if($value instanceof Model){
 					$ret .= json_encode($value->props()->export()) . ',';
 				}elseif($value instanceof stdClass){
