@@ -209,6 +209,7 @@ abstract class Model
 		$props = $this->props->export();
 		$rules = $this->schema->rules();
 		//var_dump($props);
+		
 		//Loop through the set properties.
 		if(!FormBuilder::isValidAuthenticityToken())
 			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
@@ -326,8 +327,11 @@ abstract class Model
 		if($this->props->isKey($key)){
 			return $this->props->get($key);
 		}
+		if(!is_object($this->schema) && !is_object($this->schema->relationships))
+			return;
 		//If it is a relationship that is not set then run the query and return the key.
 		if (!isset($this->$key)){
+			
 			if($this->schema->relationships->isKey($key)) {
 				$this->$key = $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
 				return $this->$key;
@@ -347,7 +351,7 @@ abstract class Model
 		if(!$this->columns->isKey($key) && !($this->schema->relationships instanceof Hash))
 			throw new NoColumnInTableException($key, $this->table_name());
 		if($this->columns->isKey($key)){
-			if($value != ''){
+			if($value !== null && $value !== $this->props()->get($key)){
 				$this->props_changed[] = $key;
 			}
 			return $this->props->set($key, $value);

@@ -307,6 +307,8 @@ class Adapter
 	{
 		$return = '';
 		foreach($props as $key => $value){
+			//print $key . ' = ';var_dump($value); print '<br>';
+			//var_dump(in_array($key, $this->model->props_changed())); print '<br>';
 			if(in_array($key, $this->model->props_changed()) && $value !== null){
 				if($value instanceof Expression){
 					$return .= "`$key` = $value,";
