@@ -29,7 +29,7 @@ function render(){
  **/
 function stylesheet_link_tag($file, $options='')
 {
-	return new LinkCss($file, $options);
+	return new LinkCss($file . '.css', $options);
 }
 /**
  * Create an img tag.

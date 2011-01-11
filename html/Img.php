@@ -3,7 +3,7 @@
  * Creates a img tag.
  * @package html
  */
-class Img extends Tag
+class Img extends AssetTag
 {
 	/**
 	 * This tag does not have a end tag.
@@ -18,6 +18,8 @@ class Img extends Tag
 	 * @var string
 	 */
 	protected $source;
+	
+	protected $path = 'public/images/';
 	/**
 	 * Return a linkCss object
 	 *
@@ -28,16 +30,7 @@ class Img extends Tag
 	 */
 	function __construct($source, $options='', $from_base=true)
 	{
-		$app_path = Registry::get('pr-install-path');
-		if($from_base){
-			$rule = new UriRule();
-			$rule->value = $source;
-			if($app_path != null && !$rule->run()){
-				$source = $app_path . 'public/images/' . $source . '?' . time();
-			}
-		}
-		$this->source = $source;
-		parent::__construct($options);
+		parent::__construct($source, $options, $from_base);
 	}
 	/**
 	 * @see Tag::start

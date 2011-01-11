@@ -3,8 +3,9 @@
  * Creates a script tag.
  * @package html
  */
-class Script extends Tag
+class Script extends AssetTag
 {
+	protected $path = 'public/javascript/';
 	/**
 	 * Return a script object
 	 *
@@ -15,18 +16,14 @@ class Script extends Tag
 	 */
 	function __construct($source, $options='')
 	{
-		$app_path = Registry::get('pr-install-path');
-		if($app_path != null)
-			$source = $app_path . 'public/javascript/' . $source . '?' . time();
-				$this->options = "src:$source,type:text/javascript";
-		parent::__construct($options);
+		parent::__construct($source, $options);
 	}
 	/**
 	 * @see Tag::start
 	 **/
 	public function start()
 	{
-		return '<script' . $this->options . '>';
+		return '<script src="' . $this->source . '" ' . $this->options . '>';
 	}
 	/**
 	 * @see Tag::start

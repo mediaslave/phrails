@@ -11,6 +11,8 @@ class LinkCss extends Link
 	 * @var boolean
 	 */
 	protected $hasEndTag = false;
+	
+	protected $path = 'public/stylesheets/';
 	/**
 	 * Default the options.
 	 * 
@@ -27,13 +29,6 @@ class LinkCss extends Link
 	 */
 	function __construct($path, $options='')
 	{
-		$url = parse_url($path);
-		if(!isset($url['scheme'])){
-			$path = $path . '.css';
-			$app_path = Registry::get('pr-install-path');
-			if($app_path != null)
-				$path = $app_path . 'public/stylesheets/' . $path . '?' . time();
-		}
 		parent::__construct($path, $options);
 	}
 }

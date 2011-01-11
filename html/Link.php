@@ -6,7 +6,7 @@
 * @author Justin Palmer
 * @package html
 */
-class Link extends Tag
+class Link extends AssetTag
 {
 	/**
 	 * Constructor
@@ -17,15 +17,14 @@ class Link extends Tag
 	 */
 	function __construct($path, $options=null)
 	{
-		parent::__construct($options);
-		$this->href = $path;
+		parent::__construct($path, $options);
 	}
 	/**
 	 * @see Tag::start()
 	 */
 	public function start()
 	{
-		return '<link href="' . $this->href . '"' . $this->options . " />";
+		return '<link href="' . $this->source . '"' . $this->options . " />";
 	}
 	/**
 	 * @see Tag::end()
