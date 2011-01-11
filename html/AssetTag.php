@@ -72,10 +72,16 @@ abstract class AssetTag extends Tag
 	private function addAssetUri($path)
 	{
 		$get = '';
+		//Get the array of 'pr-asset-uris'
 		$assets = array_values((array) Registry::get('pr-asset-uris'));
-		$source = $assets[self::$asset_num] . $path;
-		//Increase the asset_num or set it to zero.
-		(self::$asset_num == (count($assets) - 1)) ? self::$asset_num = 0 : self::$asset_num++;
+		//Count how many there are for the mod operation
+		$mod = count($assets);
+		//Calculate with mod wich element of the assets array we should use.
+		$key = self::$asset_num % $mod;
+		//Create the source
+		$source = $assets[$key] . $path;
+		//Increase the asset counter
+		self::$asset_num++;
 		//Return the source.
 		return $source;
 	}
