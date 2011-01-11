@@ -156,7 +156,7 @@ class Controller
 		if($this->flash !== ''){
 			$this->pr_request->session('pr_flash', $this->flash);
 		}
-		if($path != '/') $path = ltrim($path, '/');
+		//if($path != '/') $path = ltrim($path, '/');
 		$install_path = str_replace("/", "\/", Registry::get('pr-install-path'));
 		header('LOCATION:' . Registry::get('pr-domain-uri')  . '/' . preg_replace("%^" . $install_path . "%", '', $path, 1));
 		exit();
