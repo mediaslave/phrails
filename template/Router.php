@@ -156,7 +156,7 @@ class Router
 	{
 		$request_uri = explode('?', $_SERVER['REQUEST_URI']);
 		//$request_uri[0] = rtrim($request_uri[0], '/');
-		var_dump($request_uri);
+		//var_dump($request_uri);
 		/**
 		 * Strip of the install path and add a / all routes begin with /.
 		 */
