@@ -100,9 +100,9 @@ abstract class Migration extends Model
 		}
 		foreach($this->alter_stack as $query){
 			$stmt = $this->db()->pdo->prepare($query);
-			$stmt->execute();
-			
-			$this->log($query);
+			$result = $stmt->execute();
+			var_dump($result);
+			//$this->log($query);
 		}
 		print $this->operations;
 		$this->operations = '';

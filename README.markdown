@@ -17,7 +17,7 @@ Under Apache, add the following to virtual host:
 	    DocumentRoot /home/jpalmer/projects/php/phrails
 		
         setenv PHRAILS_ENV development
-        setenv PHRAILS_INSTALL_PATH /
+        setenv PHRAILS_BASE_URI /
 
 	    RewriteEngine off
 

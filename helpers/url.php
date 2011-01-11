@@ -32,6 +32,26 @@ function url($name, $options=null)
 {
 	return Registry::get('pr-domain-uri') . path($name, $options);
 }
+
+/**
+ * Asset url
+ *
+ * @return void
+ * @author Justin Palmer
+ **/
+function aurl($name, $options=null)
+{
+	static $acount;
+	if($acount === null) $acount = 0;
+	$assets = (array) Registry::get('pr-asset-uris');
+	$assets = array_values($assets);
+	if($assets === null){
+		return url($name, $options);
+	}	
+	$url = $assets[$acount] . path($name, $options);
+	($acount == (count($assets) - 1)) ? $acount = 0 : $acount++;
+	return $url;
+}
 /**
  * This will create a link.
  *

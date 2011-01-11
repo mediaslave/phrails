@@ -1,6 +1,7 @@
 <?
 /**
-* 
+* Allows you to pass in a method to sort by.  This can be any method that is is available
+* from the DirectoryIterator item method.
 */
 class SortableDirectoryIterator implements IteratorAggregate
 {
@@ -8,6 +9,9 @@ class SortableDirectoryIterator implements IteratorAggregate
 	private $method;
 	private $doHidden;
 	
+	/**
+	 * 
+	 */
     public function __construct($path, $method='getFileName', $doHidden=false)
     {
 		$this->method = $method;
@@ -37,8 +41,6 @@ class SortableDirectoryIterator implements IteratorAggregate
 			$key = $File->$method();
 			$this->array[$key] = new SplFileInfo($File->getPathName());
 		}
-//		print '<pre>';
-//		var_dump($this->array);
 		ksort($this->array);
 		$this->array = array_values($this->array);
 	}
