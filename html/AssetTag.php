@@ -32,7 +32,6 @@ abstract class AssetTag extends Tag
 		$app_path = Registry::get('pr-install-path');
 		if($from_base){
 			$rule = new UriRule();
-			$source = Registry::get('pr-domain-uri') . $app_path . $this->path . $source . '?' . time();
 			$rule->value = $source;
 			if($app_path != null && !$rule->run()){
 				$path = $app_path . $this->path . $source;
