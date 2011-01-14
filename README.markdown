@@ -96,21 +96,6 @@ In the base of the app (example: /blog/) put:
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
 
-# Generate controllers and models
-	
-Controller generator will create the controller class and the view files based off the actions provided.
-	
-	Format: script/generate controller ControllerName [action, ...]
-	
-	Example: script/generate controller Home
-	Example: script/generate controller Home index about
-
-Model generator will create the correct model class.  Singular model names expect plural table names.
-	
-	Format: script/generate model ModelName
-	
-	Example: script/generate model User
-
 # Docs
 
 To create documentation from the base folder run:

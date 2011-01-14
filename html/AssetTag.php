@@ -70,7 +70,9 @@ abstract class AssetTag extends Tag
 	 **/
 	private function addAssetUri($path)
 	{
-		$get = '';
+		//if we do not have an asset uris then just return the path back.
+		if(!is_object(Registry::get('pr-asset-uris')))
+			return $path;
 		//Get the array of 'pr-asset-uris'
 		$assets = array_values((array) Registry::get('pr-asset-uris'));
 		//Count how many there are for the mod operation
