@@ -71,20 +71,22 @@ class Adapter
 	{
 		self::getConfig();
 		self::getDriverClass();
-		switch(self::$Config->driver){
-			/*case 'sqlite':
-				$driver = self::$Config->driver . ":" . self::$Config->database;
-				parent::__construct($driver);
-				break;
-			*/
-			case 'mysql':
-				$this->pdo = new PDO(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
-									 self::$Config->username, 
-									 self::$Config->password, 
-									 $encoding);
-				break;
-			default:
-				throw new Exception("Database driver: '" . self::$Config->driver . "' is unknown.");
+		try{
+			switch(self::$Config->driver){
+				/*case 'sqlite':
+					break;
+				*/
+				case 'mysql':
+					$this->pdo = new PDO(self::$Config->driver . ":host=" . self::$Config->host . ";dbname=" . self::$Config->database, 
+										 self::$Config->username, 
+										 self::$Config->password, 
+									 	$encoding);
+					break;
+				default:
+					throw new Exception("Database driver: '" . self::$Config->driver . "' is unknown.");
+			}
+		} catch (PDOException $e) {
+			die($e->getMessage());
 		}
 	}
 	/**
