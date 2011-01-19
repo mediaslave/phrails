@@ -51,15 +51,12 @@ class RoutesHash extends Hash{
 	 * @return void
 	 * @author Justin Palmer
 	 */
-	public function route($name, $path, $controller, $action){
-		//$install_path = Registry::get('pr-install-path');
-		//$path = rtrim($install_path, '/') . $path;
-		//print $path . '<br/>';
-
+	public function route($name, $path, $controller, $action, $namespace=null){
 		$this->set('name', $name);
 		$this->set('path', $path);
 		$this->set('controller', $controller);
 		$this->set('action', $action);
+		$this->set('namespace', $namespace);
 	}
 
 }

@@ -47,8 +47,8 @@ class Routes{
 	 * @return void
 	 * @author Justin Palmer
 	 */			
-	function add($name, $path, $controller, $action){
-		self::$Hash->route($name, $path, $controller, $action);
+	function add($name, $path, $controller, $action, $namespace=null){
+		self::$Hash->route($name, $path, $controller, $action, $namespace);
 	}
 	/**
 	 * Create four routes for the given controller.
@@ -60,7 +60,8 @@ class Routes{
 	 * @return void
 	 * @author Justin Palmer
 	 */
-	function resources($name, $controller=null){
+	function resources($name, $controller=null, $namespace=null){
+		print $namespace;
 		$pieces = explode('\\', $name);
 		if($controller === null)
 			$controller = $name;
@@ -80,13 +81,13 @@ class Routes{
 		$singular = Inflections::singularize($name);
 		if($index == $singular)
 			$index .= '-index';
-		$this->add($index, $path, $controller, 'index');
-		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init');
-		$this->add('create-' . Inflections::singularize($name), $path . '/create', $controller, 'create');
-		$this->add($singular, $path . '/{id}', $controller, 'view');
-		$this->add('edit-' . Inflections::singularize($name), $path . '/{id}/edit', $controller, 'edit');
-		$this->add('update-' . Inflections::singularize($name), $path . '/{id}/update', $controller, 'update');
-		$this->add('delete-' . Inflections::singularize($name), $path . '/{id}/delete', $controller, 'delete');
+		$this->add($index, $path, $controller, 'index', $namespace);
+		$this->add('new-' . Inflections::singularize($name), $path . '/new', $controller, 'init', $namespace);
+		$this->add('create-' . Inflections::singularize($name), $path . '/create', $controller, 'create', $namespace);
+		$this->add($singular, $path . '/{id}', $controller, 'view', $namespace);
+		$this->add('edit-' . Inflections::singularize($name), $path . '/{id}/edit', $controller, 'edit', $namespace);
+		$this->add('update-' . Inflections::singularize($name), $path . '/{id}/update', $controller, 'update', $namespace);
+		$this->add('delete-' . Inflections::singularize($name), $path . '/{id}/delete', $controller, 'delete', $namespace);
 	}
 	/**
 	 * Return the path for the given named route

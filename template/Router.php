@@ -33,8 +33,14 @@ class Router
 			$route = $this->findByPath();
 			//Set the current routes information in the registry.
 			Registry::set('pr-route', $route);
+			//Default namespace is the application namespace
+			$namespace = PR_APPLICATION_NAMESPACE;
+			//Does the route specify it's own namespace.
+			if($route->namespace !== null){
+				$namespace = $route->namespace;
+			}
 			//Create the controller vars for instantiation and calling.
-			$controller = PR_APPLICATION_NAMESPACE . '\app\controllers\\' . str_replace('/', '\\', $route->controller) . 'Controller';
+			$controller = $namespace . '\app\controllers\\' . str_replace('/', '\\', $route->controller) . 'Controller';
 			$action = $route->action;
 			//Instantiate the correct controller and call the action.
 			$Controller = new $controller();
