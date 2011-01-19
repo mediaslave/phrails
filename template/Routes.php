@@ -61,7 +61,6 @@ class Routes{
 	 * @author Justin Palmer
 	 */
 	function resources($name, $controller=null, $namespace=null){
-		print $namespace;
 		$pieces = explode('\\', $name);
 		if($controller === null)
 			$controller = $name;
