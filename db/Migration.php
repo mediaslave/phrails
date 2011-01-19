@@ -380,7 +380,7 @@ abstract class Migration extends Model
 	 **/
 	public function alter($table, $alter)
 	{
-		$this->alter_stack[] = "ALTER TABLE `" . $this->config->database . "`.`" . $table . "` " . $alter;
+		$this->alter_stack[] = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($table) . "` " . $alter;
 	}
 	
 	/**
