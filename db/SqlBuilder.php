@@ -86,14 +86,16 @@ class SqlBuilder
 	 * @return stdClass
 	 * @author Justin Palmer
 	 **/
-	public function build($query)
+	public function build($query, $no_as = false)
 	{
 		//print 'build';
 		
 		//Add the select
 		$query = str_replace('?', $this->select, $query);
-		
-		$query .= ' AS ' . $this->model->alias();
+
+		if (!$no_as) {
+      $query .= ' AS ' . $this->model->alias();
+    }
 			
 		//build all of the joins that are called by join()
 		$query .= $this->buildOneToOneJoins();

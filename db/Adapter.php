@@ -225,6 +225,19 @@ class Adapter
 		}
 		return $this->Statement->fetchAll();
 	}
+
+	public function delete()
+	{
+		$database_name = $this->model->database_name();
+		$table_name = $this->model->table_name();
+		$query = $this->builder->build("DELETE FROM `$database_name`.`$table_name`", true);
+
+		$this->builder->reset();
+		$this->Statement = $this->pdo->prepare(array_shift($query->query));
+
+		return $this->Statement->execute(array_values($query->params));
+    
+	}
 	
 	/**
 	 * Save the model record

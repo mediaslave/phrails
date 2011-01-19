@@ -76,9 +76,14 @@ abstract class Migration extends Model
 		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` \n\t%s\n $operation";
 	}
 	
+
+  public function dropTable($name) {
+		$this->statement = "DROP TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "`";
+  }
 	/**
 	 * migrate the system
 	 *
+   * @refactor
 	 * @return void
 	 * @author Justin Palmer
 	 **/
@@ -97,12 +102,16 @@ abstract class Migration extends Model
 			$stmt->execute();
 			
 			$this->log($query);
-		}
+		} else {
+      $stmt = $this->db()->pdo->prepare($this->statement);
+      $stmt->execute();
+      $this->log($this->statement);
+    }
 		foreach($this->alter_stack as $query){
 			$stmt = $this->db()->pdo->prepare($query);
 			$result = $stmt->execute();
-			var_dump($result);
-			//$this->log($query);
+			//var_dump($result);
+			$this->log($query);
 		}
 		print $this->operations;
 		$this->operations = '';
