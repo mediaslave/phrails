@@ -62,20 +62,28 @@ class Schema
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function rule($column, Rule $rule)
+	public function rule($column, $rule)
 	{
-		//Make sure the property exists.
-		$this->model->hasProperty($column);
-		if($rule instanceof RequiredRule){
-			$this->required[] = $column;
+		$args = func_get_args();
+		$rule = array_pop($args);
+		if(!($rule instanceof Rule)) {
+			throw new Exception('Schema::rule expects the last parameter to be a Rule in ' . get_class($this->model));
 		}
-		//Get the rules for this property.
-		$rules = $this->rules->get($column);
-		if($rules === null){
-			$rules = array();
+		
+		foreach($args as $column) {
+			//Make sure the property exists.
+			$this->model->hasProperty($column);
+			if($rule instanceof RequiredRule){
+				$this->required[] = $column;
+			}
+			//Get the rules for this property.
+			$rules = $this->rules->get($column);
+			if($rules === null){
+				$rules = array();
+			}
+			$rules[] = $rule;
+			$this->rules->set($column, $rules);				
 		}
-		$rules[] = $rule;
-		$this->rules->set($column, $rules);				
 	}
 	/**
 	 * Get the rules
