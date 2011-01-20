@@ -237,6 +237,8 @@ abstract class Model
 				//var_dump($prop_rules);
 				foreach($prop_rules as $rule){
 					$rule->value = $value;
+					$rule->property = $name;
+					$rule->model = $this;
 					if(!$rule->run()){
 						if($boolean)
 							$boolean = false;

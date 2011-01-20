@@ -420,6 +420,19 @@ class Adapter
 			throw new Exception("Database driver: '$Config->driver' is unknown.");
 		return self::$drivers[$Config->driver];
 	}
+
+	/**
+	 * Is the given $value unique in $column ?
+	 *
+	 * @author Dave Kerschner (dkerschner@cetusa.org)
+	 * @access public
+	 * 
+	 * @return boolean
+	 */
+  public function isUnique($column, $value) {
+    $u = $this->model->where('`' . $column . '` = ?', $value)->findAll(false);
+		return $u instanceof $this->model ? false : true;
+  }
 	
 	/**
 	 * Get the config for the db.

@@ -15,6 +15,23 @@ class Rule
 	 * @var string
 	 */
 	public $value;
+
+	/**
+	 * The name of the field that is being validated
+	 *
+	 * @author Dave Kerschner
+	 * @var string
+	 */
+	public $property;
+
+	/**
+	 * The model that the rule is being applied to
+	 *
+	 * @author Dave Kerschner
+	 * @var string
+	 */
+	public $model;
+	
 	/**
 	 * The default message that should be returned.
 	 *
