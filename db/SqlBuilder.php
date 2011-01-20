@@ -94,8 +94,8 @@ class SqlBuilder
 		$query = str_replace('?', $this->select, $query);
 
 		if (!$no_as) {
-      $query .= ' AS ' . $this->model->alias();
-    }
+      		$query .= ' AS ' . $this->model->alias();
+    	}
 			
 		//build all of the joins that are called by join()
 		$query .= $this->buildOneToOneJoins();

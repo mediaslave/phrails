@@ -335,13 +335,7 @@ abstract class Migration extends Model
 	 **/
 	public function unique($table, $column)
 	{
-		$args = func_get_args();
-		array_shift($args);
-		$unique = '';
-		foreach($args as $value)
-			$unique .= "`$value`, ";
-		$unique = rtrim($value, ','); 
-		$this->alter($table, "ADD UNIQUE(" . $unique . ")");
+		$this->doIndex(func_get_args(), 'UNIQUE');
 	}
 	
 	/**
@@ -352,13 +346,7 @@ abstract class Migration extends Model
 	 **/
 	public function index($table, $column)
 	{
-		$args = func_get_args();
-		array_shift($args);
-		$unique = '';
-		foreach($args as $value)
-			$unique .= "`$value`, ";
-		$unique = rtrim($value, ',');
-		$this->alter($table, "ADD INDEX(" . $unique . ")");
+		$this->doIndex(func_get_args(), 'INDEX');
 	}
 	
 	/**
@@ -392,6 +380,26 @@ abstract class Migration extends Model
 	public function table()
 	{
 		return $this->table;
+	}
+	
+	/**
+	 *
+	 * This method is for unique() and index() to prevent duplicate code.
+	 *
+	 * @author Justin Palmer <justin@mediaslave.net>
+	 * @param array $args
+	 * @param string $type
+	 * @return void
+	 */
+	private function doIndex($args, $type){
+		$table = array_shift($args);
+		$name = implode('_', $args);
+		$unique = '';
+		foreach($args as $value){
+			$unique .= "`$value`, ";
+		}
+		$unique = rtrim($unique, ', '); 
+		$this->alter($table, "ADD $type `$name` (" . $unique . ")");
 	}
 	
 	/**
