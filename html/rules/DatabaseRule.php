@@ -8,11 +8,8 @@
  **/
 class DatabaseRule extends Rule
 {
-
-	protected $model;
 	
-	public function __construct(Model $model, $customMessage='') {
-		$this->model = $model;
+	public function __construct($customMessage='') {
 		parent::__construct($customMessage);
 	}
 	
