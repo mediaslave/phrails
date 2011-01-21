@@ -2,7 +2,7 @@
 session_start();
 
 //Load all of the helper methods
-include_all_in_folder(dirname(__FILE__) . '/helpers');
+include_all_in_folder(__DIR__ . '/helpers');
 
 //Instantiate the Routes object so that the user can specify the routes for the project.
 $Routes = new Routes;

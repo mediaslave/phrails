@@ -2,15 +2,15 @@
 /**
  * load the framework paths
  */
-add_include_directory(dirname(__FILE__) . '/__view__');				
-add_include_directory(dirname(__FILE__) . '/db');
-add_include_directory(dirname(__FILE__) . '/db/datatypes');
-add_include_directory(dirname(__FILE__) . '/exceptions');
-add_include_directory(dirname(__FILE__) . '/html');
-add_include_directory(dirname(__FILE__) . '/html/rules');
-add_include_directory(dirname(__FILE__) . '/mail');
-add_include_directory(dirname(__FILE__) . '/template');
-add_include_directory(dirname(__FILE__) . '/util');
+add_include_directory(__DIR__ . '/__view__');				
+add_include_directory(__DIR__ . '/db');
+add_include_directory(__DIR__ . '/db/datatypes');
+add_include_directory(__DIR__ . '/exceptions');
+add_include_directory(__DIR__ . '/html');
+add_include_directory(__DIR__ . '/html/rules');
+add_include_directory(__DIR__ . '/mail');
+add_include_directory(__DIR__ . '/template');
+add_include_directory(__DIR__ . '/util');
 
 /**
  * If the user of the framework defines their own __autoload, we will let them
@@ -41,7 +41,7 @@ function autoload($class_name){
 		$path = $class_name;
 	}
 	
-	$included = @include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
+	$included = include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
 	
 	if($included === false){
 		//die($class_name);
@@ -100,6 +100,7 @@ function add_plugin($plugin, $alt_path=null)
 	if($alt_path !== null)
 		$path = "$alt_path/$plugin";
 	add_include_directory($path);
+	Registry::setInArray('pr-plugin-paths', realpath($path));
 	include $path . "/init.php";
 }
 

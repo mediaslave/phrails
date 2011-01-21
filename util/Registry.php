@@ -44,6 +44,24 @@ class Registry
 		self::$Hash->set($key, $v);
 	}
 	/**
+	 * Just as set, but makes sure it is an array and adds to the array if need be.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public static function setInArray($key, $value)
+	{
+		self::init();
+		$array = self::$Hash->get($key);
+		if($array === null) $array = array();
+		if(is_array($value)){
+			$array = array_merge($array, $value);
+		}else{
+			$array[] = $value;
+		}
+		self::$Hash->set($key, $array);
+	}
+	/**
 	 * Get a property
 	 *
 	 * @param string $key 
