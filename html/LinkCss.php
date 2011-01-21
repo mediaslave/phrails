@@ -29,6 +29,6 @@ class LinkCss extends Link
 	 */
 	function __construct($path, $options='')
 	{
-		parent::__construct($path, $options);
+		parent::__construct($path . '.css', $options);
 	}
 }

@@ -16,7 +16,7 @@ class Script extends AssetTag
 	 */
 	function __construct($source, $options='')
 	{
-		parent::__construct($source, $options);
+		parent::__construct($source . '.js', $options);
 	}
 	/**
 	 * @see Tag::start

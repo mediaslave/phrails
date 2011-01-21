@@ -29,7 +29,7 @@ function render(){
  **/
 function stylesheet_link_tag($file, $options='')
 {
-	return new LinkCss($file . '.css', $options);
+	return new LinkCss($file, $options);
 }
 /**
  * Create an img tag.
@@ -68,7 +68,7 @@ function google_javascript_include_tag($library='jquery', $version='1.4.3', $jsa
  **/
 function javascript_include_tag($source, $options='')
 {
-	return new Script($source . '.js', $options);
+	return new Script($source, $options);
 }
 /**
  * Set the content for a certain var from the view.
