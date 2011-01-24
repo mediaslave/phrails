@@ -104,6 +104,10 @@ class SqlBuilder
 		//any conditions?
 		if(!empty($this->conditions)){
 			$query .= ' WHERE ' . array_shift($this->conditions);
+			$conditions = $this->conditions;
+			if(sizeof($conditions) == 1 && is_array($conditions[0])){
+				$this->conditions = array_shift($conditions);
+			}
 		}
 		//any order?
 		if(!empty($this->order)){

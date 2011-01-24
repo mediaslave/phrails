@@ -40,6 +40,10 @@ class FormBuilder
 	 */
 	static protected $required_hint = '( Required ) ';
 	/**
+	 * Are elements required?  Usually for search, etc.. many of the elements are not required.
+	 */
+	protected $disable_required_hint = false;
+	/**
 	 * These are special form builder objects that are loaded in the form initializer
 	 * 
 	 * @var Hash
@@ -79,6 +83,16 @@ class FormBuilder
 		$this->request = Registry::get('pr-request');
 	}
 	/**
+	 * Do we show the required hint or not?
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function disableRequiredHints($bool=true)
+	{
+		$this->disable_required_hint = $bool;
+	}
+	/**
 	 * return a Label for a model property
 	 *
 	 * @see Label
@@ -93,7 +107,7 @@ class FormBuilder
 		$hint = '';
 		//var_dump($this->model->schema()->required);
 		if($this->model !== null && in_array($property, $this->model->schema()->required))
-			$hint = self::$required_hint;
+			if(!$this->disable_required_hint) $hint = self::$required_hint;
 		$id = FormElement::getId($this->getElementName($property));
 			
 		return new Span($hint, "class:" . self::$class) . new Label($text, $id, $options);

@@ -173,6 +173,7 @@ abstract class Template
 	 **/
 	public function params($key=null)
 	{
-		return ($key === null) ? $this->request->export() : $this->request->$key;
+		return ($key !== null) ? $this->request->params($key, $value)
+							     : $this->request;
 	}
 }

@@ -86,7 +86,7 @@ function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
  **/
 function add_include_directory($path)
 {
-	set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+	set_include_path(get_include_path() . PATH_SEPARATOR . realpath($path));
 }
 /**
  * Initialize the plugin.
