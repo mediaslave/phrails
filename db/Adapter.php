@@ -395,6 +395,16 @@ class Adapter
 		return $this->Statement->queryString;
 	}
 	/**
+	 * Get the last error information
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function getErrorInformation()
+	{
+		return $this->Statement->errorInfo();
+	}
+	/**
 	 * Set the fetchmode to take into account the class or not
 	 * 
 	 * If not, it will return the raw results from the pdo
