@@ -359,7 +359,7 @@ abstract class Model
 			return $this->props->set($key, $value);
 		}
 		if (!$this->schema->relationships->isKey($key)) {
-			throw NoColumnInTableException($key, $this->table_name());
+			throw new NoColumnInTableException($key, $this->table_name());
 		}
 		
 		$this->$key = $value;
