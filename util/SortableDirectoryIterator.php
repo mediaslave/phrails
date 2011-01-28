@@ -1,45 +1,64 @@
 <?
+
 /**
 * Allows you to pass in a method to sort by.  This can be any method that is is available
 * from the DirectoryIterator item method.
 */
-class SortableDirectoryIterator implements IteratorAggregate
-{
+class SortableDirectoryIterator implements IteratorAggregate {
+
+
 	private $array = array();
-	private $method;
-	private $doHidden;
+	private $method = 'getFileName';
+	private $doHidden = false;
 	
 	/**
 	 * 
 	 */
-    public function __construct($path, $method='getFileName', $doHidden=false)
-    {
-		$this->method = $method;
-		$this->doHidden = $doHidden;
-		$this->sort($path);
+    public function __construct($path) {
+
+			if (!is_array($path)) {
+				$path = func_get_args();
+			}
+
+
+			$this->sort($path);
     }
 
-    public function getIterator()
-    {
+		public function setMethod($method = 'getFileName') {
+			$this->method = $method;
+		}
+
+		public function doHidden($doHidden = false) {
+			$this->doHidden = false;
+		}
+
+    public function getIterator() {
 		return new ArrayIterator($this->array);
     }
 
 	/**
 	 * Sort the items by the correct method
+	 * 
+	 * @DonaldKnuth
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function sort($path)
-	{	
+	private function sort($args) {	
 		$method = $this->method;
-		$i = new DirectoryIterator($path);
-		foreach($i as $File){
-			if($this->doHidden == false && $File->isDot() || $File->isDir()){
-				continue;
+		foreach($args as $path){
+			if (!(is_dir($path))) {
+					continue;
 			}
-			$key = $File->$method();
-			$this->array[$key] = new SplFileInfo($File->getPathName());
+			$i = new DirectoryIterator($path);
+
+			foreach($i as $File){
+				if($this->doHidden == false && $File->isDot() || $File->isDir()){
+					continue;
+				}
+				$key = $File->$method();
+				$this->array[$key] = new SplFileInfo($File->getPathName());
+			}
 		}
 		ksort($this->array);
 		$this->array = array_values($this->array);
