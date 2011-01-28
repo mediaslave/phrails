@@ -68,7 +68,7 @@ class Routes{
 		$name_for_path_end = array_pop($pieces);
 		if(sizeof($pieces) > 0){
 			foreach($pieces as $piece){
-				$id = '{' . str_replace('-', '_', Inflections::singularize($piece)) . '_id}';
+				$id = '{' . str_replace('-', '_', Inflections::singularize(Inflections::tableize($piece))) . '_id}';
 				$name_for_path .= $piece . '/' . $id . '/';
 			}
 		}
@@ -76,7 +76,7 @@ class Routes{
 		$path = strtolower('/' . $path);
 		
 		//If the singular and the plural are the same add -index to the index route.
-		$index = $name = strtolower(str_replace('\\', '-', $name));
+		$index = $name = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', str_replace('\\', '-', $name)));
 		$singular = Inflections::singularize($name);
 		if($index == $singular)
 			$index .= '-index';
