@@ -43,9 +43,12 @@ abstract class Migration extends Model
 	 **/
 	public function createTable($name, $primary='id', $engine='INNODB', $charset='utf8', $collation='utf8_general_ci')
 	{
+
 		$this->type = 'create';
 		$name = Inflections::tableize($name);
-		$this->migrate();
+
+		$this->migrateIfNeeded();
+
 		$this->operations .= "\033[0;36;1m$name\033[0m | \033[0;35;1m$engine\033[0m | \033[0;36;1m$charset\033[0m | \033[0;35;1m$collation\033[0m\n";
 		$this->stack = array();
 		$this->alter_stack = array();
@@ -63,7 +66,9 @@ abstract class Migration extends Model
 	public function alterTable($name, $engine=null, $charset=null, $collation=null)
 	{
 		$this->type = 'alter';
-		$this->migrate();
+
+		$this->migrateIfNeeded();
+
 		$this->stack = array();
 		$this->alter_stack = array();
 		$operation = '';
@@ -73,9 +78,26 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
+
+		$this->table = $name;
 		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` \n\t%s\n $operation";
 	}
 	
+
+	/**
+	 * Executes migrations if there are any to run 
+	 *
+	 * @author Dave Kerschner
+	 * @access private
+	 */
+	private function migrateIfNeeded() {
+		if($this->statement != "") {
+			$this->migrateTable();
+		}
+		if (!empty($this->alter_stack)) {
+			$this->migrateIndex();
+		}
+	}
 
 	/**
 	 * Drop table
@@ -97,15 +119,14 @@ abstract class Migration extends Model
 		$this->stack[] = "DROP `" . $column . "`";
 	}
 
+
 	/**
-	 * migrate the system
+	 * Execute Table migrations
 	 *
-   * @refactor
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function migrate()
-	{
+	 * @author Dave Kerschner
+	 * @access private
+	 */
+	private function migrateTable() {
 		if(!empty($this->stack)){
 			$columns = '';
 			foreach($this->stack as $value){
@@ -115,23 +136,64 @@ abstract class Migration extends Model
 			}
 			$columns = rtrim($columns, ',');
 			$query = sprintf($this->statement, $columns);
+
 			$stmt = $this->db()->pdo->prepare($query);
-			$stmt->execute();
-			
+
 			$this->log($query);
 		} else {
-      $stmt = $this->db()->pdo->prepare($this->statement);
-      $stmt->execute();
-      $this->log($this->statement);
+			$query = $this->statement;
+
+      $stmt = $this->db()->pdo->prepare($query);
+
+      $this->log($query);
     }
+		
+		if($query != "" && !$stmt->execute() ) {
+			print("ERROR: " . get_class($this) . "\n");
+			var_dump($stmt->errorInfo());
+			var_dump($query);
+			print("\n");
+			die();
+		}
+	}
+
+	/**
+	 * Execute index migrations
+	 *
+	 * @author Dave Kerschner
+	 * @access private
+	 */
+	private function migrateIndex() {
 		foreach($this->alter_stack as $query){
 			$stmt = $this->db()->pdo->prepare($query);
-			$result = $stmt->execute();
-			//var_dump($result);
+
+			if($query != "" && !$stmt->execute()) {
+				print("ERROR: " . get_class($this) . "\n");
+				var_dump($stmt->errorInfo());
+				var_dump($query);
+				print("\n");
+				die(); 
+			}
 			$this->log($query);
 		}
 		print $this->operations;
 		$this->operations = '';
+	}
+
+	/**
+	 * migrate the system
+	 *
+   * @refactor
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function migrate()
+	{
+		$this->migrateTable();
+		$this->migrateIndex();
+		$this->statement = "";
+		$this->stack = array();
+		$this->alter_stack = array();
 	}
 	/**
 	 * log of queries ran for the current migration
@@ -142,7 +204,7 @@ abstract class Migration extends Model
 	public function log($query)
 	{
 		if ($query == '') {
-			$query = "No down or up specified for this migration!";
+			$query = "No query was specified for this action. This may mean that the migration is using pdo directly.";
 		}
 		$o = "\n" . get_class($this) . "\n";
 		$o .= '=============================================================' . "\n";
@@ -334,7 +396,13 @@ abstract class Migration extends Model
 		//array('limit'=>'', 'null'=>false, , 'default'=>'', 'after'=>false);
 		//'primary'=>false, 'index'=>false, 'unique'=>false
 		//Add to the string the bits needed.
-		$bit = "ADD `$name` $datatype";
+		$bit = "";
+
+		if($this->type == 'alter') {
+			$bit = "ADD ";
+		}
+
+		$bit .= " `$name` $datatype";
 		if(isset($options['limit'])){
 			$bit .= "(" . str_replace('.', ',', $options['limit']) . ")";
 		}elseif($datatype == 'VARCHAR'){
