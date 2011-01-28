@@ -77,9 +77,26 @@ abstract class Migration extends Model
 	}
 	
 
+	/**
+	 * Drop table
+	 *
+	 * @author Dave Kerschner
+	 * @access public
+	 */
   public function dropTable($name) {
 		$this->statement = "DROP TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "`";
   }
+
+	/**
+	 * Drop a column
+	 *
+	 * @author Dave Kerschner
+	 * @access public
+	 */
+	public function drop($column) {
+		$this->stack[] = "DROP `" . $column . "`";
+	}
+
 	/**
 	 * migrate the system
 	 *
@@ -93,7 +110,7 @@ abstract class Migration extends Model
 			$columns = '';
 			foreach($this->stack as $value){
 				if($this->type == 'alter')
-					$value = ' ADD ' . $value;
+					$value = ' ' . $value;
 				$columns .= $value . ',';
 			}
 			$columns = rtrim($columns, ',');
@@ -124,9 +141,13 @@ abstract class Migration extends Model
 	 **/
 	public function log($query)
 	{
-		$o = '=============================================================' . "\n";
+		if ($query == '') {
+			$query = "No down or up specified for this migration!";
+		}
+		$o = "\n" . get_class($this) . "\n";
+		$o .= '=============================================================' . "\n";
 		$o .= $query . "\n";
-		$o .= '============================================================' . "\n";
+		$o .= '=============================================================' . "\n";
 		$this->operations .= $o;
 	}
 	
@@ -283,6 +304,18 @@ abstract class Migration extends Model
 		$this->integer($column, $options);
 		$this->index($this->table, $column);
 	}
+
+	/**
+	 * Drop table reference
+	 *
+	 * @author Dave Kerschner
+	 * @access public
+	 */
+	public function dropReferences($table)
+	{
+		$column = Inflections::underscore($table) . '_id';
+		$this->drop($column);
+	}
 	
 	/**
 	 * Add the type to the stack for us to build the query
@@ -301,7 +334,7 @@ abstract class Migration extends Model
 		//array('limit'=>'', 'null'=>false, , 'default'=>'', 'after'=>false);
 		//'primary'=>false, 'index'=>false, 'unique'=>false
 		//Add to the string the bits needed.
-		$bit = "`$name` $datatype";
+		$bit = "ADD `$name` $datatype";
 		if(isset($options['limit'])){
 			$bit .= "(" . str_replace('.', ',', $options['limit']) . ")";
 		}elseif($datatype == 'VARCHAR'){
@@ -337,6 +370,17 @@ abstract class Migration extends Model
 	{
 		$this->doIndex(func_get_args(), 'UNIQUE');
 	}
+
+	/**
+	 * Drop unique index
+	 *
+	 * @author Dave Kerschner
+	 * @access public
+	 */
+	public function dropUnique($table, $column)
+	{
+		$this->doIndex(func_get_args(), 'UNIQUE', 'DROP');
+	}
 	
 	/**
 	 * Make a column unique
@@ -347,6 +391,17 @@ abstract class Migration extends Model
 	public function index($table, $column)
 	{
 		$this->doIndex(func_get_args(), 'INDEX');
+	}
+
+	/**
+	 * Drop index
+	 *
+	 * @author Dave Kerschner
+	 * @access public
+	 */
+	public function dropIndex($table, $column)
+	{
+		$this->doIndex(func_get_args(), 'INDEX', 'DROP');
 	}
 	
 	/**
@@ -391,7 +446,7 @@ abstract class Migration extends Model
 	 * @param string $type
 	 * @return void
 	 */
-	private function doIndex($args, $type){
+	private function doIndex($args, $type, $add_drop = "ADD"){
 		$table = array_shift($args);
 		$name = implode('_', $args);
 		$unique = '';
@@ -399,9 +454,9 @@ abstract class Migration extends Model
 			$unique .= "`$value`, ";
 		}
 		$unique = rtrim($unique, ', '); 
-		$this->alter($table, "ADD $type `$name` (" . $unique . ")");
+		$this->alter($table, "$add_drop $type `$name` (" . $unique . ")");
 	}
-	
+
 	/**
 	 * up
 	 *
