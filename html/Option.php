@@ -9,6 +9,7 @@ class Option extends Element
 {
 	public $selected;
 	public $value;
+	public $display;
 	/**
 	 * Constructor
 	 *
@@ -23,7 +24,6 @@ class Option extends Element
 		if($value === null)
 			$value = $display;
 		$this->selected = $selected;
-		$this->options = "value:$value";
 		$this->value = $value;
 		parent::__construct($options);
 	}
@@ -35,7 +35,7 @@ class Option extends Element
 		$selected = '';
 		if($this->selected == true)
 			$selected = ' selected="selected"';
-		return '<option' . $this->options . "$selected>";
+		return '<option value="' . $this->value . '" ' . $this->options . "$selected>";
 	}
 	/**
 	 * @see Tag::end()
