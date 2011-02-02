@@ -8,12 +8,28 @@
 abstract class DatabaseAdapter
 {
 	/**
+	 * Constants of the different types of build methods build_<type>
+	 */
+	const CREATE = 'create';
+	const READ   = 'read';
+	const UPDATE = 'update';
+	const DELETE = 'delete';
+	
+	/**
 	 * Database connection
 	 * 
 	 * @author Justin Palmer
 	 * @var PDO
 	 */
 	private $conn = null;
+	
+	/**
+	 * Hash table to store table column information
+	 * 
+	 * @author Justin Palmer
+	 * @var Hash
+	 */
+	protected $ColumnsCache = null;
 	/**
 	 * Constructor
 	 *
@@ -23,6 +39,7 @@ abstract class DatabaseAdapter
 	public function __construct()
 	{
 		$this->conn = DatabaseConnection::connect();
+		$this->ColumnsCache = new Hash();
 	}
 	
 	/**
@@ -41,6 +58,58 @@ abstract class DatabaseAdapter
 	 **/
 	abstract public function showTables();
 	
+	/**
+	 * Store the columns for a table.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	abstract public function cacheColumns($class_name, $table_name);
+	
+	/**
+	 * Build the create (insert) query for the adapter
+	 *
+	 * @param SqlBuilderHash
+	 * @return stdClass
+	 * @author Justin Palmer
+	 **/
+	abstract public function buildCreate(SqlBuilderHash $Hash);
+	
+	/**
+	 * Build the read (select) query for the adapter
+	 *
+	 * @param SqlBuilderHash
+	 * @return stdClass
+	 * @author Justin Palmer
+	 **/
+	abstract public function buildRead(SqlBuilderHash $Hash);
+	
+	/**
+	 * Build the update (update) query for the adapter
+	 *
+	 * @param SqlBuilderHash
+	 * @return stdClass
+	 * @author Justin Palmer
+	 **/
+	abstract public function buildUpdate(SqlBuilderHash $Hash);
+	
+	/**
+	 * Build the delete (delete) query for the adapter
+	 *
+	 * @param SqlBuilderHash
+	 * @return stdClass
+	 * @author Justin Palmer
+	 **/
+	abstract public function buildDelete(SqlBuilderHash $Hash);
+	
+	/**
+	 * Back tick the items needed
+	 * 
+	 * @param
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	abstract public function tick(/* items_to_tick */);
 	
 	/**
 	 * Get the correct Adapter

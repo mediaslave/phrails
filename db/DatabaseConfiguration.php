@@ -35,6 +35,20 @@ class DatabaseConfiguration
 	{
 		self::$types[$name] = $class_prefix;
 	}
+	
+	/**
+	 * Get a var from the config
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	static public function get($var)
+	{
+		$Config = self::getConfig();
+		if(isset($Config->$var))
+			return $Config->$var;
+		throw new Exception('There is no DatabaseConfiguration of: ' . $var);
+	}
 
 	/**
 	 * Confirm that the driver is a valid driver.

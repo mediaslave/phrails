@@ -77,6 +77,16 @@ class Hash
 	}
 	
 	/**
+	 * Get the keys of the hash
+	 *
+	 * @return array
+	 * @author Justin Palmer
+	 **/
+	public function keys()
+	{
+		return array_keys($this->array);
+	}
+	/**
 	 * Remove element for the hash.
 	 *
 	 * @return void

@@ -161,7 +161,7 @@ class Schema
 	public function order($order)
 	{
 		$options = $this->relationships->get($this->last_relationship);
-		$options->order_by = ' ORDER BY ' . $order;
+		$options->order_by = $order;
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
