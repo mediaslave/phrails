@@ -46,7 +46,7 @@ class Hash
 	 */
 	public function get($key)
 	{
-		return ($this->isKey($key)) ? $this->array[$key] : null;
+		return $this->_get($key);
 	}
 	
 	/**
@@ -57,8 +57,13 @@ class Hash
 	 **/
 	public function __get($key)
 	{
-		return $this->get($key);
+		return $this->_get($key);
 	}
+
+	private function _get($key) {
+		return ($this->isKey($key)) ? $this->array[$key] : null;
+	}
+
 	/**
 	 * Is there a key in the Hash?
 	 *
