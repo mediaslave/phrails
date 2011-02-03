@@ -41,7 +41,7 @@ class Select extends FormElement
 			foreach($args as $option){
 				if(!($option instanceof Option))
 					throw new Exception("Invalid tag for element 'Select'.  Only 'Option' elements may be passed.");
-				if($option->value == $selectedValue && $selectedValue !== null)
+				if((string)$option->value === $selectedValue && $selectedValue !== null)
 					$option->selected = true;
 				$this->display .= $option . "\n";
 			}
