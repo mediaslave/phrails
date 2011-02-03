@@ -79,7 +79,7 @@ abstract class Model extends ActiveRecord
 	 * @author Justin Palmer
 	 * @var ModelFilters
 	 */
-	protected $filters;
+	private $filters;
 	/**
 	 * Constructor
 	 *
@@ -107,7 +107,7 @@ abstract class Model extends ActiveRecord
 		$this->errors = new Hash();
 		$this->setProperties($array);
 		
-		$this->filters = new ModelFilters($this);
+		$this->filters = ModelFilters::noo();
 		$this->schema = new Schema($this);
 		
 		$this->init();
@@ -127,6 +127,25 @@ abstract class Model extends ActiveRecord
 	{
 		$model = get_called_class();
 		return new $model($props);
+	}
+	
+	/**
+	 * Save the model
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function save()
+	{
+		//run before-validate
+		#$this->validate();
+		//run after-validate
+	//start transaction
+		//run before-save
+		return parent::save();
+		//run after-save
+	//commit transaction
+		//run after-commit
 	}
 	/**
 	 * __get model properties
@@ -289,7 +308,33 @@ abstract class Model extends ActiveRecord
 	 **/
 	public function filters()
 	{
-		return $this->pr_filters;
+		$this->filters->setModelClassName(get_class($this));
+		return $this->filters;
+	}
+	
+	/**
+	 * run a filter(s)
+	 * 
+	 * $this->filter('beforeSave')
+	 *
+	 * @return boolean if any filter returns false or throws an exception return false.
+	 * @author Justin Palmer
+	 **/
+	protected function filter($filter)
+	{
+		$filters = $this->filters()->get($filter);
+		if($filters !== null){
+			foreach(array_values($filters) as $filter){
+				try{
+					if($this->$filter() === false){
+						return false;
+					}
+				}catch(Exception $e){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**

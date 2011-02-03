@@ -9,6 +9,26 @@ class MysqlAdapter extends DatabaseAdapter
 {
 	
 	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function transactional($callback)
+	{
+		$this->conn()->beginTransaction();
+		try{
+			if(call_user_func($callback)){
+				return $this->conn()->commit();
+			}
+			$this->conn()->rollBack();
+		}catch(Exception $e){
+			$this->conn()->rollBack();
+		}
+		return false;
+	}
+	
+	/**
 	 * Show columns
 	 *
 	 * @return void
@@ -39,7 +59,18 @@ class MysqlAdapter extends DatabaseAdapter
 	 **/
 	public function buildCreate(SqlBuilderHash $Hash)
 	{
-		
+		$sql = 'INSERT INTO ' . $Hash->from() . ' (';
+		$q_marks = '';
+		$params = array();
+		foreach($Hash->props()->export() as $key => $value){
+			$sql .= $this->tick($key) . ',';
+			$q_marks .= '?,';
+			$params[] = $value;
+		}
+		$sql = rtrim($sql, ',');
+		$q_marks = rtrim($q_marks, ',');
+		$sql .= ') VALUES (' . $q_marks . ')';
+		return (object) array('sql' => $sql, 'params'=>$params);
 	}
 
 	/**
@@ -50,8 +81,8 @@ class MysqlAdapter extends DatabaseAdapter
 	 **/
 	public function buildRead(SqlBuilderHash $Hash)
 	{
-		new Dbug($Hash, '', false, __FILE__, __LINE__);
-		$sql = 'SELECT ' . $Hash->select() . ' FROM ' . $Hash->from() .  ' ' . $Hash->join();
+		$sql = 'SELECT ' . $Hash->select() . ' ' . $this->buildCount($Hash) . ' 
+				FROM ' . $Hash->from() .  ' ' . $Hash->join();
 		if($Hash->where())
 			$sql .= ' WHERE ' . $Hash->where();
 		if($Hash->group())
@@ -62,8 +93,7 @@ class MysqlAdapter extends DatabaseAdapter
 			$sql .= ' ORDER BY ' . $Hash->order();
 		if($Hash->limit())
 			$sql .= $this->limit($Hash->offset(), $Hash->limit());
-		new Dbug($sql, '', false, __FILE__, __LINE__);
-		return (object) array('sql' => $sql, 'params'=>array_merge($Hash->whereArgs()));
+		return (object) array('sql' => $sql, 'params'=>$Hash->whereArgs());
 	}
 	
 	/**
@@ -85,7 +115,12 @@ class MysqlAdapter extends DatabaseAdapter
 	 **/
 	public function buildDelete(SqlBuilderHash $Hash)
 	{
-		
+		$sql = 'DELETE FROM ' . $Hash->from();
+		if($Hash->where())
+			$sql .= ' WHERE ' . $Hash->where();
+		if($Hash->limit())
+			$sql .= $this->limit($Hash->offset(), $Hash->limit());
+		return (object) array('sql' => $sql, 'params'=>$Hash->whereArgs());
 	}
 	
 	/**
@@ -98,7 +133,7 @@ class MysqlAdapter extends DatabaseAdapter
 	{
 		$args = func_get_args();
 		if(sizeof($args) == 1){
-			return "`$args[0]`";
+			return '`' . array_shift($args) . '`';
 		}
 		$ret = array();
 		foreach(array_values($args) as $item){
@@ -137,7 +172,7 @@ class MysqlAdapter extends DatabaseAdapter
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	private function limit($offset, $limit)
+	protected function limit($offset, $limit)
 	{
 		$limit_s = ' LIMIT ';
 		if($offset == '' && $limit > 0)
@@ -145,5 +180,24 @@ class MysqlAdapter extends DatabaseAdapter
 		if($offset > 0 && $limit > 0)
 			return $limit_s . $offset . ',' . $limit;
 		return '';
+	}
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function buildCount(Hash $Hash)
+	{
+		if(sizeof($Hash->count()) == 0)
+			return '';
+		$ret = '';	
+		if($Hash->select() != '')
+			$ret .= ', ';
+		foreach($Hash->count() as $count){
+			$ret .= "COUNT($count->distinct $count->column) AS $count->as, ";
+		}
+		return rtrim($ret, ', ');
 	}
 }

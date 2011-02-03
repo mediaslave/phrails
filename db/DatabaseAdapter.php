@@ -43,6 +43,14 @@ abstract class DatabaseAdapter
 	}
 	
 	/**
+	 * Trasactional
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	abstract public function transactional($callback);
+	
+	/**
 	 * Show columns
 	 *
 	 * @return stdClass
@@ -111,6 +119,14 @@ abstract class DatabaseAdapter
 	 **/
 	abstract public function tick(/* items_to_tick */);
 	
+	
+	/**
+	 * limit
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	abstract protected function limit($offset, $limit);
 	/**
 	 * Get the correct Adapter
 	 *

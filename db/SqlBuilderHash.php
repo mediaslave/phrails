@@ -13,6 +13,7 @@ class SqlBuilderHash extends Hash
 		parent::__construct();
 		$this->select('*');
 		$this->whereArgs(array());
+		$this->doGetSet('count', array());
 	}
 
 	/**
@@ -153,5 +154,36 @@ class SqlBuilderHash extends Hash
 	public function having($value=null)
 	{
 		return $this->doGetSet('having', $value);
+	}
+	
+	/**
+	 * count
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function count($column=null, $as=null, $distinct=null)
+	{
+		if($column === null){
+			return $this->get('count');
+		}
+		$array = $this->get('count');
+		$o = new stdClass;
+		$o->column = $column;
+		$o->as = $as;
+		$o->distinct = $distinct;
+		$array[] = $o;
+		$this->set('count', $array);
+	}
+	
+	/**
+	 * props of a model
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function props($value=null)
+	{
+		return $this->doGetSet('props', $value);
 	}
 }

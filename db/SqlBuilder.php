@@ -41,6 +41,18 @@ class SqlBuilder
 	}
 	
 	/**
+	 * count
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function count($column=null, $as=null, $distinct='')
+	{
+		$this->Hash->count($column, $as, $distinct);
+		return $this;
+	}
+	
+	/**
 	 * table
 	 *
 	 * @return void
@@ -96,7 +108,7 @@ class SqlBuilder
 	{
 		$this->Hash->offset($offset);
 		$this->Hash->limit($limit);
-		if($limit = null){
+		if($limit === null){
 			$this->Hash->offset(0);
 			$this->Hash->limit($offset);
 		}	
@@ -135,6 +147,7 @@ class SqlBuilder
 	 **/
 	public function build($method)
 	{
+		$this->Hash->props($this->props());
 		$method = 'build' . ucfirst($method);
 		return $this->adapter()->$method($this->Hash);
 	}
@@ -172,7 +185,28 @@ class SqlBuilder
 		$this->raw = $value;
 		return $this;
 	}
+	
+	/**
+	 * Is the mode raw
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function isRaw()
+	{
+		return $this->raw;
+	}
 
+	/**
+	 * export the hash
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function export()
+	{
+		return $this->Hash->export();
+	}
 
 	/**
 	 * Reset to factory default
@@ -182,7 +216,6 @@ class SqlBuilder
 	 **/
 	protected function reset()
 	{
-		
 		$this->Hash = new SqlBuilderHash();
 		$this->from($this->database_name(), $this->table_name(), $this->alias());
 	}
