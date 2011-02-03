@@ -60,10 +60,9 @@ class Routes{
 	 * @return void
 	 * @author Justin Palmer
 	 */
-	function resources($name, $controller=null, $namespace=null){
+	function resources($name, $namespace=null){
 		$pieces = explode('\\', $name);
-		if($controller === null)
-			$controller = $name;
+		$controller = $name;
 		$name_for_path = '';
 		$name_for_path_end = array_pop($pieces);
 		if(sizeof($pieces) > 0){
