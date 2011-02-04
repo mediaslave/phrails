@@ -80,6 +80,11 @@ class Router
 		return $Controller;
 	}
 
+
+	public function isRequestUriCurrentRoute($uri) {
+		return $this->isActualPath(\Registry::get('pr-route'), $uri);
+	}
+
 	/**
 	 * Find the route that is a match from the path in the REQUEST_URI
 	 *
