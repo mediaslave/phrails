@@ -77,7 +77,11 @@ class FormBuilder
 	 */
 	function __construct($model=null)
 	{
-		if(!($model instanceof Model) && $model !== null)
+		if ($model === null) {
+			$model = new Hash();
+		}
+
+		if(!($model instanceof Model) && !($model instanceof Hash))
 			throw new Exception("Parameter one in 'FormBuilder' should be a 'Model' Object or null.");
 		$this->model = $model;
 		$this->request = Registry::get('pr-request');
@@ -106,7 +110,8 @@ class FormBuilder
 		FlashForm::setLabel($name, $text);
 		$hint = '';
 		//var_dump($this->model->schema()->required);
-		if($this->model !== null && in_array($property, $this->model->schema()->required))
+		if((!($this->model instanceof Hash) && in_array($property, $this->model->schema()->required)) ||
+			 OptionsParser::findAndDestroy('required', $options) == true)
 			if(!$this->disable_required_hint) $hint = self::$required_hint;
 		$id = FormElement::getId($this->getElementName($property));
 			
@@ -302,7 +307,7 @@ class FormBuilder
 	private function checkForErrors($property, $options)
 	{
 		//if we are working with out a model then just return the options.
-		if($this->model === null)
+		if($this->model instanceof Hash)
 			return $options;
 		$array_it = $this->array_it;
 		//if we have a model then let's see if there are errors and if so set
@@ -324,7 +329,7 @@ class FormBuilder
 	private function getElementName($property)
 	{
 		//If there is no model then we will just pass it back how it came in.
-		if($this->model === null)
+		if($this->model instanceof Hash)
 			return $property;
 		//Create the element name based off of the model.
 		$this->model->hasProperty($property);
@@ -364,8 +369,13 @@ class FormBuilder
 	{
 		//Get the value from the request object if we do not have a model
 		//or get it from the model property if we have a model.
-		return ($this->model === null) ? $this->request->params($property) 
-		 							   : $this->model->$property;
+		$value = $this->request->params($property);
+		if ($this->model instanceof Hash) {
+			$value = $this->model->get($property);
+		} else if ($this->model instanceof Model) {
+			$value = $this->model->$property;
+		}
+		return $value;
 	}
 	
 	/**
