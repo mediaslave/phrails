@@ -158,12 +158,12 @@ abstract class Model
 	 **/
 	public function save()
 	{
-		self::$db->model = $this;
 		$filters = $this->filters();
 		$boolean = $this->validate();
 		if($boolean){
 			$filters->run($filters->getName(ModelFilters::before, ModelFilters::save));
 			try{
+				self::$db->model = $this;
 				$result = self::$db->saveNow();
 			}catch(SqlException $e){
 				throw $e;
