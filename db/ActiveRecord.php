@@ -22,8 +22,9 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function save()
 	{
-		$this->adapter()->beginTransaction();
 		try{
+			$this->adapter()->beginTransaction();
+			$this->filter('beforeSave');
 			$primary = $this->primary_key();
 			if($this->$primary === null){
 				$this->filter('beforeCreate');
@@ -34,19 +35,20 @@ class ActiveRecord extends SqlBuilder
 				if(!$this->update()) new FailedActiveRecordCreateUpdateException();
 				$this->filter('afterUpdate');
 			}
+			$this->filter('afterSave');
 			$this->adapter()->commit();
-		}catch(FailedModelFilterException $e){
+			$this->filter('afterCommit');
+		}catch(Exception $e){
 			$this->adapter()->rollBack();
-			return false;
-		}catch(FailedActiveRecordCreateUpdateException $e){
-			$this->adapter()->rollBack();
-			return false;
+			throw $e;
 		}
 		return true;
 	}
 	
 	/**
 	 * insert
+	 * 
+	 * Careful no validation!
 	 *
 	 * @return void
 	 * @author Justin Palmer
@@ -63,6 +65,8 @@ class ActiveRecord extends SqlBuilder
 	
 	/**
 	 * update
+	 * 
+	 * Careful no validation!
 	 *
 	 * @return void
 	 * @author Justin Palmer
@@ -80,6 +84,32 @@ class ActiveRecord extends SqlBuilder
 		$query = $this->build(DatabaseAdapter::UPDATE);
 		$this->$primary = $p_value;
 		return $this->processCud($query);
+	}
+	
+	/**
+	 * Update the props passed in.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function updateProps(/* properties */)
+	{
+		$args = func_get_args();
+		if(sizeof($args) == 0)
+			throw new Exception('updateProps expects that you pass the properties you would like to update to it.');
+
+		//Turn args into keys of an array to do some diff and intersect on it.
+		$args_as_keys = array_fill_keys($args, null);
+		//Find invalid columns and throw an exception if there are some
+		$invalid_columns = array_diff_key($args_as_keys, $this->props()->export());
+		if(sizeof($invalid_columns) > 0)
+			throw new ActiveRecordInvalidColumnsForUpdateException(get_class($this), array_keys($invalid_columns));
+		
+		$props = array_intersect_key($this->props()->export(), $args_as_keys);
+		$model = get_class($this);
+		$model = new $model($props);
+		$model->id = $this->id;
+		return $model->save();
 	}
 	
 	/**
@@ -138,17 +168,6 @@ class ActiveRecord extends SqlBuilder
 	}
 	
 	/**
-	 * findOrCreateBy
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function findOrCreateBy()
-	{
-		
-	}
-	
-	/**
 	 * count records
 	 *
 	 * @return void
@@ -192,7 +211,6 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function __call($method, $params)
 	{
-		die($method);
 		$finder = $this->findDynamicFinder($method);
 		
 		$underscore = Inflections::underscore($finder->props);
@@ -247,7 +265,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function lazy($result, $joins, $isLazy=false)
+	protected function lazy($result, $joins, $isLazy=false)
 	{	
 		foreach($joins as $key => $query){
 			$prop = $query->prop;

@@ -143,7 +143,6 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function buildUpdate(SqlBuilderHash $Hash)
 	{
-		new \Dbug($Hash, '', false, __FILE__, __LINE__);
 		$sql = 'UPDATE ' . $Hash->from() . ' '. $Hash->join() . 
 		      ' SET ';
 		$params = array();
@@ -160,8 +159,6 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		$sql = rtrim($sql, ',');
 		if($Hash->where())
 			$sql .= ' WHERE ' . $Hash->where();
-		new \Dbug($sql, '', false, __FILE__, __LINE__);
-		new \Dbug($params, '', false, __FILE__, __LINE__);
 		return (object) array('sql' => $sql, 'params'=>array_merge($params,$Hash->whereArgs()));
 	}
 

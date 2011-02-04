@@ -135,18 +135,43 @@ abstract class Model extends ActiveRecord
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function savee()
+	public function save()
 	{
-		//run before-validate
-		#$this->validate();
-		//run after-validate
-	//start transaction
-		//run before-save
-		return parent::save();
-		//run after-save
-	//commit transaction
-		//run after-commit
+		try{
+			$this->filter('beforeValidate');
+			$this->validate();
+			$this->filter('afterValidate');
+			return parent::save();
+		}catch(FailedModelFilterException $e){
+			return false;
+		}catch(FailedActiveRecordCreateUpdateException $e){
+			return false;
+		}
 	}
+	
+	/**
+	 * Validate the model props against the schema
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function validate()
+	{
+		//Make sure we are not a csrf haxor.
+		if(!FormBuilder::isValidAuthenticityToken()){
+			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
+			return false;
+		}
+			
+		$Judge = new RuleJudge($this->props, $this->schema);
+		
+		$this->errors = $Judge->judge($this);
+		
+		if($this->errors->isEmpty())
+			return false;
+		return true;
+	}
+	
 	/**
 	 * __get model properties
 	 *
@@ -331,8 +356,7 @@ abstract class Model extends ActiveRecord
 						if($filter() === false){
 							throw new FailedModelFilterException(get_class($this), $filterType, $filter);
 						}
-					}
-					if($this->$filter() === false){
+					}elseif($this->$filter() === false){
 						throw new FailedModelFilterException(get_class($this), $filterType, $filter);
 					}
 				}catch(Exception $e){
@@ -341,6 +365,22 @@ abstract class Model extends ActiveRecord
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Try to return a datatype object for the specified column
+	 *
+	 * @return DataType
+	 * @author Justin Palmer
+	 **/
+	public function objectify($key)
+	{
+		//if there is a property with this key in the model return the value.
+		if($this->columns->isKey($key)){
+			$column = $this->columns->get($key);
+			return DataTypeFactory::process($column->Type, $this->props->get($key));
+		}
+		return $this->$key;
 	}
 	
 	/**
