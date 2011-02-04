@@ -139,7 +139,7 @@ abstract class Model extends ActiveRecord
 	{
 		try{
 			$this->filter('beforeValidate');
-			$this->validate();
+			if(!$this->validate()) return false;
 			$this->filter('afterValidate');
 			return parent::save();
 		}catch(FailedModelFilterException $e){
@@ -167,7 +167,7 @@ abstract class Model extends ActiveRecord
 		
 		$this->errors = $Judge->judge($this);
 		
-		if($this->errors->isEmpty())
+		if(!$this->errors->isEmpty())
 			return false;
 		return true;
 	}
@@ -354,6 +354,12 @@ abstract class Model extends ActiveRecord
 				try{
 					if($filter instanceof Closure){
 						if($filter() === false){
+							throw new FailedModelFilterException(get_class($this), $filterType, $filter);
+						}
+					}elseif(is_array($filter)){
+						$property = array_shift($filter);
+						$method = array_shift($filter);
+						if($this->$property->$method() === false){
 							throw new FailedModelFilterException(get_class($this), $filterType, $filter);
 						}
 					}elseif($this->$filter() === false){

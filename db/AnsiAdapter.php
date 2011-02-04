@@ -96,7 +96,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		$q_marks = '';
 		$params = array();
 		foreach($Hash->props()->export() as $column => $value){
-			if($value !== null){
+			if($value !== null && $value !== ''){
 				if($value instanceof Expression){
 					$sql .= $this->tick($column) . ' = ' . $value . ',';
 				}else{
@@ -147,7 +147,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		      ' SET ';
 		$params = array();
 		foreach($Hash->props()->export() as $column => $value){
-			if($value !== null){
+			if($value !== null && $value !== ''){
 				if($value instanceof Expression){
 					$sql .= $this->tick($column) . ' = ' . $value . ',';
 				}else{
@@ -195,6 +195,16 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 			$ret[] = "`$item`";
 		}
 		return $ret;
+	}
+	
+	/**
+	 * get the last insert id
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function lastInsertId(){
+		return $this->conn()->lastInsertId();
 	}
 
  	/**

@@ -13,7 +13,6 @@ class ActiveRecord extends SqlBuilder
 	 * @var PDOStatement
 	 */
 	private $Statement;
-	
 	/**
 	 * Save
 	 *
@@ -44,7 +43,6 @@ class ActiveRecord extends SqlBuilder
 		}
 		return true;
 	}
-	
 	/**
 	 * insert
 	 * 
@@ -55,14 +53,16 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function create()
 	{
+		$primary = $this->primary_key();
 		$this->from($this->database_name(), $this->table_name());
 		if($this->columns->isKey('created_at')){
 			$this->created_at = date('Y-m-d H:i:s');
 		}
 		$query = $this->build(DatabaseAdapter::CREATE);
-		return $this->processCud($query);
+		$boolean = $this->processCud($query);
+		$this->$primary = $this->lastInsertId();
+		return $boolean;
 	}
-	
 	/**
 	 * update
 	 * 
@@ -85,7 +85,6 @@ class ActiveRecord extends SqlBuilder
 		$this->$primary = $p_value;
 		return $this->processCud($query);
 	}
-	
 	/**
 	 * Update the props passed in.
 	 *
@@ -111,7 +110,6 @@ class ActiveRecord extends SqlBuilder
 		$model->id = $this->id;
 		return $model->save();
 	}
-	
 	/**
 	 * Find the id's specified and with the primary key
 	 * 
@@ -143,7 +141,6 @@ class ActiveRecord extends SqlBuilder
 		}
 		return $this->processRead($this->build(DatabaseAdapter::READ), $forceArray);
 	}
-	
 	/**
 	 * Find all records
 	 *
@@ -154,7 +151,6 @@ class ActiveRecord extends SqlBuilder
 	{
 		return $this->processRead($this->build(DatabaseAdapter::READ), true);
 	}
-	
 	/**
 	 * findFirst
 	 *
@@ -166,7 +162,6 @@ class ActiveRecord extends SqlBuilder
 		$this->limit(1);
 		return $this->processRead($this->build(DatabaseAdapter::READ), false);
 	}
-	
 	/**
 	 * count records
 	 *
@@ -180,7 +175,6 @@ class ActiveRecord extends SqlBuilder
 		parent::count($column, $as, $distinct);
 		return $this->find();
 	}
-	
 	/**
 	 * delete records
 	 *
@@ -202,7 +196,26 @@ class ActiveRecord extends SqlBuilder
 		$query = $this->build(DatabaseAdapter::DELETE);
 		return $this->processCud($query);
 	}
-	
+	/**
+	 * Get the last insert id.
+	 *
+	 * @return int
+	 * @author Justin Palmer
+	 **/
+	public function lastInsertId()
+	{
+		return $this->adapter()->lastInsertId();
+	}
+	/**
+	 * Get the last query
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function lastQuery()
+	{
+		return '';
+	}
 	/**
 	 * Call a dynamic finder
 	 *
@@ -233,7 +246,55 @@ class ActiveRecord extends SqlBuilder
 		$method = $finder->method;
 		return $this->$method();
 	}
-	
+	/**
+	 * Join the tables passed in based off the Schema.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function join($args)
+	{
+		$args = func_get_args();
+		foreach($args as $key){
+			if(!$this->schema()->relationships->isKey($key))
+				throw new NoSchemaRelationshipDefinedException($this->table_name(), $key);
+			$this->addJoinFromRelationship($this->schema()->relationships->get($key));
+		}
+		return $this;
+	}
+	/**
+	 * Add the joins to the result
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function lazy($result, $joins, $isLazy=false)
+	{	
+		foreach($joins as $key => $query){
+			$prop = $query->prop;
+			$obj = $this->select($query->alias .".*");
+			$obj = parent::join($query->join)
+				 		->from($this->database_name(), $query->table, $query->alias)
+				 		->where($query->where . $query->on, $this->$prop)
+				 		->order($query->order_by);
+			$sqlObject = $this->build(DatabaseAdapter::READ);
+			//Function to set the fetchmode for the class
+			$customFetchMode = function($statement, $klass){
+				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);
+			};
+			//What should we return.
+			if($query->type == 'has-one' || $query->type == 'belongs-to'){
+				try{
+					$result->$key = $this->processRead($sqlObject, false, $customFetchMode, $query->klass);
+				}catch(RecordNotFoundException $e){
+					$result->$key = null;
+				}
+			}else{
+				$result->$key = $this->processRead($sqlObject, true, $customFetchMode, $query->klass);
+			}
+		}	
+		return ($isLazy) ? $result->$key : $result;
+	}
 	/**
 	 * See if the dynamic finder is available.
 	 * Only used by __call
@@ -258,38 +319,7 @@ class ActiveRecord extends SqlBuilder
 		if($finder === null)
 			throw new Exception('No dynamic finder found :(');
 		return $finder;
-	}
-	/**
-	 * Add the joins to the result
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	protected function lazy($result, $joins, $isLazy=false)
-	{	
-		foreach($joins as $key => $query){
-			$prop = $query->prop;
-			$this->select($query->alias .".*")
-				 ->from($this->database_name(), $query->table, $query->alias)
-				 ->where($query->where . $query->on, $this->$prop)
-				 ->order($query->order_by);
-			$sqlObject = $this->build(DatabaseAdapter::READ);
-			//Function to set the fetchmode for the class
-			$customFetchMode = function($statement, $klass){
-				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);
-			};
-			//What should we return.
-			if($query->type == 'has-one' || $query->type == 'belongs-to'){
-				$result->$key = $this->processRead($sqlObject, false, $customFetchMode, $query->klass);
-				//if no record is found then set null
-				if(!$result->$key) $result->$key = null;
-			}else{
-				$result->$key = $this->processRead($sqlObject, true, $customFetchMode, $query->klass);
-			}
-		}	
-		return ($isLazy) ? $result->$key : $result;
-	}
-	
+	}	
 	/**
 	 * create comma separate question marks for the size of the array
 	 *
@@ -318,6 +348,8 @@ class ActiveRecord extends SqlBuilder
 		$this->Statement = $this->conn()->prepare($object->sql);
 		$this->setFetchMode($customFetchMode, $customFetchClass);
 		$this->Statement->execute(array_values($object->params));
+		if($forceArray == false && $this->Statement->rowCount() == 0)
+			throw new RecordNotFoundException($object->sql, $object->params);
 		if($forceArray == false && $this->Statement->rowCount() == 1){
 			return $this->Statement->fetch();
 		}

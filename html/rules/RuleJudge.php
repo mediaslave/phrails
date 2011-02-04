@@ -30,7 +30,7 @@ class RuleJudge
 			if(empty($this->errors))
 				$last_prop_name = $property;
 			if(!empty($this->errors) && $last_prop_name != $property){
-				$this->Hash->set($Model->alias() . '[' . $last_prop_name . ']', $this->errors);
+				$Hash->set($Model->alias() . '[' . $last_prop_name . ']', $this->errors);
 				$last_prop_name = $property;
 				$this->errors = array();
 			}

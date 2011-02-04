@@ -119,6 +119,14 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract protected function limit($offset, $limit);
+	
+	/**
+	 * get the last insert id
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	abstract public function lastInsertId();
 	/**
 	 * Get the correct Adapter
 	 *

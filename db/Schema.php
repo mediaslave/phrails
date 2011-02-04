@@ -2,8 +2,7 @@
 /**
  * To define the schema of a model
  * 
- * @todo There is a lot more to do with relationships.  As of this (03-06-10), you can do very 
- * simple hasOne and hasMany.  We need to deal with the rest
+ * @todo Building SQL in schema is bad.  Needs to be done by the adapter.
  * 
  * @package db
  * @author Justin Palmer

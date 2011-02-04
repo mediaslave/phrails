@@ -3,6 +3,10 @@
  * Build sql statements
  *
  * @todo named_scope
+ * 	
+ * @todo This really sucks.  SqlBuilder really should not be building this join.  The adapter should be.
+ * Do to time constraints this is going to have to wait. self::join should be able to take multiple
+ * relationships and pass the "config" off to the adapter for build.
  * 
  * @package db
  * @author Justin Palmer
@@ -38,6 +42,39 @@ class SqlBuilder
 		if($replace)
 			$this->Hash->select($select);
 		return $this;
+	}
+	
+	/**
+	 * count
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function join($join)
+	{
+		$this->Hash->join($join);
+		return $this;
+	}
+	
+	/**
+	 * build a join from a schema relationship
+	 * 
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function addJoinFromRelationship($relationship)
+	{		
+		$join = '';		
+		if($relationship->type == 'has-one' || $relationship->type == 'belongs-to'){
+			$this->raw();
+			$klass = $relationship->klass;
+			$obj = new $klass;
+			$on = str_replace('?', $this->alias() . "." . $relationship->prop, $relationship->on);
+			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "` 
+						 AS " . $relationship->alias . " 
+						  ON " . $on . " ";
+		}
+		self::join($join);
 	}
 	
 	/**
