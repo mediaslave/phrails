@@ -64,6 +64,10 @@ class Hash
 		return ($this->isKey($key)) ? $this->array[$key] : null;
 	}
 
+	public function __set($key, $value) {
+		$this->set($key, $value);
+	}
+
 	/**
 	 * Is there a key in the Hash?
 	 *
