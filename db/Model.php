@@ -135,7 +135,7 @@ abstract class Model extends ActiveRecord
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function save()
+	public function savee()
 	{
 		//run before-validate
 		#$this->validate();
@@ -322,15 +322,21 @@ abstract class Model extends ActiveRecord
 	 **/
 	protected function filter($filter)
 	{
+		$filterType = $filter;
 		$filters = $this->filters()->get($filter);
 		if($filters !== null){
 			foreach(array_values($filters) as $filter){
 				try{
+					if($filter instanceof Closure){
+						if($filter() === false){
+							throw new FailedModelFilterException(get_class($this), $filterType, $filter);
+						}
+					}
 					if($this->$filter() === false){
-						return false;
+						throw new FailedModelFilterException(get_class($this), $filterType, $filter);
 					}
 				}catch(Exception $e){
-					return false;
+					throw $e;
 				}
 			}
 		}

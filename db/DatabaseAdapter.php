@@ -43,14 +43,6 @@ abstract class DatabaseAdapter
 	}
 	
 	/**
-	 * Trasactional
-	 *
-	 * @return boolean
-	 * @author Justin Palmer
-	 **/
-	abstract public function transactional($callback);
-	
-	/**
 	 * Show columns
 	 *
 	 * @return stdClass

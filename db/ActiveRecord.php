@@ -22,15 +22,25 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function save()
 	{
-		$primary = $this->primary_key();
-		if($this->$primary === null){
-			if(!$this->filter('beforeCreate')) return false;
-			if(!$this->create()) return false;
-			if(!$this->filter('afterCreate')) return false;
-		}else{
-			if(!$this->filter('beforeUpdate')) return false;
-			if(!$this->update()) return false;
-			if(!$this->filter('afterUpdate')) return false;
+		$this->adapter()->beginTransaction();
+		try{
+			$primary = $this->primary_key();
+			if($this->$primary === null){
+				$this->filter('beforeCreate');
+				if(!$this->create()) new FailedActiveRecordCreateUpdateException();
+				$this->filter('afterCreate');
+			}else{
+				$this->filter('beforeUpdate');
+				if(!$this->update()) new FailedActiveRecordCreateUpdateException();
+				$this->filter('afterUpdate');
+			}
+			$this->adapter()->commit();
+		}catch(FailedModelFilterException $e){
+			$this->adapter()->rollBack();
+			return false;
+		}catch(FailedActiveRecordCreateUpdateException $e){
+			$this->adapter()->rollBack();
+			return false;
 		}
 		return true;
 	}
@@ -44,6 +54,9 @@ class ActiveRecord extends SqlBuilder
 	public function create()
 	{
 		$this->from($this->database_name(), $this->table_name());
+		if($this->columns->isKey('created_at')){
+			$this->created_at = date('Y-m-d H:i:s');
+		}
 		$query = $this->build(DatabaseAdapter::CREATE);
 		return $this->processCud($query);
 	}
@@ -56,8 +69,16 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function update()
 	{
+		$primary = $this->primary_key();
+		$p_value = $this->$primary;
+		$this->$primary = null;
 		$this->from($this->database_name(), $this->table_name());
+		$this->where("$primary = ?", $p_value);
+		if($this->columns->isKey('updated_at')){
+			$this->updated_at = date('Y-m-d H:i:s');
+		}
 		$query = $this->build(DatabaseAdapter::UPDATE);
+		$this->$primary = $p_value;
 		return $this->processCud($query);
 	}
 	
@@ -171,6 +192,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function __call($method, $params)
 	{
+		die($method);
 		$finder = $this->findDynamicFinder($method);
 		
 		$underscore = Inflections::underscore($finder->props);
