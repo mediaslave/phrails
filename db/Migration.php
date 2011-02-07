@@ -339,6 +339,19 @@ abstract class Migration extends Model
 		$invalid = array('null', 'index', 'unique', 'default', 'auto');
 		$this->add('TIMESTAMP', $name, $options, $invalid);
 	}
+
+	/**
+	 * year
+	 *
+	 * @return void
+	 * @author Dave Kerschner
+	 **/
+	public function year($name, $options='')
+	{
+		$invalid = array('null', 'index', 'unique', 'default', 'auto');
+		$this->add('YEAR', $name, $options, $invalid);
+	}
+
 	
 	/**
 	 * timestamps
