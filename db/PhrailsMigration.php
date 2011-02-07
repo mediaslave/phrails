@@ -19,7 +19,7 @@ class PhrailsMigration extends Model{
 	 **/
 	public function save()
 	{
-		$this->where('version = ?', $this->version);
-		return $this->save();
+		$s = $this->conn()->prepare("INSERT INTO `" . $this->database_name() . "`.`" . $this->table_name() . "` SET version = ?;");
+		return $s->execute(array($this->version));
 	}
 }
