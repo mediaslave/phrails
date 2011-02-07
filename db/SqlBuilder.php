@@ -36,7 +36,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function select($select, $replace = true)
+	final public function select($select, $replace = true)
 	{
 		$this->Hash->select($this->Hash->select() . ", $select");
 		if($replace)
@@ -62,7 +62,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function addJoinFromRelationship($relationship)
+	final public function addJoinFromRelationship($relationship)
 	{		
 		$join = '';		
 		if($relationship->type == 'has-one' || $relationship->type == 'belongs-to'){
@@ -95,7 +95,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function from($db, $table, $as=null)
+	final public function from($db, $table, $as=null)
 	{
 		$from = $this->adapter()->tick($db) . '.' . $this->adapter()->tick($table);
 		if($as !== null)
@@ -110,7 +110,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function where(/*$conditions, $args*/)
+	final public function where(/*$conditions, $args*/)
 	{
 		$args = func_get_args();
 		$where = array_shift($args);
@@ -126,7 +126,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function order($order)
+	final public function order($order)
 	{
 		$this->Hash->order($order);
 		return $this;
@@ -141,7 +141,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function limit($offset, $limit=null)
+	final public function limit($offset, $limit=null)
 	{
 		$this->Hash->offset($offset);
 		$this->Hash->limit($limit);
@@ -158,7 +158,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function group($group)
+	final public function group($group)
 	{
 		$this->Hash->group($group);
 		return $this;
@@ -170,7 +170,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function having($having)
+	final public function having($having)
 	{
 		$this->Hash->having($having);
 		return $this;
@@ -182,7 +182,7 @@ class SqlBuilder
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function build($method)
+	final protected function build($method)
 	{
 		$this->Hash->props($this->props());
 		$method = 'build' . ucfirst($method);
@@ -195,7 +195,7 @@ class SqlBuilder
 	 * @return DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
-	public function adapter()
+	final public function adapter()
 	{
 		return self::$adapter;
 	}
@@ -205,7 +205,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function conn()
+	final public function conn()
 	{
 		return $this->adapter()->conn();
 	}
@@ -217,7 +217,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function raw($value=true)
+	final public function raw($value=true)
 	{
 		$this->raw = $value;
 		return $this;
@@ -229,7 +229,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function isRaw()
+	final public function isRaw()
 	{
 		return $this->raw;
 	}
@@ -251,7 +251,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function reset()
+	final protected function reset()
 	{
 		$this->Hash = new SqlBuilderHash();
 		$this->from($this->database_name(), $this->table_name(), $this->alias());

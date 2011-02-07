@@ -123,7 +123,7 @@ abstract class Model extends ActiveRecord
 	 * @return Model
 	 * @author Justin Palmer
 	 **/
-	static public function noo(array $props = array())
+	final static public function noo(array $props = array())
 	{
 		$model = get_called_class();
 		return new $model($props);
@@ -132,6 +132,9 @@ abstract class Model extends ActiveRecord
 	/**
 	 * Save the model
 	 *
+	 * @todo there has to be a better way to do this.  We should not return false,
+	 * but we also do not want every save call wrapped in a try/catch block.
+	 * 
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
@@ -155,7 +158,7 @@ abstract class Model extends ActiveRecord
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function validate()
+	final public function validate()
 	{
 		//Make sure we are not a csrf haxor.
 		if(!FormBuilder::isValidAuthenticityToken()){
@@ -178,7 +181,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function __get($key)
+	final public function __get($key)
 	{
 		//if there is a property with this key in the model return the value.
 		if($this->props->isKey($key)){
@@ -202,7 +205,7 @@ abstract class Model extends ActiveRecord
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function __set($key, $value)
+	final public function __set($key, $value)
 	{
 		if(!$this->columns->isKey($key) && !($this->schema->relationships instanceof Hash))
 			throw new NoColumnInTableException($key, $this->table_name());
@@ -224,7 +227,7 @@ abstract class Model extends ActiveRecord
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function hasProperty($column)
+	final public function hasProperty($column)
 	{	
 		if(!$this->columns->isKey($column))
 			throw new NoColumnInTableException($column, $this->table_name());
@@ -236,7 +239,7 @@ abstract class Model extends ActiveRecord
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function hasErrors()
+	final public function hasErrors()
 	{
 		return (empty($this->errors)) ? false : true;
 	}
@@ -246,7 +249,7 @@ abstract class Model extends ActiveRecord
 	 * @return array
 	 * @author Justin Palmer
 	 **/
-	public function errors()
+	final public function errors()
 	{
 		return $this->errors;
 	}
@@ -256,7 +259,7 @@ abstract class Model extends ActiveRecord
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function columns()
+	final public function columns()
 	{
 		return $this->columns;
 	}
@@ -267,7 +270,7 @@ abstract class Model extends ActiveRecord
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function props($props=array())
+	final public function props($props=array())
 	{
 		if(empty($props)){
 			return $this->props;
@@ -281,7 +284,7 @@ abstract class Model extends ActiveRecord
 	 * @return Schema
 	 * @author Justin Palmer
 	 **/
-	public function schema()
+	final public function schema()
 	{
 		return $this->schema;
 	}
@@ -291,7 +294,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function alias()
+	final public function alias()
 	{
 		return $this->alias;
 	}
@@ -301,7 +304,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function table_name()
+	final public function table_name()
 	{
 		return $this->table_name;
 	}
@@ -311,7 +314,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function database_name()
+	final public function database_name()
 	{
 		return $this->database_name;
 	}
@@ -321,7 +324,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function primary_key()
+	final public function primary_key()
 	{
 		return $this->primary_key;
 	}
@@ -331,7 +334,7 @@ abstract class Model extends ActiveRecord
 	 * @return ModelFilters
 	 * @author Justin Palmer
 	 **/
-	public function filters()
+	final public function filters()
 	{
 		$this->filters->setModelClassName(get_class($this));
 		return $this->filters;
@@ -345,7 +348,7 @@ abstract class Model extends ActiveRecord
 	 * @return boolean if any filter returns false or throws an exception return false.
 	 * @author Justin Palmer
 	 **/
-	protected function filter($filter)
+	final protected function filter($filter)
 	{
 		$filterType = $filter;
 		$filters = $this->filters()->get($filter);
@@ -379,7 +382,7 @@ abstract class Model extends ActiveRecord
 	 * @return DataType
 	 * @author Justin Palmer
 	 **/
-	public function objectify($key)
+	final public function objectify($key)
 	{
 		//if there is a property with this key in the model return the value.
 		if($this->columns->isKey($key)){

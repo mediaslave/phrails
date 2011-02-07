@@ -3,12 +3,12 @@
 class PhrailsMigration extends Model{
 	
 	public function init(){
-		$stmt = self::$db->pdo->prepare('CREATE TABLE IF NOT EXISTS `phrails_migrations` (
+		$stmt = $this->conn()->prepare('CREATE TABLE IF NOT EXISTS `phrails_migrations` (
 		  				`version` varchar(14) NOT NULL,
 						  KEY `version` (`version`)
 						) ENGINE=MyISAM');
 		$stmt->execute();
-		$this->columns = $this->prepareShowColumns($this->showColumns());
+		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name);
 	}
 	
 	/**
@@ -19,7 +19,7 @@ class PhrailsMigration extends Model{
 	 **/
 	public function save()
 	{
-		$s = self::$db->pdo->prepare("INSERT INTO `" . $this->database_name() . "`.`" . $this->table_name() . "` SET version=?;");
-		return $s->execute(array($this->version));
+		$this->where('version = ?', $this->version);
+		return $this->save();
 	}
 }

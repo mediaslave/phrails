@@ -51,7 +51,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function create()
+	final public function create()
 	{
 		$primary = $this->primary_key();
 		$this->from($this->database_name(), $this->table_name());
@@ -71,7 +71,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function update()
+	final public function update()
 	{
 		$primary = $this->primary_key();
 		$p_value = $this->$primary;
@@ -91,7 +91,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function updateProps(/* properties */)
+	final public function updateProps(/* properties */)
 	{
 		$args = func_get_args();
 		if(sizeof($args) == 0)
@@ -127,7 +127,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function find(/* id's */)
+	final public function find(/* id's */)
 	{
 		$args = func_get_args();
 		$forceArray = false;
@@ -147,7 +147,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function findAll()
+	final public function findAll()
 	{
 		return $this->processRead($this->build(DatabaseAdapter::READ), true);
 	}
@@ -157,7 +157,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function findFirst()
+	final public function findFirst()
 	{
 		$this->limit(1);
 		return $this->processRead($this->build(DatabaseAdapter::READ), false);
@@ -168,7 +168,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function count($column='*', $as='count', $distinct=null)
+	final public function count($column='*', $as='count', $distinct=null)
 	{
 		$this->raw();
 		$this->select('');
@@ -181,7 +181,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function delete(/* id's */)
+	final public function delete(/* id's */)
 	{
 		$args = func_get_args();
 		$primary = $this->primary_key();
@@ -202,7 +202,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return int
 	 * @author Justin Palmer
 	 **/
-	public function lastInsertId()
+	final public function lastInsertId()
 	{
 		return $this->adapter()->lastInsertId();
 	}
@@ -212,7 +212,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function lastQuery()
+	final public function lastQuery()
 	{
 		return '';
 	}
@@ -222,7 +222,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function __call($method, $params)
+	final public function __call($method, $params)
 	{
 		$finder = $this->findDynamicFinder($method);
 		
@@ -252,7 +252,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function join($args)
+	final public function join($args)
 	{
 		$args = func_get_args();
 		foreach($args as $key){
@@ -268,7 +268,7 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function lazy($result, $joins, $isLazy=false)
+	final protected function lazy($result, $joins, $isLazy=false)
 	{	
 		foreach($joins as $key => $query){
 			$prop = $query->prop;
@@ -278,6 +278,7 @@ class ActiveRecord extends SqlBuilder
 				 		->where($query->where . $query->on, $this->$prop)
 				 		->order($query->order_by);
 			$sqlObject = $this->build(DatabaseAdapter::READ);
+			//new \Dbug($sqlObject, '', false, __FILE__, __LINE__);
 			//Function to set the fetchmode for the class
 			$customFetchMode = function($statement, $klass){
 				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);
@@ -323,6 +324,8 @@ class ActiveRecord extends SqlBuilder
 	/**
 	 * create comma separate question marks for the size of the array
 	 *
+	 * @todo should this be in the adapter?
+	 * 
 	 * @return string
 	 * @author Justin Palmer
 	 **/

@@ -29,7 +29,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 * @var Hash
 	 */
-	protected $ColumnsCache = null;
+	static protected $ColumnsCache = null;
 	/**
 	 * Constructor
 	 *
@@ -39,7 +39,8 @@ abstract class DatabaseAdapter
 	public function __construct()
 	{
 		$this->conn = DatabaseConnection::connect();
-		$this->ColumnsCache = new Hash();
+		if(!(self::$ColumnsCache instanceof Hash))
+			self::$ColumnsCache = new Hash();
 	}
 	
 	/**

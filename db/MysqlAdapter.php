@@ -19,15 +19,15 @@ class MysqlAdapter extends AnsiAdapter
 	public function cacheColumns($class_name, $table_name)
 	{
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
-		if($this->ColumnsCache->isKey($class_name)){
-			return $this->ColumnsCache->get($class_name);
+		if(self::$ColumnsCache->isKey($class_name)){
+			return self::$ColumnsCache->get($class_name);
 		}else{
 			$cols = $this->showColumns($table_name)->fetchAll(PDO::FETCH_OBJ);
 			$cache = new Hash();
 			foreach($cols as $column){
 				$cache->set($column->Field, $column);
 			}
-			$this->ColumnsCache->set($class_name, $cache);
+			self::$ColumnsCache->set($class_name, $cache);
 			return $cache;	
 		}
 	}
