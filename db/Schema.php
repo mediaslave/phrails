@@ -215,10 +215,10 @@ class Schema
 	 * @return Schema
 	 * @author Justin Palmer
 	 **/
-	public function belongsTo($name)
+	public function hasOne($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));
+		return $this->addRelationship($name, 'has-one')->className(Inflections::singularize($name));
 	}
 	/**
 	 * has many
@@ -237,10 +237,10 @@ class Schema
 	 * @return Schema
 	 * @author Justin Palmer
 	 **/
-	public function hasOne($name)
+	public function belongsTo($name)
 	{	
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'has-one')->className(Inflections::singularize($name));	
+		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));	
 	}
 	/**
 	 * Add the option to the last relationship.
@@ -256,7 +256,7 @@ class Schema
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
 		
-		if($name == 'prop' && ($options->type == 'has-many' || $options->type == 'belongs-to')){
+		if($name == 'prop' && ($options->type == 'has-many' || $options->type == 'has-one')){
 			$value = $this->model->primary_key();
 		}
 		$options->$key = $value;
@@ -302,11 +302,11 @@ class Schema
 		$options = $this->relationships->get($name);
 		$ret = '';
 		switch($options->type){
-			case ($options->type =='has-one' ):
+			case ($options->type =='belongs-to' ):
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
 				$ret = $options->alias . '.' . $this->model->primary_key() . ' = ?';
 				break; 
-			case ($options->type == 'has-many' || $options->type == 'belongs-to'):
+			case ($options->type == 'has-many' || $options->type == 'has-one'):
 				$ret = $options->alias . "." . $options->foreign_key . " = ?";
 				break;
 		}

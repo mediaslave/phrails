@@ -134,8 +134,8 @@ class ActiveRecord extends SqlBuilder
 		$primary = $this->primary_key();
 		if($this->$primary !== null)
 			$args[] = $this->$primary;
-	 	if(sizeof($args) > 0){
-			if(sizeof($args) > 1) $forceArray = true;
+	 	if(count($args) > 0){
+			if(count($args) > 1) $forceArray = true;
 			$question_marks = $this->getQuestionMarks($args);
 			$this->where("$primary IN ($question_marks)", $args);
 		}
@@ -352,7 +352,7 @@ class ActiveRecord extends SqlBuilder
 		$this->setFetchMode($customFetchMode, $customFetchClass);
 		$this->Statement->execute(array_values($object->params));
 		if($forceArray == false && $this->Statement->rowCount() == 0)
-			//throw new RecordNotFoundException($object->sql, $object->params);
+			throw new RecordNotFoundException($object->sql, $object->params);
 		if($forceArray == false && $this->Statement->rowCount() == 1){
 			return $this->Statement->fetch();
 		}
