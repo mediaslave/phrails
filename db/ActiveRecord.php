@@ -318,7 +318,7 @@ class ActiveRecord extends SqlBuilder
 			}
 		}
 		if($finder === null)
-			throw new Exception('No dynamic finder found :(');
+			throw new UnknownActiveRecordDynamicFinderException($method);
 		return $finder;
 	}	
 	/**
@@ -352,7 +352,7 @@ class ActiveRecord extends SqlBuilder
 		$this->setFetchMode($customFetchMode, $customFetchClass);
 		$this->Statement->execute(array_values($object->params));
 		if($forceArray == false && $this->Statement->rowCount() == 0)
-			throw new RecordNotFoundException($object->sql, $object->params);
+			//throw new RecordNotFoundException($object->sql, $object->params);
 		if($forceArray == false && $this->Statement->rowCount() == 1){
 			return $this->Statement->fetch();
 		}
