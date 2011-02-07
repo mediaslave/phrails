@@ -3,261 +3,257 @@
  * Build sql statements
  *
  * @todo named_scope
+ * 	
+ * @todo This really sucks.  SqlBuilder really should not be building this join.  The adapter should be.
+ * Do to time constraints this is going to have to wait. self::join should be able to take multiple
+ * relationships and pass the "config" off to the adapter for build.
  * 
  * @package db
  * @author Justin Palmer
  */
 class SqlBuilder
 {
-	/**
-	 * The current model.
-	 *
-	 * @author Justin Palmer
-	 * @var Model
-	 */
-	public $model;
-	/**
-	 * The select statement that should added to the query.
-	 *
-	 * @author Justin Palmer
-	 * @var string
-	 */
-	private $select;
-	/**
-	 * The conditions for the current query.
-	 *
-	 * @author Justin Palmer
-	 * @var array
-	 */
-	public  $conditions;
-	/**
-	 * The order for the current query.
-	 *
-	 * @author Justin Palmer
-	 * @var array
-	 */
-	private $order;
-	/**
-	 * The limit for the current query.
-	 *
-	 * @author Justin Palmer
-	 * @var string
-	 */
-	private $limit;
-	/**
-	 * The relationships that are available for the the current model.
-	 *
-	 * @author Justin Palmer
-	 * @var array
-	 */
-	private $relationships;
-	/**
-	 * The has_many relationships for the current model.
-	 *
-	 * @author Justin Palmer
-	 * @var array
-	 */
-	private $has_many;
+	static private $adapter = null;
 	
-	private $is_raw_mode = false;
-	/**
-	 * what to do this this?
-	 */
-	private $NamedScope;
+	private $Hash;
+	
+	private $raw=false;
 	/**
 	 * Constructor
 	 *
 	 * @return SqlBuilder
 	 * @author Justin Palmer
 	 **/
-	public function __construct($model)
-	{
-		//print '<br/><br/><br/>';
-		//var_dump($db);
-		//print '<br/><br/><br/>';
-		$this->model = $model;
-		$this->NamedScope = new Hash();
-		//Resets all class level vars to their default states.
+	public function __construct()
+	{	
+		self::$adapter = DatabaseAdapter::get();
 		$this->reset();
 	}
-	/**
-	 * build the additional items to the query
-	 *
-	 * @return stdClass
-	 * @author Justin Palmer
-	 **/
-	public function build($query, $no_as = false)
-	{
-		//print 'build';
-		
-		//Add the select
-		$query = str_replace('?', $this->select, $query);
-
-		if (!$no_as) {
-      		$query .= ' AS ' . $this->model->alias();
-    	}
-			
-		//build all of the joins that are called by join()
-		$query .= $this->buildOneToOneJoins();
-		//class to hold the query and the params to return.
-		$result = new stdClass;
-		//any conditions?
-		if(!empty($this->conditions)){
-			$query .= ' WHERE ' . array_shift($this->conditions);
-			$conditions = $this->conditions;
-			if(sizeof($conditions) == 1 && is_array($conditions[0])){
-				$this->conditions = array_shift($conditions);
-			}
-		}
-		//any order?
-		if(!empty($this->order)){
-			$query .= ' ORDER BY ' . array_shift($this->order);
-		}
-		//any limit?
-		if($this->limit != ''){
-			$query .= ' LIMIT ' . $this->limit;
-		}
-		$result->params = array_merge($this->conditions, $this->order);
-		$result->query[] = $query;
-		foreach($this->has_many as $many){
-			$klass = $many->klass;
-			$obj = new $klass;
-			$result->query[$many->alias] = $many;
-		}
-		return $result;
-	}
-	/**
-	 * Add items to the select
-	 *
-	 * @return Adapter
-	 * @author Justin Palmer
-	 **/
-	public function select($string)
-	{
-		if($string != '')
-			$this->select = $string;
-		return $this->model;
-	}
 	
 	/**
-	 * Join the tables passed in based off the Schema.
+	 * select text snippet
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function join($args)
+	final public function select($select, $replace = true)
+	{
+		$this->Hash->select($this->Hash->select() . ", $select");
+		if($replace)
+			$this->Hash->select($select);
+		return $this;
+	}
+	
+	/**
+	 * count
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function join($join)
+	{
+		$this->Hash->join($join);
+		return $this;
+	}
+	
+	/**
+	 * build a join from a schema relationship
+	 * 
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function addJoinFromRelationship($relationship)
+	{		
+		$join = '';		
+		if($relationship->type == 'has-one' || $relationship->type == 'belongs-to'){
+			$this->raw();
+			$klass = $relationship->klass;
+			$obj = new $klass;
+			$on = str_replace('?', $this->alias() . "." . $relationship->prop, $relationship->on);
+			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "` 
+						 AS " . $relationship->alias . " 
+						  ON " . $on . " ";
+		}
+		self::join($join);
+	}
+	
+	/**
+	 * count
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function count($column=null, $as=null, $distinct='')
+	{
+		$this->Hash->count($column, $as, $distinct);
+		return $this;
+	}
+	
+	/**
+	 * table
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function from($db, $table, $as=null)
+	{
+		$from = $this->adapter()->tick($db) . '.' . $this->adapter()->tick($table);
+		if($as !== null)
+			$from .= ' AS ' . $this->adapter()->tick($as);
+		$this->Hash->from($from);
+		return $this;
+	}
+	
+	/**
+	 * where
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function where(/*$conditions, $args*/)
 	{
 		$args = func_get_args();
-		foreach($args as $key){
-			if(!$this->model->schema()->relationships->isKey($key))
-				throw new NoSchemaRelationshipDefinedException($this->model->table_name(), $key);
-			$this->relationships[] = $this->model->schema()->relationships->get($key);
-		}
-		return $this->model;
+		$where = array_shift($args);
+		($this->Hash->where() != '') ? $this->Hash->where($this->Hash->where() . ' AND ' . $where)
+								: $this->Hash->where($where);
+		$this->Hash->whereArgs(array_merge($this->Hash->whereArgs(), $args));
+		return $this;		
 	}
 	
 	/**
-	 * Build all the one to one joins as inners
+	 * order
 	 *
-	 * @return string
+	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function buildOneToOneJoins()
+	final public function order($order)
 	{
-		$joins = '';
-		if(!empty($this->relationships)){
-			foreach($this->relationships as $join){
-				
-				switch($join->type){
-					case 'has-many':
-						$this->has_many[] = $join;
-						break;
-					case 'has-one' || 'belongs-to':
-						$this->is_raw_mode = true;
-						$klass = $join->klass;
-						$obj = new $klass;
-						$on = str_replace('?', $this->model->alias() . "." . $join->prop, $join->on);
-						$joins .= " INNER JOIN `" . $obj->database_name() . "`.`" . $join->table . "` 
-									 AS " . $join->alias . " 
-									  ON " . $on . " ";
-						break;
-				}
-			}
-		}
-		return $joins;
+		$this->Hash->order($order);
+		return $this;
+	}
+	
+	/**
+	 * If limit is not provided the function assumes you want the offset to be zero (0) and the limit to
+	 * be the first parameter passed in.
+	 *
+	 * @param integer $offset
+	 * @param integer $limit
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function limit($offset, $limit=null)
+	{
+		$this->Hash->offset($offset);
+		$this->Hash->limit($limit);
+		if($limit === null){
+			$this->Hash->offset(0);
+			$this->Hash->limit($offset);
+		}	
+		return $this;
+	}
+	
+	/**
+	 * group
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function group($group)
+	{
+		$this->Hash->group($group);
+		return $this;
+	}
+	
+	/**
+	 * having
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function having($having)
+	{
+		$this->Hash->having($having);
+		return $this;
+	}
+	
+	/**
+	 * Build the query.  Pass the build onto Adapter.
+	 *
+	 * @return Hash
+	 * @author Justin Palmer
+	 **/
+	final protected function build($method)
+	{
+		$this->Hash->props($this->props());
+		$method = 'build' . ucfirst($method);
+		return $this->adapter()->$method($this->Hash);
+	}
+	
+	/**
+	 * return the adapter for use.
+	 *
+	 * @return DatabaseAdapter
+	 * @author Justin Palmer
+	 **/
+	final public function adapter()
+	{
+		return self::$adapter;
+	}
+	/**
+	 * get the connection from the adapter
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function conn()
+	{
+		return $this->adapter()->conn();
+	}
+	/**
+	 * Set the fetchmode to take into account the class or not
+	 * 
+	 * If not, it will return the raw results from the pdo
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function raw($value=true)
+	{
+		$this->raw = $value;
+		return $this;
+	}
+	
+	/**
+	 * Is the mode raw
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function isRaw()
+	{
+		return $this->raw;
 	}
 
 	/**
-	 * Is the builder forcing the Adapter into raw mode?
+	 * export the hash
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function isRawMode()
+	public function export()
 	{
-		return ($this->is_raw_mode);
+		return $this->Hash->export();
 	}
+
 	/**
-	 * @deprecated
-	 * @see where
-	 **/
-	public function conditions($conditions)
-	{
-		return $this->where($conditions);
-	}	
-	/**
-	 * Add items to the where claus of the query
-	 *
-	 * @return Model
-	 * @author Justin Palmer
-	 **/
-	public function where($where)
-	{
-		$where = func_get_args();
-		$this->conditions = $where;
-		return $this->model;
-	}
-	
-	/**
-	* Add the order
-	*
-	* @return Adapter
-	* @author Justin Palmer
-	**/
-	public function order($order)
-	{
-		$order = func_get_args();
-		$this->order = $order;
-		return $this->model;
-	}	
-	/**
-	 * Add the limit
-	 *
-	 * @return Adapter
-	 * @author Justin Palmer
-	 **/
-	public function limit($min, $max=null)
-	{
-		$this->limit = $min;
-		if($max !== null)
-			$this->limit = $min . ',' . $max;
-		return $this->model;
-	}
-	/**
-	 * Reset the conditions.
+	 * Reset to factory default
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function reset()
+	final protected function reset()
 	{
-		$this->as = '';
-		$this->select = '*';
-		$this->conditions = array();
-		$this->order = array();
-		$this->limit = '';
-		$this->relationships = array();
-		$this->has_many = array();
-		$this->is_raw_mode = false;
+		$this->Hash = new SqlBuilderHash();
+		$this->from($this->database_name(), $this->table_name(), $this->alias());
 	}
 }

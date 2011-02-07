@@ -30,7 +30,7 @@ abstract class Migration extends Model
 	function __construct()
 	{
 		parent::__construct();
-		$this->config = $this->db()->getConfig();
+		$this->config = DatabaseConfiguration::getConfig();
 		$this->stack = array();
 	}
 	
@@ -542,5 +542,4 @@ abstract class Migration extends Model
 	abstract public function down();
 	
 	public function init(){}
-	
 }

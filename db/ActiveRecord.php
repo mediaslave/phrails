@@ -1,0 +1,389 @@
+<?php
+/**
+ * ActiveRecord
+ *
+ * @package db
+ * @author Justin Palmer
+ */				
+class ActiveRecord extends SqlBuilder
+{
+	/**
+	 * PDOStatement
+	 * 
+	 * @var PDOStatement
+	 */
+	private $Statement;
+	/**
+	 * Save
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function save()
+	{
+		try{
+			$this->adapter()->beginTransaction();
+			$this->filter('beforeSave');
+			$primary = $this->primary_key();
+			if($this->$primary === null){
+				$this->filter('beforeCreate');
+				if(!$this->create()) new FailedActiveRecordCreateUpdateException();
+				$this->filter('afterCreate');
+			}else{
+				$this->filter('beforeUpdate');
+				if(!$this->update()) new FailedActiveRecordCreateUpdateException();
+				$this->filter('afterUpdate');
+			}
+			$this->filter('afterSave');
+			$this->adapter()->commit();
+			$this->filter('afterCommit');
+		}catch(Exception $e){
+			$this->adapter()->rollBack();
+			throw $e;
+		}
+		return true;
+	}
+	/**
+	 * insert
+	 * 
+	 * Careful no validation!
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function create()
+	{
+		$primary = $this->primary_key();
+		$this->from($this->database_name(), $this->table_name());
+		if($this->columns->isKey('created_at')){
+			$this->created_at = date('Y-m-d H:i:s');
+		}
+		$query = $this->build(DatabaseAdapter::CREATE);
+		$boolean = $this->processCud($query);
+		$this->$primary = $this->lastInsertId();
+		return $boolean;
+	}
+	/**
+	 * update
+	 * 
+	 * Careful no validation!
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function update()
+	{
+		$primary = $this->primary_key();
+		$p_value = $this->$primary;
+		$this->$primary = null;
+		$this->from($this->database_name(), $this->table_name());
+		$this->where("$primary = ?", $p_value);
+		if($this->columns->isKey('updated_at')){
+			$this->updated_at = date('Y-m-d H:i:s');
+		}
+		$query = $this->build(DatabaseAdapter::UPDATE);
+		$this->$primary = $p_value;
+		return $this->processCud($query);
+	}
+	/**
+	 * Update the props passed in.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function updateProps(/* properties */)
+	{
+		$args = func_get_args();
+		if(sizeof($args) == 0)
+			throw new Exception('updateProps expects that you pass the properties you would like to update to it.');
+
+		//Turn args into keys of an array to do some diff and intersect on it.
+		$args_as_keys = array_fill_keys($args, null);
+		//Find invalid columns and throw an exception if there are some
+		$invalid_columns = array_diff_key($args_as_keys, $this->props()->export());
+		if(sizeof($invalid_columns) > 0)
+			throw new ActiveRecordInvalidColumnsForUpdateException(get_class($this), array_keys($invalid_columns));
+		
+		$props = array_intersect_key($this->props()->export(), $args_as_keys);
+		$model = get_class($this);
+		$model = new $model($props);
+		$model->id = $this->id;
+		return $model->save();
+	}
+	/**
+	 * Find the id's specified and with the primary key
+	 * 
+	 * If no id's and no primary key in the model throw ActiveRecordNoIdException
+	 * 
+	 * Example:
+	 * <code>
+	 * Person::noo()->where('active = ?', 1)->find(23)
+	 * Person::noo()->find(1,2,3,4)
+	 * </code>
+	 * 
+	 * @todo $this->where("$primary IN...") does not use the adapter and should to allow
+	 * nosql and other adapters to modify how that works.
+	 * 
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function find(/* id's */)
+	{
+		$args = func_get_args();
+		$forceArray = false;
+		$primary = $this->primary_key();
+		if($this->$primary !== null)
+			$args[] = $this->$primary;
+	 	if(sizeof($args) > 0){
+			if(sizeof($args) > 1) $forceArray = true;
+			$question_marks = $this->getQuestionMarks($args);
+			$this->where("$primary IN ($question_marks)", $args);
+		}
+		return $this->processRead($this->build(DatabaseAdapter::READ), $forceArray);
+	}
+	/**
+	 * Find all records
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function findAll()
+	{
+		return $this->processRead($this->build(DatabaseAdapter::READ), true);
+	}
+	/**
+	 * findFirst
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function findFirst()
+	{
+		$this->limit(1);
+		return $this->processRead($this->build(DatabaseAdapter::READ), false);
+	}
+	/**
+	 * count records
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function count($column='*', $as='count', $distinct=null)
+	{
+		$this->raw();
+		$this->select('');
+		parent::count($column, $as, $distinct);
+		return $this->find();
+	}
+	/**
+	 * delete records
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function delete(/* id's */)
+	{
+		$args = func_get_args();
+		$primary = $this->primary_key();
+		if($this->$primary !== null)
+			$args[] = $this->$primary; 	
+ 		if(sizeof($args) > 0){
+			if(sizeof($args) > 1) $forceArray = true;
+			$question_marks = $this->getQuestionMarks($args);
+			$this->where("$primary IN ($question_marks)", $args);
+		}
+		$this->from($this->database_name(), $this->table_name());
+		$query = $this->build(DatabaseAdapter::DELETE);
+		return $this->processCud($query);
+	}
+	/**
+	 * Get the last insert id.
+	 *
+	 * @return int
+	 * @author Justin Palmer
+	 **/
+	final public function lastInsertId()
+	{
+		return $this->adapter()->lastInsertId();
+	}
+	/**
+	 * Get the last query
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function lastQuery()
+	{
+		return '';
+	}
+	/**
+	 * Call a dynamic finder
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function __call($method, $params)
+	{
+		$finder = $this->findDynamicFinder($method);
+		
+		$underscore = Inflections::underscore($finder->props);
+		
+		$and = explode('_and_', $underscore);
+		$where = implode(' = ?  AND ', $and);
+		
+		$or = explode('_or_', $where);
+		if(sizeof($and) > 1 and sizeof($or) > 1)
+			throw new Exception('no and/or combo');
+			
+		if((sizeof($and) == 1 && sizeof($or) == 1) && sizeof($params) > 1){
+			$where = "$underscore IN (" . $this->getQuestionMarks($params) . ")";
+		}else{
+			$where = implode(' = ?  OR ', $or);
+			$where .= ' = ?';
+		}
+		
+		$this->where('(' . $where . ')', $params);
+		$method = $finder->method;
+		return $this->$method();
+	}
+	/**
+	 * Join the tables passed in based off the Schema.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final public function join($args)
+	{
+		$args = func_get_args();
+		foreach($args as $key){
+			if(!$this->schema()->relationships->isKey($key))
+				throw new NoSchemaRelationshipDefinedException($this->table_name(), $key);
+			$this->addJoinFromRelationship($this->schema()->relationships->get($key));
+		}
+		return $this;
+	}
+	/**
+	 * Add the joins to the result
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	final protected function lazy($result, $joins, $isLazy=false)
+	{	
+		foreach($joins as $key => $query){
+			$prop = $query->prop;
+			$obj = $this->select($query->alias .".*");
+			$obj = parent::join($query->join)
+				 		->from($this->database_name(), $query->table, $query->alias)
+				 		->where($query->where . $query->on, $this->$prop)
+				 		->order($query->order_by);
+			$sqlObject = $this->build(DatabaseAdapter::READ);
+			//new \Dbug($sqlObject, '', false, __FILE__, __LINE__);
+			//Function to set the fetchmode for the class
+			$customFetchMode = function($statement, $klass){
+				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);
+			};
+			//What should we return.
+			if($query->type == 'has-one' || $query->type == 'belongs-to'){
+				try{
+					$result->$key = $this->processRead($sqlObject, false, $customFetchMode, $query->klass);
+				}catch(RecordNotFoundException $e){
+					$result->$key = null;
+				}
+			}else{
+				$result->$key = $this->processRead($sqlObject, true, $customFetchMode, $query->klass);
+			}
+		}	
+		return ($isLazy) ? $result->$key : $result;
+	}
+	/**
+	 * See if the dynamic finder is available.
+	 * Only used by __call
+	 *
+	 * @param string $method - Method from __call
+	 * @return stdClass
+	 * @author Justin Palmer
+	 **/
+	private function findDynamicFinder($method)
+	{
+		$registered_finders = array('findFirst', 'find', 'findAll', 'count', 'delete');
+		$finder = null;
+		foreach(array_values($registered_finders) as $dynamic_finder){
+			$length = strlen($dynamic_finder) + 2;
+			if(substr($method, 0, $length) == $dynamic_finder . 'By'){
+				$props = substr($method, $length);
+				$finder = new stdClass;
+				$finder->props = $props;
+				$finder->method = $dynamic_finder;
+			}
+		}
+		if($finder === null)
+			throw new Exception('No dynamic finder found :(');
+		return $finder;
+	}	
+	/**
+	 * create comma separate question marks for the size of the array
+	 *
+	 * @todo should this be in the adapter?
+	 * 
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	private function getQuestionMarks($args)
+	{
+		$question_marks = '';
+		for($i=0; $i < sizeof($args); $i++){
+			$question_marks .= "?,";
+		}
+		return rtrim($question_marks, ',');
+	}
+	/**
+	 * Process, execute the query and return the results.
+	 *
+	 * @param stdClass $object
+	 * @param boolean $forceArray
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function processRead($object, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
+	{
+		$this->reset();
+		$this->Statement = $this->conn()->prepare($object->sql);
+		$this->setFetchMode($customFetchMode, $customFetchClass);
+		$this->Statement->execute(array_values($object->params));
+		if($forceArray == false && $this->Statement->rowCount() == 0)
+			throw new RecordNotFoundException($object->sql, $object->params);
+		if($forceArray == false && $this->Statement->rowCount() == 1){
+			return $this->Statement->fetch();
+		}
+		return $this->Statement->fetchAll();
+	}
+	/**
+	 * process a C, U or D
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function processCud(stdClass $query)
+	{
+		$this->Statement = $this->conn()->prepare($query->sql);
+		return $this->Statement->execute($query->params);
+	}
+	/**
+	 * Set the fetch mode for the prepare query.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function setFetchMode($custom=null, $customClass=null)
+	{
+		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this));
+		if($this->isRaw()){
+			$this->Statement->setFetchMode(PDO::FETCH_OBJ);
+		}elseif($custom instanceof Closure){
+			$custom($this->Statement, $customClass);
+		}
+		//return raw to it's original state.
+		$this->raw(false);
+	}
+}
