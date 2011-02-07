@@ -22,7 +22,7 @@ class MysqlAdapter extends AnsiAdapter
 		if(self::$ColumnsCache->isKey($class_name)){
 			return self::$ColumnsCache->get($class_name);
 		}else{
-			$cols = $this->showColumns($table_name)->fetchAll(PDO::FETCH_OBJ);
+			$cols = $this->showColumns($table_name);
 			$cache = new Hash();
 			foreach($cols as $column){
 				$cache->set($column->Field, $column);

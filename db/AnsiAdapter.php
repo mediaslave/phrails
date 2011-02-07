@@ -69,7 +69,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function showColumns($table_name)
 	{
-		return $this->conn()->query("SHOW COLUMNS FROM `$table_name", PDO::FETCH_OBJ);
+		return $this->conn()->query("SHOW COLUMNS FROM `$table_name`", PDO::FETCH_OBJ)->fetchAll(PDO::FETCH_OBJ);
 	}
 	
 	/**
