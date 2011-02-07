@@ -137,13 +137,13 @@ abstract class Migration extends Model
 			$columns = rtrim($columns, ',');
 			$query = sprintf($this->statement, $columns);
 
-			$stmt = $this->db()->pdo->prepare($query);
+			$stmt = $this->conn()->prepare($query);
 
 			$this->log($query);
 		} else {
 			$query = $this->statement;
 
-      $stmt = $this->db()->pdo->prepare($query);
+      $stmt = $this->conn()->prepare($query);
 
       $this->log($query);
     }
@@ -165,7 +165,7 @@ abstract class Migration extends Model
 	 */
 	private function migrateIndex() {
 		foreach($this->alter_stack as $query){
-			$stmt = $this->db()->pdo->prepare($query);
+			$stmt = $this->conn()->prepare($query);
 
 			if($query != "" && !$stmt->execute()) {
 				print("ERROR: " . get_class($this) . "\n");

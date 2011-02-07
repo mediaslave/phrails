@@ -224,6 +224,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function __call($method, $params)
 	{
+		die($method);
 		$finder = $this->findDynamicFinder($method);
 		
 		$underscore = Inflections::underscore($finder->props);
