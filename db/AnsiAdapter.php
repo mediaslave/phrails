@@ -141,22 +141,23 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	public function buildCreate(SqlBuilderHash $Hash)
 	{
 		$sql = 'INSERT INTO ' . $Hash->from() . ' (';
-		$q_marks = '';
+		$values = '';
 		$params = array();
 		foreach($Hash->props()->export() as $column => $value){
 			if($value !== null && $value !== ''){
 				if($value instanceof Expression){
-					$sql .= $this->tick($column) . ' = ' . $value . ',';
+					$sql .= $this->tick($column) . ',';
+					$values .= $value . ',';
 				}else{
 					$sql .= $this->tick($column) . ',';
-					$q_marks .= '?,';
+					$values .= '?,';
 					$params[] = $value;
 				}
 			}
 		}
 		$sql = rtrim($sql, ',');
-		$q_marks = rtrim($q_marks, ',');
-		$sql .= ') VALUES (' . $q_marks . ')';
+		$values = rtrim($values, ',');
+		$sql .= ') VALUES (' . $values . ')';
 		return (object) array('sql' => $sql, 'params'=>$params);
 	}
 

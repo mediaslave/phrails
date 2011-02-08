@@ -34,24 +34,38 @@ class OptionsParser
 	 * @nodoc
 	 */
 	private function parse($options, array $optionExceptions=array(), $array=false)
-	{	
-		//Initialize return var
+	{
 		($array) ? $ret = array() : $ret = '';
+		if(is_array($options))
+			return self::convertTo($options, $optionExceptions, $array);
 		//Do some processing if we actually have some options.
 		if($options !== null && $options != ''){
 			//All options are comma seperated, make an array out of them.
 			$options = explode(',', $options);
-			foreach($options as $value){
-				//Get the key/value an array
-				$option = explode(':', $value);
-				$key = trim($option[0]);
-				$value = trim($option[1]);
-				if(array_key_exists($key, $optionExceptions))
-					$key = $optionExceptions[$key];
-				//Set the option into the appropriate return type.
-				($array) ? $ret[$key] = $value
-						 : $ret .= ' ' . $key . '="' . $value . '"';
-			}
+			$ret = self::convertTo($options, $optionExceptions, $array);
+		}
+		return $ret;
+	}
+	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	private function convertTo(array $options, array $optionExceptions, $array)
+	{
+		($array) ? $ret = array() : $ret = '';
+		foreach($options as $key => $value){
+			//Get the key/value an array
+			$option = explode(':', $value);
+			$key = trim($option[0]);
+			$value = trim($option[1]);
+			if(array_key_exists($key, $optionExceptions))
+				$key = $optionExceptions[$key];
+			//Set the option into the appropriate return type.
+			($array) ? $ret[$key] = $value
+					 : $ret .= ' ' . $key . '="' . $value . '"';
 		}
 		return $ret;
 	}
