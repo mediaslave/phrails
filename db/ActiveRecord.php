@@ -21,9 +21,8 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function save()
 	{
-		
-		$this->adapter()->beginTransaction();
 		try{
+			$this->adapter()->beginTransaction();
 			$this->filter('beforeSave');
 			$primary = $this->primary_key();
 			if($this->$primary === null){
