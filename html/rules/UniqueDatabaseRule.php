@@ -17,6 +17,7 @@ class UniqueDatabaseRule extends DatabaseRule
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		 return parent::run(!$this->model->isUnique($this->property, $this->value));
+		$record = $this->model->where('`' . $this->property . '` = ? ', $this->value)->count();
+		return parent::run($record->count);
 	 }
 } // END class Rule

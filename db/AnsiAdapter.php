@@ -1,12 +1,17 @@
 <?php
 /**
  * Mysql adapter
+ * 
+ * @todo shouldn't transaction, beginTransaction, commit, rollBack, savepoint all be in the
+ * DatabaseAdapter as abstract and the DatabaseAdapter implement Transactional?
  *
  * @package db
  * @author Justin Palmer
  */				
 abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 {
+	static private $savepoints = array();
+	static private $savepoint_counter = 0;
 	
 	/**
 	 * undocumented function
@@ -29,41 +34,82 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	}
 	
 	/**
-	 * undocumented function
+	 * Begin a transaction or set a savepoint
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function beginTransaction($savepoint=null)
 	{
-		return $this->conn()->beginTransaction();
+		//Figure out what savepoint query we are going to run depending on
+		//if the user sends in a name.
+		$savepoint_name = "sp" . self::$savepoint_counter;
+		if($savepoint !== null)
+			$savepoint_name = $savepoint;
+		//Check the counter and decide to really start a transaction
+		//or just add a savepoint.
+		if(count(self::$savepoints) == 0) {
+            $this->conn()->beginTransaction();
+            $this->savepoint($savepoint_name);
+        } else {
+            $this->savepoint($savepoint_name);
+        }
+        self::$savepoint_counter++;
 	}
 	
 	/**
-	 * undocumented function
+	 * Set a savepoint
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function savepoint($name)
+	{
+		//Register the save point with the savepoints array
+		self::$savepoints[] = $name;
+		$this->conn()->exec('SAVEPOINT ' . $name);
+	}
+	
+	/**
+	 * Release a savepoint or commit
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function commit()
 	{
-		return $this->conn()->commit();
+		$savepoint = array_pop(self::$savepoints);
+	    if(count(self::$savepoints) == 0) {
+            $this->conn()->commit();
+        } else {
+            $this->conn()->exec("RELEASE SAVEPOINT " . $savepoint);
+        }
+	 
 	}
 	
 	/**
-	 * undocumented function
+	 * Rollback to a savepoint or rollback
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function rollBack($savepoint=null)
 	{
-		return $this->conn()->rollBack();
+		$savepoint = array_pop(self::$savepoints);
+		if(count(self::$savepoints) == 0) {
+            $this->conn()->rollBack();
+        } else {
+            $this->conn()->exec("ROLLBACK TO SAVEPOINT " . $savepoint);
+        }
+		
 	}
 	
 	/**
 	 * Show columns
 	 *
+	 * We use this style instead of {query()} because up to 5.3.3.? there
+	 * was a bug in the cli.
+	 * 
 	 * @return void
 	 * @author Justin Palmer
 	 **/
