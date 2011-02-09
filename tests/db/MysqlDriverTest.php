@@ -8,7 +8,7 @@ class MysqlDriverTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
-	 * @covers MySqlDriver
+	 * @covers MysqlDriver
 	 **/
 	public function Mock_constructor()
 	{
