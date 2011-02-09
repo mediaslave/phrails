@@ -74,7 +74,7 @@ function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
 			include_all_in_folder($file, $extension, $do_folders);
 			continue;
 		}
-        include $file;
+        include_once $file;
     }
 }
 
