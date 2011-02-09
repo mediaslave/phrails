@@ -13,7 +13,7 @@ class MysqlAdapter extends AnsiAdapter
 	 * 
 	 * @todo move to base DatabaseAdapter and take a third parameter for the field to make into the Hash key.
 	 *
-	 * @return array
+	 * @return Hash
 	 * @author Justin Palmer
 	 **/
 	public function cacheColumns($class_name, $table_name)

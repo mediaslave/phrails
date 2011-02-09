@@ -8,8 +8,9 @@ class ExpressionTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 **/
-	public function Place_holder()
+	public function Expression_to_string()
 	{
-		$this->assertTrue(true);
+		$o = new Expression('NOW()');
+		$this->assertEquals('NOW()', $o->__toString());
 	}
 }

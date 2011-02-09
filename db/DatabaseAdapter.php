@@ -62,7 +62,7 @@ abstract class DatabaseAdapter
 	/**
 	 * Store the columns for a table.
 	 *
-	 * @return void
+	 * @return Hash
 	 * @author Justin Palmer
 	 **/
 	abstract public function cacheColumns($class_name, $table_name);
@@ -106,17 +106,15 @@ abstract class DatabaseAdapter
 	/**
 	 * Back tick the items needed
 	 * 
-	 * @param
-	 * @return void
+	 * @return array
 	 * @author Justin Palmer
 	 **/
 	abstract public function tick(/* items_to_tick */);
 	
-	
 	/**
-	 * limit
+	 * The limit string for a query.
 	 *
-	 * @return void
+	 * @return string
 	 * @author Justin Palmer
 	 **/
 	abstract protected function limit($offset, $limit);
@@ -124,7 +122,7 @@ abstract class DatabaseAdapter
 	/**
 	 * get the last insert id
 	 *
-	 * @return void
+	 * @return integer
 	 * @author Justin Palmer
 	 **/
 	abstract public function lastInsertId();
