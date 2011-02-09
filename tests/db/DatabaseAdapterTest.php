@@ -16,7 +16,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 	 * @test
 	 * @covers DatabaseAdapter
 	 **/
-	public function has_attributes()
+	public function Has_attributes()
 	{
 		$this->assertClassHasAttribute('conn', 'DatabaseAdapter');
 		$this->assertClassHasStaticAttribute('ColumnsCache', 'DatabaseAdapter');

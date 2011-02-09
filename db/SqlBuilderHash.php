@@ -12,7 +12,7 @@ class SqlBuilderHash extends Hash
 	function __construct() {
 		parent::__construct();
 		$this->select('*');
-		$this->whereArgs(array());
+		$this->doGetSet('where_args', array());
 		$this->doGetSet('count', array());
 	}
 
@@ -90,20 +90,19 @@ class SqlBuilderHash extends Hash
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function whereArgs($value=null)
+	public function whereArgs(array $value=array())
 	{
-		$array = array();
-		if(is_array($value)){
-			foreach(array_values($value) as $param){
-				if(is_array($param)){
-					$array = array_merge($array, $param);
-					continue;
-				}
-				$array[] = $param;
+		if(count($value) == 0)
+			return $this->get('where_args');
+		$array = $this->get('where_args');
+		foreach(array_values($value) as $param){
+			if(is_array($param)){
+				$array = array_merge($array, $param);
+				continue;
 			}
-			$value = $array;
+			$array[] = $param;
 		}
-		return $this->doGetSet('where_args', $value);
+		return $this->doGetSet('where_args', $array);
 	}
 	
 	/**
@@ -112,8 +111,11 @@ class SqlBuilderHash extends Hash
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function order($value=null)
+	public function order(array $value=array())
 	{
+		if(count($value) == 0){
+			return $this->get('order');
+		}
 		return $this->doGetSet('order', $value);
 	}
 	
@@ -182,8 +184,10 @@ class SqlBuilderHash extends Hash
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function props($value=null)
+	public function props(array $value=array())
 	{
+		if(count($value) == 0)
+			return $this->get('props');
 		return $this->doGetSet('props', $value);
 	}
 }

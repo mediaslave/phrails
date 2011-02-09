@@ -178,7 +178,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		if($Hash->having())
 			$sql .= ' HAVING ' . $Hash->having();
 		if($Hash->order())
-			$sql .= ' ORDER BY ' . $Hash->order();
+			$sql .= ' ORDER BY ' . implode(',', $Hash->order());
 		if($Hash->limit())
 			$sql .= $this->limit($Hash->offset(), $Hash->limit());
 		return (object) array('sql' => $sql, 'params'=>$Hash->whereArgs());

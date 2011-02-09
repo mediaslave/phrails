@@ -115,8 +115,8 @@ class SqlBuilder
 		$args = func_get_args();
 		$where = array_shift($args);
 		($this->Hash->where() != '') ? $this->Hash->where($this->Hash->where() . ' AND ' . $where)
-								: $this->Hash->where($where);
-		$this->Hash->whereArgs(array_merge($this->Hash->whereArgs(), $args));
+									 : $this->Hash->where($where);
+		$this->Hash->whereArgs($args);
 		return $this;		
 	}
 	
@@ -128,7 +128,7 @@ class SqlBuilder
 	 **/
 	final public function order($order)
 	{
-		$this->Hash->order($order);
+		$this->Hash->order(func_get_args());
 		return $this;
 	}
 	
