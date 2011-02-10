@@ -113,8 +113,6 @@ class ActiveRecord extends SqlBuilder
 	/**
 	 * Find the id's specified and with the primary key
 	 * 
-	 * If no id's and no primary key in the model throw ActiveRecordNoIdException
-	 * 
 	 * Example:
 	 * <code>
 	 * Person::noo()->where('active = ?', 1)->find(23)

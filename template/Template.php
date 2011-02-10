@@ -125,7 +125,7 @@ abstract class Template
 	{
 		ob_start();
 			extract($this->objectVars($this->Controller), EXTR_REFS);
-			$t = include $path;
+			include $path;
 			$pr_view = ob_get_contents();
 		ob_clean();
 			extract($this->objectVars(self::$ContentFor), EXTR_REFS);

@@ -126,7 +126,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	final public function order($order)
+	final public function order(/* $order, $order, ... */)
 	{
 		$this->Hash->order(func_get_args());
 		return $this;

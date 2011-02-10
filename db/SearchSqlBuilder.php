@@ -9,7 +9,7 @@ class SearchSqlBuilder
 	private $where = '';
 	private $where_params = array();
 	
-	function __construct(\Model $Model) {
+	function __construct(/* \Model $Model, ... */) {
 		$args = func_get_args();
 		$this->models = $args;
 	}

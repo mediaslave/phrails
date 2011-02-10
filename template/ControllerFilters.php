@@ -1,6 +1,7 @@
 <?php	
 /**
-* 
+* @todo refactor like ModelFilters.
+* @todo Use __call instead of defining each method that does the same thing
 */
 class ControllerFilters extends Filters
 {
@@ -76,9 +77,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function before($filter, $actions=null)
 	{
-		$args = func_get_args();
-		$filter = array_shift($args);
-		$this->add(self::before, $filter, $args);
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add(self::before, $filter, $actions);
 	}
 	
 	/**
@@ -89,9 +90,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function beforeExcept($filter, $actions)
 	{			
-		$args = func_get_args();
-		$filter = array_shift($args);
-		$this->add($this->exceptName(self::before), $filter, $args);
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add($this->exceptName(self::before), $filter, $actions);
 	}
 	
 	/**
@@ -102,9 +103,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function around($filter, $actions=null)
 	{
-		$args = func_get_args();
-		$filter = array_shift($args);
-		$this->add(self::around, $filter, $args);
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add(self::around, $filter, $actions);
 	}
 	
 	/**
@@ -115,10 +116,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function aroundExcept($filter, $actions)
 	{
-
-			$args = func_get_args();
-			$filter = array_shift($args);
-			$this->add($this->exceptName(self::around), $filter, $args);
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add($this->exceptName(self::around), $filter, $actions);
 	}
 	
 	/**
@@ -129,10 +129,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function after($filter, $actions=null)
 	{
-		
-			$args = func_get_args();
-			$filter = array_shift($args);
-			$this->add(self::after, $filter, $args);	
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add(self::after, $filter, $actions);	
 	}
 	/**
 	 * Set an after filter except.
@@ -142,9 +141,9 @@ class ControllerFilters extends Filters
 	 **/
 	public function afterExcept($filter, $actions)
 	{
-		$args = func_get_args();
-		$filter = array_shift($args);
-		$this->add($this->exceptName(self::after), $filter, $args);	
+		$actions = func_get_args();
+		$filter = array_shift($actions);
+		$this->add($this->exceptName(self::after), $filter, $actions);	
 	}
 	
 	/**
