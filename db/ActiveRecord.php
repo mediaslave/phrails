@@ -278,7 +278,6 @@ class ActiveRecord extends SqlBuilder
 				 		->where($query->where . $query->on, $this->$prop)
 				 		->order($query->order_by);
 			$sqlObject = $this->build(DatabaseAdapter::READ);
-			//new \Dbug($sqlObject, '', false, __FILE__, __LINE__);
 			//Function to set the fetchmode for the class
 			$customFetchMode = function($statement, $klass){
 				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);

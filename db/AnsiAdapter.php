@@ -177,7 +177,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 			$sql .= ' GROUP BY ' . $Hash->group();
 		if($Hash->having())
 			$sql .= ' HAVING ' . $Hash->having();
-		if($Hash->order())
+		if(count($Hash->order()) > 0)
 			$sql .= ' ORDER BY ' . implode(',', $Hash->order());
 		if($Hash->limit())
 			$sql .= $this->limit($Hash->offset(), $Hash->limit());

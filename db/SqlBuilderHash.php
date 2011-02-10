@@ -14,6 +14,7 @@ class SqlBuilderHash extends Hash
 		$this->select('*');
 		$this->doGetSet('where_args', array());
 		$this->doGetSet('count', array());
+		$this->doGetSet('order', array());
 	}
 
 	/**
@@ -116,7 +117,14 @@ class SqlBuilderHash extends Hash
 		if(count($value) == 0){
 			return $this->get('order');
 		}
-		return $this->doGetSet('order', $value);
+		$array = array();
+		//Squash all of the empty elements
+		foreach(array_values($value) as $item){
+			if($item != ''){
+				$array[] = $item;
+			}
+		}
+		return $this->doGetSet('order', $array);
 	}
 	
 	/**
@@ -184,9 +192,9 @@ class SqlBuilderHash extends Hash
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function props(array $value=array())
+	public function props(Hash $value=null)
 	{
-		if(count($value) == 0)
+		if($value == null)
 			return $this->get('props');
 		return $this->doGetSet('props', $value);
 	}
