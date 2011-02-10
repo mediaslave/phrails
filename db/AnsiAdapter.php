@@ -21,8 +21,8 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function transaction($callback)
 	{
-		$this->beginTransaction();
 		try{
+			$this->beginTransaction();
 			if(call_user_func($callback)){
 				return $this->commit();
 			}
@@ -169,8 +169,8 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function buildRead(SqlBuilderHash $Hash)
 	{
-		$sql = 'SELECT ' . $Hash->select() . ' ' . $this->buildCount($Hash) . ' 
-				FROM ' . $Hash->from() .  ' ' . $Hash->join();
+		$sql = 'SELECT ' . $Hash->select() . ' ' . $this->buildCount($Hash);
+		$sql .= ' FROM ' . $Hash->from() .  ' ' . $Hash->join();
 		if($Hash->where())
 			$sql .= ' WHERE ' . $Hash->where();
 		if($Hash->group())
@@ -192,8 +192,8 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function buildUpdate(SqlBuilderHash $Hash)
 	{
-		$sql = 'UPDATE ' . $Hash->from() . ' '. $Hash->join() . 
-		      ' SET ';
+		$sql = 'UPDATE ' . $Hash->from() . ' '. $Hash->join();
+		$sql .= ' SET ';
 		$params = array();
 		foreach($Hash->props()->export() as $column => $value){
 			if($value !== null && $value !== ''){
@@ -286,7 +286,10 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		if($Hash->select() != '')
 			$ret .= ', ';
 		foreach($Hash->count() as $count){
-			$ret .= "COUNT($count->distinct $count->column) AS $count->as, ";
+			$distinct = '';
+			if($count->distinct)
+				$distinct = 'DISTINCT ';
+			$ret .= "COUNT($distinct$count->column) AS $count->as, ";
 		}
 		return rtrim($ret, ', ');
 	}
