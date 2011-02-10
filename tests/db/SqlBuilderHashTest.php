@@ -106,8 +106,22 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$order = array('foo DESC');
 		$this->o->order($order);
 		$this->test['order'] = $order;
-		$this->assertEquals($this->test, $this->o->export());
+		$this->assertEquals($this->test, $this->o->export());		
 		$this->assertEquals($order, $this->o->order());
+	}
+	
+	/**
+	 * @test
+	 * @covers SqlBuilderHash::order
+	 **/
+	public function Order_when_array_contains_empty_string()
+	{
+		$order = array('', 'foo', '', 'bar');
+		$expected_order = array('foo', 'bar');
+		$this->o->order($order);
+		$this->test['order'] = $expected_order;
+		$this->assertEquals($this->test, $this->o->export());		
+		$this->assertEquals($expected_order, $this->o->order());
 	}
 	
 	/**

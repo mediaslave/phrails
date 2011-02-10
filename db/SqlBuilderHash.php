@@ -117,14 +117,12 @@ class SqlBuilderHash extends Hash
 		if(count($value) == 0){
 			return $this->get('order');
 		}
-		$array = array();
-		//Squash all of the empty elements
-		foreach(array_values($value) as $item){
-			if($item != ''){
-				$array[] = $item;
-			}
-		}
-		return $this->doGetSet('order', $array);
+		//Squash all of the empty string elements in the array
+		//if there are any.
+		$empties = array('');
+		$array = array_diff($value, $empties);
+		//array_values makes sure that the keys are re-indexed.
+		return $this->doGetSet('order', array_values($array));
 	}
 	
 	/**
