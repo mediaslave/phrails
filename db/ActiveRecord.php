@@ -188,7 +188,6 @@ class ActiveRecord extends SqlBuilder
 		if($this->$primary !== null)
 			$args[] = $this->$primary; 	
  		if(sizeof($args) > 0){
-			if(sizeof($args) > 1) $forceArray = true;
 			$question_marks = $this->getQuestionMarks($args);
 			$this->where("$primary IN ($question_marks)", $args);
 		}

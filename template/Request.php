@@ -1,13 +1,25 @@
 <?php
 /**
  * A Hash that holds all of the global vars, POST, GET, FILES, SESSION, COOKIE, REQUEST, SERVER, ENV
- * (in the above order when using get())
+ * (in the above order when using params())
  * 
  * @package util
  */
 class Request extends Hash
 {
 	private $do_unset = false;
+	
+	private $types = array('post'		=>'_POST',
+				   		   'env'		=>'_ENV',
+						   'server'		=>'_SERVER',
+						   'request'	=>'_REQUEST',
+						   'cookie'		=>'_COOKIE',
+						   'session'	=>'_SESSION',
+						   'files'		=>'_FILES',
+						   'get'		=>'_GET',
+						   'put'		=>'_PUT',
+						   'delete'		=>'_DELETE'
+						  );
 	/**
 	 * Constructor
 	 *
@@ -36,18 +48,9 @@ class Request extends Hash
 	}
 	
 	/**
-	 * Get or set a POST ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function post($key=null, $value=null)
-	{
-		return $this->perform('_POST', $key, $value);
-	}
-	
-	/**
-	 * Get or set a GET ITEM
+	 * Get or set a GET ITEM.
+	 * 
+	 * We can not use __call here because we are overloading the parent::get
 	 *
 	 * @return mixed
 	 * @author Justin Palmer
@@ -56,73 +59,22 @@ class Request extends Hash
 	{
 		return $this->perform('_GET', $key, $value);
 	}
-	
+
 	/**
-	 * Get or set a FILES ITEM
+	 * Get/set a var of one of the server globals
 	 *
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function files($key=null, $value=null)
+	public function __call($method, $args)
 	{
-		return $this->perform('_FILES', $key, $value);
+		if(!array_key_exists($method, $this->types))
+			throw new Exception('Invalid request type: Request::' . $method . '()');
+		$key = array_shift($args);
+		$value = array_shift($args);
+		return $this->perform($this->types[$method], $key, $value);
 	}
-	
-	/**
-	 * Get or set a SESSION ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function session($key=null, $value=null)
-	{
-		return $this->perform('_SESSION', $key, $value);
-	}
-	
-	/**
-	 * Get or set a COOKIE ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function cookie($key=null, $value=null)
-	{
-		return $this->perform('_COOKIE', $key, $value);
-	}
-	
-	/**
-	 * Get or set a REQUEST ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function request($key=null, $value=null)
-	{
-		return $this->perform('_REQUEST', $key, $value);
-	}
-	
-	/**
-	 * Get or set a SERVER ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function server($key=null, $value=null)
-	{
-		return $this->perform('_SERVER', $key, $value);
-	}
-	
-	/**
-	 * Get or set a ENV ITEM
-	 *
-	 * @return mixed
-	 * @author Justin Palmer
-	 **/
-	public function env($key=null, $value=null)
-	{
-		return $this->perform('_ENV', $key, $value);
-	}
-	
+
 	/**
 	 * Prepare for an unset.
 	 *
@@ -142,19 +94,8 @@ class Request extends Hash
 	 **/
 	public function has($type)
 	{
-		$types = array('post'		=>'_POST',
-					   'env'		=>'_ENV',
-					   'server'		=>'_SERVER',
-					   'request'	=>'_REQUEST',
-					   'cookie'		=>'_COOKIE',
-					   'session'	=>'_SESSION',
-					   'files'		=>'_FILES',
-					   'get'		=>'_GET',
-					   'put'		=>'_PUT',
-					   'delete'		=>'_DELETE'
-					  );
-		if(array_key_exists($type, $types))
-			$type = $types[$type];
+		if(array_key_exists($type, $this->types))
+			$type = $this->types[$type];
 		return (isset($GLOBALS[$type]) && !empty($GLOBALS[$type]));
 	}
 	
