@@ -16,7 +16,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->o = new SqlBuilderHash;
-		$this->test = array('select'=>'*', 'where_args'=>array(), 'count'=>array());
+		$this->test = array('select'=>'*', 'where_args'=>array(), 'count'=>array(), 'order'=>array());
 	}
 	
 	/**
@@ -198,7 +198,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function Props()
 	{
-		$props = array('bar'=>'baz');
+		$props = new Hash(array('bar'=>'baz'));
 		$this->o->props($props);
 		$this->test['props'] = $props;
 		$this->assertEquals($this->test, $this->o->export());
