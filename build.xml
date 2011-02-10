@@ -49,7 +49,7 @@
  <!-- Generate pmd.xml -->
  <target name="phpmd">
   <exec executable="phpmd">
-   <arg line=". xml codesize,unusedcode --reportfile ${basedir}/build/logs/pmd.xml --exclude tests" />
+   <arg line=". xml codesize,unusedcode --reportfile ${basedir}/build/logs/pmd.xml --ignore tests,mail/lib,util/Dbug.php,util/Markdown.php" />
   </exec>
  </target>
 
