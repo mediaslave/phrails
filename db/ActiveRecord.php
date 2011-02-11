@@ -17,6 +17,7 @@ class ActiveRecord extends SqlBuilder
 	 * Save
 	 *
 	 * @return void
+	 * @throws FailedActiveRecordCreateUpdateException
 	 * @author Justin Palmer
 	 **/
 	public function save()
@@ -27,11 +28,11 @@ class ActiveRecord extends SqlBuilder
 			$primary = $this->primary_key();
 			if($this->$primary === null){
 				$this->filter('beforeCreate');
-				if(!$this->create()) new FailedActiveRecordCreateUpdateException();
+				if(!$this->create()) throw new FailedActiveRecordCreateUpdateException();
 				$this->filter('afterCreate');
 			}else{
 				$this->filter('beforeUpdate');
-				if(!$this->update()) new FailedActiveRecordCreateUpdateException();
+				if(!$this->update()) throw new FailedActiveRecordCreateUpdateException();
 				$this->filter('afterUpdate');
 			}
 			$this->filter('afterSave');
@@ -89,6 +90,7 @@ class ActiveRecord extends SqlBuilder
 	 * Update the props passed in.
 	 *
 	 * @return void
+	 * @throws ActiveRecordInvalidColumnsForUpdateException
 	 * @author Justin Palmer
 	 **/
 	final public function updateProps(/* properties */)
@@ -217,6 +219,7 @@ class ActiveRecord extends SqlBuilder
 	 * Call a dynamic finder
 	 *
 	 * @return void
+	 * @throws Exception
 	 * @author Justin Palmer
 	 **/
 	final public function __call($method, $params)
@@ -247,6 +250,7 @@ class ActiveRecord extends SqlBuilder
 	 * Join the tables passed in based off the Schema.
 	 *
 	 * @return void
+	 * @throws NoSchemaRelationshipDefinedException
 	 * @author Justin Palmer
 	 **/
 	final public function join($args)
@@ -263,6 +267,7 @@ class ActiveRecord extends SqlBuilder
 	 * Add the joins to the result
 	 *
 	 * @return void
+	 * @throws RecordNotFoundException
 	 * @author Justin Palmer
 	 **/
 	final protected function lazy($result, $joins, $isLazy=false)
@@ -298,6 +303,7 @@ class ActiveRecord extends SqlBuilder
 	 *
 	 * @param string $method - Method from __call
 	 * @return stdClass
+	 * @throws UnknownActiveRecordDynamicFinderException
 	 * @author Justin Palmer
 	 **/
 	private function findDynamicFinder($method)
@@ -339,6 +345,7 @@ class ActiveRecord extends SqlBuilder
 	 * @param stdClass $object
 	 * @param boolean $forceArray
 	 * @return void
+	 * @throws RecordNotFoundException
 	 * @author Justin Palmer
 	 **/
 	private function processRead($object, $forceArray = false, $customFetchMode=null, $customFetchClass=null)

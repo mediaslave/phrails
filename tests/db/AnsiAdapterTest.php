@@ -100,7 +100,16 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function Build_delete()
 	{
+		$expected = new stdClass;
+		$expected->sql = "DELETE FROM `users` WHERE id = ?";
+		$expected->params = array(1);
 		
+		$this->o->from('`users`');
+		$this->o->where('id = ?');
+		$this->o->whereArgs(array(1));
+		
+		$actual = $this->stub->buildDelete($this->o);
+		$this->assertEquals($expected, $actual);
 	}
 	
 	/**
@@ -109,6 +118,14 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function tick()
 	{
-		
+		//Tick all items
+		$actual = $this->stub->tick('foo', 'bar', 'baz');
+		$expected = array('`foo`', '`bar`', '`baz`');
+		$this->assertEquals($expected, $actual);
+	
+		//Tick a single item.
+		$actual = $this->stub->tick('foo');
+		$expected = '`foo`';
+		$this->assertEquals($expected, $actual);
 	}
 }

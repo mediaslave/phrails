@@ -230,7 +230,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	/**
 	 * Back tick the items passed in.
 	 *
-	 * @return void
+	 * @return array or string
 	 * @author Justin Palmer
 	 **/
 	public function tick(/* items_to_tick */)
@@ -249,7 +249,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	/**
 	 * get the last insert id
 	 *
-	 * @return void
+	 * @return integer
 	 * @author Justin Palmer
 	 **/
 	public function lastInsertId(){
@@ -275,7 +275,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	/**
 	 * undocumented function
 	 *
-	 * @return void
+	 * @return string
 	 * @author Justin Palmer
 	 **/
 	protected function buildCount(Hash $Hash)
