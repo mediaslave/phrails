@@ -45,7 +45,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
-	 * @covers DatabaseAdapter::buildRead
+	 * @covers AnsiAdapter::buildRead
 	 **/
 	public function Build_read()
 	{
@@ -69,7 +69,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
-	 * @covers DatabaseAdapter::buildUpdate
+	 * @covers AnsiAdapter::buildUpdate
 	 **/
 	public function Build_update()
 	{
@@ -96,7 +96,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
-	 * @covers DatabaseAdapter::buildDelete
+	 * @covers AnsiAdapter::buildDelete
 	 **/
 	public function Build_delete()
 	{
@@ -114,7 +114,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
-	 * @covers DatabaseAdapter::tick
+	 * @covers AnsiAdapter::tick
 	 **/
 	public function tick()
 	{

@@ -273,7 +273,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	}
 
 	/**
-	 * undocumented function
+	 * Build a ansi count select.
 	 *
 	 * @return string
 	 * @author Justin Palmer
