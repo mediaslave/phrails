@@ -373,11 +373,15 @@ abstract class Migration extends Model
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function references($table, $options='')
+	public function references($table, $options='', $type='INDEX')
 	{
 		$column = Inflections::underscore($table) . '_id';
 		$this->integer($column, $options);
-		$this->index($this->table, $column);
+		$this->doIndex(array($this->table, $column), $type);
+	}
+
+	public function referencesUnique($table, $options='') {
+		$this->references($table, $options, 'UNIQUE');
 	}
 
 	/**
