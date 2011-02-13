@@ -2,6 +2,10 @@
 
 A PHP 5.3 framework for developing applications fast.  A comfortable framework for Ruby on Rails developers that only have a PHP environment.
 
+#Dependencies
+
+PECL Yaml - This is for seeding database tables from fixtures. (Make sure libyaml-dev is installed.)
+
 #Create a Project
 
 To create a new project using phrails please go to the phrails-bin project:

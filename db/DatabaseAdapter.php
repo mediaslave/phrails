@@ -60,6 +60,14 @@ abstract class DatabaseAdapter
 	abstract public function showTables();
 	
 	/**
+	 * Truncate a table
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	abstract public function truncate($table_name);
+		
+	/**
 	 * Store the columns for a table.
 	 *
 	 * @return Hash

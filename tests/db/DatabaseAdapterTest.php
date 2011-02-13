@@ -36,6 +36,18 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @test
+	 * @covers DatabaseAdapter::truncate
+	 **/
+	public function Truncate()
+	{
+		$this->stub->expects($this->any())
+				   ->method('truncate')
+				   ->will($this->returnValue(true));
+		$this->assertEquals('true', $this->stub->truncate('users'));
+	}
+	
+	/**
+	 * @test
 	 * @covers DatabaseAdapter::showTables
 	 **/
 	public function Show_tables()

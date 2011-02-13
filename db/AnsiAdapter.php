@@ -121,6 +121,18 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	}
 	
 	/**
+	 * Truncate a table
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function truncate($table_name)
+	{
+		$stmt = $this->conn()->prepare("TRUNCATE TABLE `$table_name`");
+		return $stmt->execute();
+	}
+	
+	/**
 	 * Show tables
 	 *
 	 * @return void

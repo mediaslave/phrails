@@ -86,6 +86,17 @@ class ActiveRecord extends SqlBuilder
 		$this->$primary = $p_value;
 		return $this->processCud($query);
 	}
+	
+	/**
+	 * truncate a table
+	 *
+	 * @return boolean
+	 * @author Justin Palmer
+	 **/
+	public function truncate()
+	{
+		return $this->adapter()->truncate($this->table_name());
+	}
 	/**
 	 * Update the props passed in.
 	 *
