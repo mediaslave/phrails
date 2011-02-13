@@ -2,24 +2,24 @@
 
 class PhrailsMigration extends Model{
 	
+	protected $primary_key = 'version';
+	
 	public function init(){
-		$stmt = $this->conn()->prepare('CREATE TABLE IF NOT EXISTS `phrails_migrations` (
-		  				`version` varchar(14) NOT NULL,
-						  KEY `version` (`version`)
-						) ENGINE=MyISAM');
-		$stmt->execute();
 		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name);
 	}
 	
 	/**
-	 * undocumented function
+	 * Create the table if need be.
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function save()
+	public function createTableIfNotExits()
 	{
-		$s = $this->conn()->prepare("INSERT INTO `" . $this->database_name() . "`.`" . $this->table_name() . "` SET version = ?;");
-		return $s->execute(array($this->version));
+		$stmt = $this->conn()->prepare('CREATE TABLE IF NOT EXISTS `phrails_migrations` (
+		  				`version` varchar(14) NOT NULL,
+						  KEY `version` (`version`)
+						) ENGINE=MyISAM');
+		return $stmt->execute();
 	}
 }
