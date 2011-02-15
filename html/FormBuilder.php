@@ -68,6 +68,8 @@ class FormBuilder
 	 * @var string
 	 */
 	private $array_it_value = '';
+
+	private $models;
 	/**
 	 * Constructor
 	 *
@@ -358,6 +360,11 @@ class FormBuilder
 			$this->array_it_value = $value;
 		return $this;
 	}
+
+	public function modelsForCheckbox(array $models) {
+		$this->models = $models;
+		return $this;
+	}
 	
 	/**
 	 * Get the value depending if the model is null or not
@@ -367,6 +374,17 @@ class FormBuilder
 	 **/
 	public function getValue($property)
 	{
+		if ($this->models !== null) {
+			$foreignKey = Inflections::foreignKey($this->model->table_name());
+			foreach ($this->models as $m) {
+
+				if ($m->$foreignKey == $this->array_it_value) {
+					return true;
+				}
+
+			}
+		}
+
 		//Get the value from the request object if we do not have a model
 		//or get it from the model property if we have a model.
 		$value = $this->request->params($property);
