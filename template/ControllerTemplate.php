@@ -8,6 +8,7 @@
 class ControllerTemplate extends TemplateCache
 {
 	protected $layouts_path = 'layouts';
+	
 	/**
 	 * Sets the file path and route array.
 	 *
@@ -23,6 +24,7 @@ class ControllerTemplate extends TemplateCache
 		//through $controller->respond_to
 		try{
 			$this->checkViewType($Route);
+			$this->getView($Route->view_type);
 		}catch(NoViewTypeException $e){
 			//If it is not a view type then we will change the route to
 			//change the view to the prNoViewType
@@ -40,10 +42,29 @@ class ControllerTemplate extends TemplateCache
 		self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
 		//print self::$current_view_path . '<br/>';
 		//exit();
+		
 		//Get the file to render from the action of the route.
 		$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
+		$this->setViewPath($file);		
+		//Let's make sure that the view path exists
+		if(!is_file($this->view_path) && 
+				$this->View->should_fallback_to_html &&
+				!($this->View instanceof HtmlView)){
+			$this->View->extension = 'html';
+			$this->setViewPath($file);
+		}
+	}
+	
+	/**
+	 * Set the view path
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function setViewPath($file)
+	{
 		//Concat the necassary items to complete the path.
-		$path = $file . '.' . $Route->view_type . '.php';
+		$path = $file . '.' . $this->View->extension . '.php';
 		//Make sure the path is set
 		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
@@ -51,12 +72,14 @@ class ControllerTemplate extends TemplateCache
 		$path = strtolower($path);
 		//If the view is not html then we will set the layout to null
 		//json will not use a layout.
-		if($Route->view_type != 'html')
+		if($this->View->can_have_layout == false){
 			$this->Controller->pr_layout = null;
+		}
 		//Users can specify a direct view path.
 		if($this->Controller->pr_view_path !== null)
 			$path = rtrim($this->Controller->pr_view_path, '\\') . '/' . $path;
 		//Save the sha of the file path.
 		$this->view_path = $path;
 	}
+	
 }

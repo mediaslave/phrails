@@ -43,6 +43,12 @@ abstract class Template
 	
 	private $request;
 	
+	
+	static private $view_types = array('html' => 'HtmlView',
+							   		   'json' => 'JsonView');
+							
+	protected $View;
+	
 	/**
 	 * Create a new Template
 	 *
@@ -132,7 +138,7 @@ abstract class Template
 			include $this->layouts_path . '/' . $this->Controller->pr_layout . '.html.php';
 			$content = ob_get_clean();
 		$this->init();
-		return $content;
+		return $this->View->process($content);
 	}
 	/**
 	 * @nodoc
@@ -175,5 +181,32 @@ abstract class Template
 	{
 		return ($key !== null) ? $this->request->$key
 							   : $this->request;
+	}
+	
+	/**
+	 * Register a valid view type
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	static public function registerView($key, ViewInterface $view)
+	{
+		self::$view_types[$key] = $view->class_name();
+	}
+	
+	/**
+	 * is registered view
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function getView($key)
+	{
+		if(!array_key_exists($key, self::$view_types)){
+			throw new Exception('No registered view object.');
+		}
+		$view = self::$view_types[$key];
+		$this->View = new $view;
+		return $this->View;
 	}
 }
