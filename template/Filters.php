@@ -40,7 +40,6 @@ abstract class Filters
 	protected function add($type, $filter, array $actions=array())
 	{
 		$actions = $this->addToMethods($actions);
-		//new Dbug($actions, '', false, __FILE__, __LINE__);
 		//Get the hash that has the correct type in it.
 		$Set = $this->filters->get($type);
 		//Is the filter passed in already in the hash?
@@ -56,6 +55,19 @@ abstract class Filters
 			$Set->set($filter, $actions);
 		}
 		$this->filters->set($type, $Set);
+	}
+	
+	/**
+	 * remove a filter
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function remove($type, $filter)
+	{
+		//Get the hash that has the correct type in it.
+		$Set = $this->filters->get($type);
+		$Set->remove($filter);
 	}
 	
 	/**

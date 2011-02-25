@@ -68,6 +68,19 @@ class ControllerFilters extends Filters
 			}
 		}
 	}
+	/**
+	 * remove
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function remove($type, $filter, $is_except=false)
+	{
+		if($is_except){
+			$type = $this->exceptName($type);
+		}
+		parent::remove($type, $filter);
+	}
 	
 	/**
 	 * Set a before filter for.
@@ -173,7 +186,6 @@ class ControllerFilters extends Filters
 		$filters->set(self::after	, new Hash);
 		$filters->set($this->exceptName(self::after) , new Hash);
 		$this->filters = $filters;
-		//print 'reset controllerfilters';
 	}
 	
 }

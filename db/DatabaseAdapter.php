@@ -73,7 +73,7 @@ abstract class DatabaseAdapter
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	abstract public function cacheColumns($class_name, $table_name);
+	abstract public function cacheColumns($class_name, $table_name, $forceReload=false);
 	
 	/**
 	 * Build the create (insert) query for the adapter

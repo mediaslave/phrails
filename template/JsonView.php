@@ -3,7 +3,7 @@
 /**
 * 
 */
-abstract class JsonView extends View
+class JsonView extends View
 {
 	public $can_have_layout=false;
 	public $should_fallback_to_html = false;
@@ -15,13 +15,7 @@ abstract class JsonView extends View
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function process();
-	
-	/**
-	 * get the class name of the view
-	 *
-	 * @return void
-	 * @author Justin Palmer
-	 **/
-	public function class_name();
+	public function process($content){
+		return $content;
+	}
 }

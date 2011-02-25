@@ -51,4 +51,13 @@ class HashTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(empty($array));
 		$this->assertTrue($this->o->isEmpty());
 	}
+	
+	/**
+	 * @test
+	 **/
+	public function Can_we_empty()
+	{
+		$this->o->clear();
+		$this->assertTrue($this->o->isEmpty());
+	}
 }
