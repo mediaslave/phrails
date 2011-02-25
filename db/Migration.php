@@ -63,7 +63,7 @@ abstract class Migration extends Model
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function alterTable($name, $engine=null, $charset=null, $collation=null)
+	public function alterTable($name, $engine=null, $charset=null, $collation=null, $raw=null)
 	{
 		$this->type = 'alter';
 
@@ -78,9 +78,11 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
+		if($raw != true) 
+			$name = Inflections::tableize($name);
 
 		$this->table = $name;
-		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($name) . "` \n\t%s\n $operation";
+		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` \n\t%s\n $operation";
 	}
 	
 
