@@ -28,12 +28,6 @@ class Controller
 	 */
 	public $pr_action;
 	/**
-	 * The view type
-	 *
-	 * @var Hash
-	 */
-	public $pr_view_types;
-	/**
 	 * The view path.  If you want to change the path to which the views live on
 	 * 
 	 * @var string
@@ -85,9 +79,14 @@ class Controller
 	 */
 	private static $public_vars = null;
 	/**
-	 * Initialize some vars
+	 * The view type
 	 *
-	 * @todo $pr_request should be private, template now has access.
+	 * @var Hash
+	 */
+	public $pr_view_types;
+	
+	/**
+	 * Initialize some vars
 	 * 
 	 * @return Controller
 	 * @author Justin Palmer
@@ -97,8 +96,8 @@ class Controller
 		$this->pr_controller = get_class($this);
 		$this->pr_request = new Request;
 		Registry::set('pr-request', $this->pr_request);
-		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->pr_filters = new ControllerFilters($this);
+		$this->pr_view_types = new Hash(array('html'=>'html'));
 		$this->flash = new HashArray();
 		if($this->pr_request->session('pr_flash') instanceof HashArray){
 			$this->flash->array = $this->pr_request->session('pr_flash')->export();

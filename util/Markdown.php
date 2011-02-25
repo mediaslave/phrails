@@ -192,7 +192,7 @@ class Markdown {
 		$link_id = strtolower($matches[1]);
 		$url = $matches[2] == '' ? $matches[3] : $matches[2];
 		$this->urls[$link_id] = $url;
-		$this->titles[$link_id] =& $matches[4];
+		$this->titles[$link_id] = $matches[4];
 		return ''; # String that will replace the block
 	}
 
@@ -553,7 +553,7 @@ class Markdown {
 	function _doAnchors_reference_callback($matches) {
 		$whole_match =  $matches[1];
 		$link_text   =  $matches[2];
-		$link_id     =& $matches[3];
+		$link_id     = $matches[3];
 
 		if ($link_id == "") {
 			# for shortcut links like [this][] or [this].
@@ -887,10 +887,10 @@ class Markdown {
 	}
 	function _processListItems_callback($matches) {
 		$item = $matches[4];
-		$leading_line =& $matches[1];
-		$leading_space =& $matches[2];
+		$leading_line = $matches[1];
+		$leading_space = $matches[2];
 		$marker_space = $matches[3];
-		$tailing_blank_line =& $matches[5];
+		$tailing_blank_line = $matches[5];
 
 		if ($leading_line || $tailing_blank_line || 
 			preg_match('/\n{2,}/', $item))
@@ -1010,8 +1010,8 @@ class Markdown {
 			#
 			$parts = preg_split($token_re, $text, 2, PREG_SPLIT_DELIM_CAPTURE);
 			$text_stack[0] .= $parts[0];
-			$token =& $parts[1];
-			$text =& $parts[2];
+			$token = $parts[1];
+			$text = $parts[2];
 			
 			if (empty($token)) {
 				# Reached end of text span: empty stack without emitting.

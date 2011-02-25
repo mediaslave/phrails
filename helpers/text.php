@@ -31,6 +31,14 @@ function pluralize($string)
 }
 
 /**
+ * @see Inflections::$pluralizeIf()
+ **/
+function pluralizeIf($integer, $string)
+{
+	return Inflections::pluralizeIf($integer, $string);
+}
+
+/**
  * @see Inflections::$singularize()
  **/
 function singularize($string)

@@ -377,8 +377,8 @@ class FormBuilder
 		if ($this->models !== null) {
 			$foreignKey = Inflections::foreignKey($this->model->table_name());
 			foreach ($this->models as $m) {
-
-				if ($m->$foreignKey == $this->array_it_value) {
+				if ($m->$foreignKey == 
+					$this->array_it_value) {
 					return true;
 				}
 
