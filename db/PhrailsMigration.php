@@ -5,7 +5,7 @@ class PhrailsMigration extends Model{
 	protected $primary_key = 'version';
 	
 	public function init(){
-		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name);
+		
 	}
 	
 	/**
@@ -14,12 +14,25 @@ class PhrailsMigration extends Model{
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function createTableIfNotExits()
+	public function createTableIfNotExists()
 	{
 		$stmt = $this->conn()->prepare('CREATE TABLE IF NOT EXISTS `phrails_migrations` (
 		  				`version` varchar(14) NOT NULL,
 						  KEY `version` (`version`)
 						) ENGINE=MyISAM');
-		return $stmt->execute();
+		$boolean =  $stmt->execute();
+		$this->setColumns();
+		return $boolean;
+	}
+	
+	/**
+	 * Special init because the table may not be there and the columns get cached, we need to call this after createTableIfNotExists
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function setColumns()
+	{
+		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name, true);
 	}
 }

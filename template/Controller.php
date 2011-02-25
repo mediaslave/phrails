@@ -152,7 +152,7 @@ class Controller
 	 **/
 	protected function redirectTo($path)
 	{
-		if($this->flash !== ''){
+		if(!$this->flash->isEmpty()){
 			$this->pr_request->session('pr_flash', $this->flash);
 		}
 		if($path != '/') $path = ltrim($path, '/');

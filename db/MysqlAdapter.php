@@ -16,10 +16,10 @@ class MysqlAdapter extends AnsiAdapter
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	public function cacheColumns($class_name, $table_name)
+	public function cacheColumns($class_name, $table_name, $forceReload=false)
 	{
 		//Hold the columns from the db to make sure properties, rules and relationships set actually exist.
-		if(self::$ColumnsCache->isKey($class_name)){
+		if(self::$ColumnsCache->isKey($class_name) && !$forceReload){
 			return self::$ColumnsCache->get($class_name);
 		}else{
 			$cols = $this->showColumns($table_name);

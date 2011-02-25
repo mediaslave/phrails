@@ -541,7 +541,11 @@ abstract class Migration extends Model
 			$unique .= "`$value`, ";
 		}
 		$unique = rtrim($unique, ', '); 
-		$this->alter($table, "$add_drop $type `$name` (" . $unique . ")");
+		$items = "  (" . $unique . ")";
+		if($add_drop == 'DROP'){
+			$items = '';
+		}
+		$this->alter($table, "$add_drop $type `$name` $items");
 	}
 
 	/**

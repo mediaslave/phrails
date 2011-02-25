@@ -111,6 +111,17 @@ class Hash
 	{
 		return $this->array;
 	}
+	
+	/**
+	 * Empty the hash
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function clear()
+	{
+		$this->array = array();
+	}
 	/**
 	 * Is the hash empty?
 	 *
