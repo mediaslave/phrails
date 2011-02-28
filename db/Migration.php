@@ -354,6 +354,18 @@ abstract class Migration extends Model
 		$this->add('YEAR', $name, $options, $invalid);
 	}
 
+
+	/**
+	 * blob
+	 *
+	 * @return void
+	 * @author Dave Kerschner
+	 **/
+	public function blob($name, $options='')
+	{
+		$invalid = array('index', 'unique', 'default', 'auto');
+		$this->add('BLOB', $name, $options, $invalid);
+	}
 	
 	/**
 	 * timestamps
