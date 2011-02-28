@@ -24,6 +24,7 @@ class MailerTemplate extends TemplateCache
 	 **/
 	protected function prepare()
 	{
+		$this->View = new HtmlView;
 		$explode = explode('\Mailers\\', get_class($this->Controller));
 		$mailer = preg_replace('%Mailer$%', '', array_pop($explode));
 		
