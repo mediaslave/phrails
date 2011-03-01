@@ -106,6 +106,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function updateProps(/* properties */)
 	{
+		$id = $this->primary_key();
 		$args = func_get_args();
 		if(sizeof($args) == 0)
 			throw new Exception('updateProps expects that you pass the properties you would like to update to it.');
@@ -120,8 +121,10 @@ class ActiveRecord extends SqlBuilder
 		$props = array_intersect_key($this->props()->export(), $args_as_keys);
 		$model = get_class($this);
 		$model = new $model($props);
-		$model->id = $this->id;
-		return $model->save();
+		$model->$id = $this->$id;
+		$saved = $model->save();
+		$this->errors($model->errors());
+		return $saved;
 	}
 	/**
 	 * Find the id's specified and with the primary key

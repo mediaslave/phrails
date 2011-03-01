@@ -169,9 +169,9 @@ abstract class Model extends ActiveRecord
 		$Judge = new RuleJudge($this->props, $this->schema);
 		
 		$this->errors = $Judge->judge($this);
-		
-		if(!$this->errors->isEmpty())
+		if(!$this->errors->isEmpty()){
 			return false;
+		}
 		return true;
 	}
 	
@@ -249,8 +249,11 @@ abstract class Model extends ActiveRecord
 	 * @return array
 	 * @author Justin Palmer
 	 **/
-	final public function errors()
+	final public function errors($errors = null)
 	{
+		if($errors instanceof Hash){
+			$this->errors = $errors;
+		}
 		return $this->errors;
 	}
 	/**
