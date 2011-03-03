@@ -15,7 +15,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	public function Does_construct_have_hash()
 	{
 		$r = new Registry();
-		$this->assertType('Hash', Registry::$Hash);
+		$this->assertInstanceOf('Hash', Registry::$Hash);
 	}
 	/**
 	 * @test
@@ -26,7 +26,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('bar', Registry::get('foo'));
 		
 		Registry::set('baz', array('quo'=>'fuo', 'one'=>1));
-		$this->assertType('stdClass', Registry::get('baz'));
+		$this->assertInstanceOf('stdClass', Registry::get('baz'));
 	}
 	/**
 	 * @test
