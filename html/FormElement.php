@@ -18,8 +18,9 @@ abstract class FormElement extends Element
 	 */
 	function __construct($name, $value, $options=null, array $optionExceptions=array())
 	{
-		if($name != '')
+		if($name != ''){
 			$this->options .= ",name:$name";
+		}
 		if($value !== null)
 			$this->value = $value;
 		if(!$this->is_hidden){

@@ -55,12 +55,18 @@ class OptionsParser
 	 **/
 	private function convertTo(array $options, array $optionExceptions, $array)
 	{
+		$keys = array();
 		($array) ? $ret = array() : $ret = '';
-		foreach($options as $key => $value){
+		foreach($options as $key => $value){			
 			//Get the key/value an array
 			$option = explode(':', $value);
 			$key = trim($option[0]);
 			$value = trim($option[1]);
+			if(!in_array($key, $keys)){
+				$keys[] = $key;
+			}else{
+				continue;
+			}
 			if(array_key_exists($key, $optionExceptions))
 				$key = $optionExceptions[$key];
 			//Set the option into the appropriate return type.

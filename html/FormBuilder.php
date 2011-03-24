@@ -220,6 +220,18 @@ class FormBuilder
 		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id, $optgroup);
 	}
 	/**
+	 * radio group
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+//	public function array_radio_group($property, array $set, $options='', $optionDisplay='name', $id='id')
+	public function array_radio_group($property, array $set, $options='')
+	{
+		$options = $this->checkForErrors($property, $options);
+		return new InputRadioGroup($this->getElementName($property), $set, $this->getValue($property), $options);
+	}
+	/**
 	 * Boolean select with yes and no as the options
 	 *
 	 * @return void

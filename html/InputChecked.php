@@ -47,7 +47,8 @@ class InputChecked extends Input
 	 **/
 	public function setChecked($value)
 	{
-		if($this->checked_value == $value)
+		if($this->checked_value == $value){
 			$this->checked = ' checked';
+		}
 	}
 }
