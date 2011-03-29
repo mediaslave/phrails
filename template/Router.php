@@ -147,16 +147,24 @@ class Router
 		$current = explode('/', $route->path);
 		$request = explode('/', $request_uri);
 		$diff = array_diff($current, $request);
+    $local = new Hash();
+
 		foreach($diff as $key => $val){
 			if(isset($request[$key]) && preg_match($this->getTagExpression(), $val)){
 				$current[$key] = $request[$key];
 				$get = ltrim(rtrim($val, '}'), '{');
-				$r = new Request();
-				$r->get($get, $request[$key]);
+				$local->set($get, $request[$key]);
 			}
 		}
 		$actual_path = implode('/', $current);
-		return $request_uri == $actual_path;
+    $bool = ($request_uri == $actual_path);
+    if ($bool) {
+      foreach($local->export() as $k => $v) {
+        $r = new Request();
+				$r->get($k, $v);
+      }
+    }
+		return $bool;
 	}
 	/**
 	 * Get the request uri for comparison.
