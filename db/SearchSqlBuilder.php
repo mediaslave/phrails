@@ -82,11 +82,14 @@ class SearchSqlBuilder
 	 **/
 	public function prepare($operand='AND')
 	{
+		$args = func_get_args();
+		$operand = array_shift($args);
 		foreach($this->models as $model){
 			foreach($model->props()->export() as $key => $value){
 				if($value === null || $value == '' || 
 					in_array($key, $this->exclude) || 
-					(count($this->only) > 0 && !in_array($key, $this->only))){
+					(count($this->only) > 0 && !in_array($key, $this->only)) ||
+					in_array($value, $args)){
 					continue;
 				}
 				$column_type = $model->columns()->get($key)->Type;
