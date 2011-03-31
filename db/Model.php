@@ -73,6 +73,8 @@ abstract class Model extends ActiveRecord
 	 * @var Hash
 	 */
 	protected $errors;
+
+  public $validateNulls = false;
 	/**
 	 * The filters for the model
 	 * 
