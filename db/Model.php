@@ -138,11 +138,11 @@ abstract class Model extends ActiveRecord
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
-	public function save()
+	public function save($runCSRF = true)
 	{
 		try{
 			$this->filter('beforeValidate');
-			if(!$this->validate()) return false;
+			if(!$this->validate($runCSRF)) return false;
 			$this->filter('afterValidate');
 			return parent::save();
 		}catch(FailedModelFilterException $e){
@@ -158,10 +158,10 @@ abstract class Model extends ActiveRecord
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	final public function validate()
+	final public function validate($runCSRF = false)
 	{
 		//Make sure we are not a csrf haxor.
-		if(!FormBuilder::isValidAuthenticityToken()){
+		if($runCSRF && !FormBuilder::isValidAuthenticityToken()){
 			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
 			return false;
 		}
@@ -174,6 +174,21 @@ abstract class Model extends ActiveRecord
 		}
 		return true;
 	}
+
+  /**
+   * reload the relationship, destroying the current results
+   * @param string $key relationship to reload
+   */
+  public function live($key) {
+    return $this->loadRelationship($key);
+  }
+
+  private function loadRelationship($key) {
+    if($this->schema->relationships->isKey($key)) {
+      $this->$key = $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
+      return $this->$key;
+    }
+  }
 	
 	/**
 	 * __get model properties
@@ -191,12 +206,8 @@ abstract class Model extends ActiveRecord
 			return;
 		//If it is a relationship that is not set then run the query and return the key.
 		if (!isset($this->$key)){
-			
-			if($this->schema->relationships->isKey($key)) {
-				$this->$key = $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
-				return $this->$key;
-			}
-		}
+			return $this->loadRelationship($key);
+		} 
 	}
 	/**
 	 * __set model properties
