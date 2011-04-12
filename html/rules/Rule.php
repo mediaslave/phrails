@@ -67,9 +67,6 @@ class Rule
 	 * @author Justin Palmer
 	 **/
 	 public function run($comparison){
-     if($this->value === null && $this->model->validateNulls == false) {
-       return true;
-     }
 		$boolean = true;
 		if($comparison)
 		{
