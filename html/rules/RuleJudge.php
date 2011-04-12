@@ -34,11 +34,9 @@ class RuleJudge
 				$last_prop_name = $property;
 				$this->errors = array();
 			}
-
 			//if the value is null and it is not a required property then lets just 
 			//continue onto the next property, nothing to do here.
 			if((($value instanceof Expression) || 
-         ($Model->validateNulls == false && $value === null) ||
           $value == '') && 
 				!in_array($property, $this->Schema->required)){
 				continue;
