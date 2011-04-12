@@ -167,7 +167,7 @@ abstract class Model extends ActiveRecord
 			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
 			return false;
 		}
-			
+    
 		$Judge = new RuleJudge($this->props, $this->schema);
 		
 		$this->errors = $Judge->judge($this);
@@ -181,7 +181,7 @@ abstract class Model extends ActiveRecord
    * reload the relationship, destroying the current results
    * @param string $key relationship to reload
    */
-  public function live($key) {
+  final public function live($key) {
     return $this->loadRelationship($key);
   }
 
