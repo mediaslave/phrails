@@ -35,14 +35,14 @@ class RuleJudge
 				$this->errors = array();
 			}
 
-      if ($Model->validateNulls == false && $value === null) {
+      if($Model->validateNulls == false && $value === null) {
         continue;
       }
 
 			//if the value is null and it is not a required property then lets just 
 			//continue onto the next property, nothing to do here.
 			if((($value instanceof Expression) || 
-         $value === null ||
+          $value === null ||
           $value == '') && 
 				!in_array($property, $this->Schema->required)){
 				continue;
