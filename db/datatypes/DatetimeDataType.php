@@ -9,7 +9,7 @@ class DatetimeDataType extends DataType{
 	 * 
 	 * Follows the formatting of the PHP <code>DateTime</code> class
 	 *
-	 * @return void
+	 * @return mixed
 	 * @author Justin Palmer
 	 **/
 	public function format($format = 'Y-m-d H:i:s')
@@ -32,5 +32,35 @@ class DatetimeDataType extends DataType{
 		$birth = new Datetime($this->value());
 		$interval = $birth->diff($now);
 		return $interval->format($format);
+	}
+	/**
+	 * Get the year
+	 *
+	 * @return integer
+	 * @author Justin Palmer
+	 **/
+	public function year($format = 'Y')
+	{
+		return $this->format($format);
+	}
+	/**
+	 * Get the month
+	 *
+	 * @return integer
+	 * @author Justin Palmer
+	 **/
+	public function month($format='m')
+	{
+		return $this->format($format);
+	}
+	/**
+	 * Get the integer
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function day($format='d')
+	{
+		return $this->format($format);
 	}
 }

@@ -286,7 +286,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final protected function lazy($result, $joins, $isLazy=false)
 	{	
-    $this->reset();
+    	$this->reset();
 		foreach($joins as $key => $query){
 			$prop = $query->prop;
 			$obj = $this->select($query->alias .".*");
