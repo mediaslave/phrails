@@ -96,7 +96,7 @@ class SearchSqlBuilder
 				$column_type = array_shift(explode('(', $column_type));
 				switch($column_type){
 					case 'varchar':
-						$this->where .= '`' . $model->alias() . '`.' . $key . ' LIKE ? ' . $operand . ' ';
+						$this->where .= '`' . $key . '` LIKE ? ' . $operand . ' ';
 						$this->where_params[] = '%' . $value . '%';
 						break;
 					default:

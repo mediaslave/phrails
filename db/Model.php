@@ -89,7 +89,7 @@ abstract class Model extends ActiveRecord
 	 * @return Model
 	 * @author Justin Palmer
 	 **/
-	public function __construct(array $array=array())
+	public function __construct($array=array())
 	{
 		//Generate the table name if it is not set.
 		if($this->table_name === null){
@@ -107,7 +107,9 @@ abstract class Model extends ActiveRecord
 		
 		$this->props = new Hash();
 		$this->errors = new Hash();
-		$this->setProperties($array);
+		if(is_array($array)){
+			$this->setProperties($array);
+		}
 		
 		$this->filters = ModelFilters::noo();
 		$this->schema = new Schema($this);
