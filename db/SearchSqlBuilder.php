@@ -84,6 +84,9 @@ class SearchSqlBuilder
 	{
 		$args = func_get_args();
 		$operand = array_shift($args);
+		if($operand === null){
+			$operand = 'AND';
+		}
 		foreach($this->models as $model){
 			foreach($model->props()->export() as $key => $value){
 				if($value === null || $value == '' || 
@@ -96,16 +99,23 @@ class SearchSqlBuilder
 				$column_type = array_shift(explode('(', $column_type));
 				switch($column_type){
 					case 'varchar':
-						$this->where .= '`' . $key . '` LIKE ? ' . $operand . ' ';
+						$this->where .= '`' . $model->alias() . '`.`' . $key . '` LIKE ? ' . $operand . ' ';
 						$this->where_params[] = '%' . $value . '%';
 						break;
 					default:
-						$this->where .= $key . ' = ? ' . $operand . ' ';
+						$this->where .= '`' . $model->alias() . '`.`' . $key . '` = ? ' . $operand . ' ';
 						$this->where_params[] = $value;
 				}
 			}
 		}
-		$this->where = rtrim($this->where, ' ' . $operand . ' ');
+		//So we trim(rtrim(trim()))
+		/*
+		1. trim('Trims the ending space')
+		2. rtrim('Trims the $operand off')
+		3. trim('Trims the extra space before the operand')
+		We do it this way, because it is faster than preg_replace to trim the /\s$operand\s^/
+		*/
+		$this->where = trim(rtrim(trim($this->where), $operand));
 	}
 	
 }

@@ -312,8 +312,11 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	final public function alias()
+	final public function alias($alias = null)
 	{
+		if($alias !== null){
+			$this->alias = $alias;
+		}
 		return $this->alias;
 	}
 	/**
