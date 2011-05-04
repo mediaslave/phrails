@@ -396,16 +396,21 @@ class FormBuilder
 
 			}
 		}
-
+		
 		//Get the value from the request object if we do not have a model
 		//or get it from the model property if we have a model.
 		$value = $this->request->params($property);
-		if ($this->model instanceof Hash) {
-			$value = $this->model->get($property);
-		} else if ($this->model instanceof Model) {
-			$value = $this->model->$property;
+		if($value !== ''){
+			return $value;
 		}
-		return $value;
+		
+		if ($this->model instanceof Hash) {
+			return $this->model->get($property);
+		} 
+		
+		if ($this->model instanceof Model) {
+			return $this->model->$property;
+		}
 	}
 	
 	/**
