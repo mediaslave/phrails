@@ -447,4 +447,4 @@ abstract class Model extends ActiveRecord
 	 * @author Justin Palmer
 	 **/
 	abstract public function init();
-} // END class Model
+}

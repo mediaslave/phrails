@@ -2,7 +2,7 @@
 //@todo convert array to stdClass for pr-db-config
 //We seperate this from run so that we can run rake tasks and other items
 //when the app is not running.
-$db_config = parse_ini_file('database.ini', true);
+$db_config = parse_ini_file(Registry::get('pr-real-install-path') . '/config/database.ini', true);
 if($db_config['global']['need_database'] == true){
 	if(isset($db_config[Registry::get('pr-environment')])){
 		Registry::set('pr-db-config', $db_config[Registry::get('pr-environment')]);
