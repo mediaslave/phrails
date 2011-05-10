@@ -10,8 +10,11 @@ class ModelFilters
 								   'beforeCreate', 'afterCreate', 
 								   'beforeUpdate', 'afterUpdate');
 	private $model_class_name;
-	static private $Hash;
-	
+	//static private $Hash;
+	private $Hash;
+	function __construct() {
+		$this->Hash = new ModelFiltersHash;
+	}
 	/**
 	 * new model
 	 *
@@ -36,7 +39,7 @@ class ModelFilters
 	{
 		if(!in_array($filter, $this->valid_filters))
 			throw new Exception('unknown model filter: ' . $filter);
-		self::$Hash->set($this->model_class_name, $filter, array_shift($callback));
+		$this->Hash->set($this->model_class_name, $filter, array_shift($callback));
 	}
 	
 	/**
@@ -49,7 +52,7 @@ class ModelFilters
 	{
 		if(!in_array($filter, $this->valid_filters))
 			throw new Exception('unknown model filter: ' . $filter);
-		$ModelFilters = self::$Hash->get($this->model_class_name);
+		$ModelFilters = $this->Hash->get($this->model_class_name);
 		return ($ModelFilters instanceof HashArray) ? $ModelFilters->get($filter) : null;
 	}
 	
@@ -72,7 +75,7 @@ class ModelFilters
 	 **/
 	public function export()
 	{
-		return self::$Hash->export();
+		return $this->Hash->export();
 	}
 }
 

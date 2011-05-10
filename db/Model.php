@@ -111,7 +111,7 @@ abstract class Model extends ActiveRecord
 			$this->setProperties($array);
 		}
 		
-		$this->filters = ModelFilters::noo();
+		$this->filters = new ModelFilters();
 		$this->schema = new Schema($this);
 		
 		$this->init();
