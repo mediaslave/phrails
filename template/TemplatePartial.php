@@ -31,13 +31,17 @@ class TemplatePartial
 	 */
 	private function get($file, array $array = array())
 	{
-		if(!empty($array))
-			extract($array);
-		ob_start();
-		$included = include $file;
-		if($included === false)
-			throw new Exception("The template at the path '$file' does not exist.");
-		return ob_get_clean();
+    $func = function ($file, $array) {
+      if(!empty($array))
+        extract($array);
+      ob_start();
+      $included = include $file;
+      if($included === false)
+        throw new Exception("The template at the path '$file' does not exist.");
+      return ob_get_clean();
+    };
+    
+    return $func($file, $array);
 	}
 	/**
 	 * Figure out if the path should include the current views path.
