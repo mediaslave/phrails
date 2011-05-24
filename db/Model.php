@@ -189,8 +189,7 @@ abstract class Model extends ActiveRecord
 
   private function loadRelationship($key) {
     if($this->schema->relationships->isKey($key)) {
-      $this->$key = $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
-      return $this->$key;
+      return $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
     }
   }
 	
