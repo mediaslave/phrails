@@ -67,9 +67,9 @@ class FormBuilder
 	 * 
 	 * @var string
 	 */
-	private $array_it_value = '';
+	protected $array_it_value = '';
 
-	private $models;
+	protected $models;
 	/**
 	 * Constructor
 	 *

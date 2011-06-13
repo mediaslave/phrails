@@ -9,9 +9,9 @@
  **/
 class FlashForm extends Flash
 {
-	private $array = array();
-	private $class='flash-form-errors';
-	private $title='Form Errors';
+	protected $array = array();
+	protected $class='flash-form-errors';
+	protected $title='Form Errors';
 	/**
 	 * Label values that have been registered with the current view.
 	 *
