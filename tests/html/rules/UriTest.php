@@ -8,7 +8,7 @@ class UriTest extends PHPUnit_Framework_TestCase
 	 * undocumented function
 	 *
 	 * @return void
-	 * @author Justin Palmer
+	 * @author Shaun Gilliland
 	 **/
 	public function setUp()
 	{
