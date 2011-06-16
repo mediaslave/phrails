@@ -19,11 +19,10 @@ class LengthRangeTest extends PHPUnit_Framework_TestCase
 		$min = 5;
 		$max = 16;
 		$this->o = new LengthRangeRule($min,$max);
-		for ($i=0;$i<10;$i++){
-			$ranges[$i] = rand($min,$max);		
-		}
-		
-		foreach($ranges as $range){
+		$ranges = array("Hello","Length","January","November","September","Regulation"
+					  ,"backlighted","abbreviation","abbreviations","ambidextrously"
+					     ,"macroaggregated","lamentablenesses");
+		foreach($ranges as $range){	
 			$this->o->value = $range;
 			$this->assertTrue($this->o->run());
 		}
@@ -36,12 +35,10 @@ class LengthRangeTest extends PHPUnit_Framework_TestCase
 	{
 		$min = 5;
 		$max = 16;
-		$minwrong = 17;
-		$maxwrong = 24;
 		$this->o = new LengthRangeRule($min,$max);
-		for ($i=0;$i<10;$i++){
-		$ranges[$i] = rand($minwrong,$maxwrong);
-		}
+		$ranges = array("a","ab","abc","abcd","abcdefghijklmnopq","abcdefghijklmnopqr"
+					  ,"abcdefghijklmnopqrs","abcdefghijklmnopqrst","abcdefghijklmnopqrstu","abcdefghijklmnopqrstuv"
+					     ,"abcdefghijklmnopqrstuvw","abcdefghijklmnopqrstuvwx","abcdefghijklmnopqrstuvwxy","abcdefghijklmnopqrstuvwxyz");
 		foreach($ranges as $range){
 			$this->o->value = $range;
 			$this->assertFalse($this->o->run());

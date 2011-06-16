@@ -17,6 +17,6 @@ class BooleanRule extends Rule
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		return parent::run($this->value != 0 && $this->value != 1);
+		return parent::run($this->value !== 0 && $this->value !== '0' && $this->value !== 1 && $this->value !== '1');
 	 }
 } // END class Rule
