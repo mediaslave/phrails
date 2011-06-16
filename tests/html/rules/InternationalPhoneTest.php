@@ -27,7 +27,8 @@ class InternationalPhoneTest extends PHPUnit_Framework_TestCase
 				'+42-360-736-5559',
 				'+423607365560',
 				'+42-1-360-736-5561',
-				'+42 1 360 736 5562'
+				'+42 1 360 736 5562',
+				'+ 42 12345 12345-123456789'
 			      );
 		foreach($nums as $num){
 			$this->o->value = $num;
@@ -48,7 +49,10 @@ class InternationalPhoneTest extends PHPUnit_Framework_TestCase
 				'+42+360+736-5559',
 				'+42+360-736+5560',
 				'+42-1-360+736-5561',
-				'+42 1 3A0 73F 55E2'
+				'+42 1 3A0 73F 55E2',
+				' 42 1 360-555-1212',
+				' +3605551212',
+				'+ 42 12345 12345-123456789101112'
 			      );
 		foreach($nums as $num){
 			$this->o->value = $num;
