@@ -10,18 +10,20 @@ class AlphaExtraTest extends PHPUnit_Framework_TestCase
 	 * @return void
 	 * @author Shaun Gilliland
 	 **/
-	public function setUp()
-	{
-		$this->o = new AlphaExtraRule();
-	}
+	
 	/**
 	 * @test
 	 **/
 	public function valid_alexs()
 	{
+		$extra = '0-4';
+		$this->o = new AlphaExtraRule($extra);
 		$alexs = array('ThisIsValid',
 				'TestingIsFun',
-				  'FreDFlintstone'
+				  'FreDFlintstone',
+				     'This234',
+					'that23',
+					   'dis4'
 			     );
 		foreach($alexs as $alex){
 			$this->o->value = $alex;
@@ -34,10 +36,14 @@ class AlphaExtraTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function invalid_alexs()
 	{
+		$extra = '0-4';
+		$this->o = new AlphaExtraRule($extra);
 		$alexs = array('ThisIsNotValid234@',
 				'@thisAndThat',
-				  '423362hkdi',
-				    'This Is Not Valid'
+				    'This Is Not Valid',
+				       '4234@#$@',
+					  'this s',
+					     'thisandthat567'
 			      );
 		foreach($alexs as $alex){
 			$this->o->value = $alex;
