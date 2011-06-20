@@ -318,7 +318,7 @@ class FormBuilder
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	private function checkForErrors($property, $options)
+	protected function checkForErrors($property, $options)
 	{
 		//if we are working with out a model then just return the options.
 		if($this->model instanceof Hash)
@@ -340,7 +340,7 @@ class FormBuilder
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	private function getElementName($property)
+	protected function getElementName($property)
 	{
 		//If there is no model then we will just pass it back how it came in.
 		if($this->model instanceof Hash)

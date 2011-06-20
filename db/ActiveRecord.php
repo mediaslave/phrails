@@ -7,6 +7,7 @@
  */				
 class ActiveRecord extends SqlBuilder
 {
+	public static $num_queries = 0;
 	/**
 	 * PDOStatement
 	 * 
@@ -229,6 +230,20 @@ class ActiveRecord extends SqlBuilder
 	{
 		return '';
 	}
+	
+	/**
+	 * findBySql
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	protected function findBySql($query, $args, $forceArray=false)
+	{	
+		self::$num_queries++;
+		$object = (object) array('sql'=>$query, 'params'=>$args);
+		return $this->raw()->processRead($object, $forceArray);
+	}
+	
 	/**
 	 * Call a dynamic finder
 	 *
@@ -365,6 +380,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processRead($object, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
+			self::$num_queries++;
 		//new \Dbug($object, '', false, __FILE__, __LINE__);
 		$this->reset();
 		$this->Statement = $this->conn()->prepare($object->sql);
@@ -385,7 +401,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processCud(stdClass $query)
 	{
-		//new \Dbug($query, '', false, __FILE__, __LINE__);
+			self::$num_queries++;
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}

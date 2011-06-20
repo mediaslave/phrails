@@ -55,27 +55,28 @@ class FlashForm extends Flash
 	 **/
 	public function display()
 	{
-			$ret = '';
-			$lis = '';
-			$labels = self::$Labels;
-			if(!empty($this->array)){
-				$ret = '<div class="' . $this->class . '">
-							<div>' . $this->title . '</div>
-							<ul>';
-				foreach($this->array as $key => $value){
-					if(!is_array($value))
-						$value = array($value);
-					foreach($value as $message){
-						$label = '';
-						if($labels !== null && $labels->isKey($key))
-							$label = '<span class="form-element-description">' . $labels->get($key) . '</span>';
-						$ret .= '<li>' . sprintf($message, $label) . '</li>';
+		$ret = '';
+		$lis = '';
+		$labels = self::$Labels;
+		if(!empty($this->array)){
+			$ret = '<div class="' . $this->class . '">
+						<div>' . $this->title . '</div>
+						<ul>';
+			foreach($this->array as $key => $value){
+				if(!is_array($value))
+					$value = array($value);
+				foreach($value as $message){
+					$label = '';
+					if($labels !== null && $labels->isKey($key)){
+						$label = '<span class="form-element-description">' . $labels->get($key) . '</span>';
 					}
+					$ret .= '<li>' . sprintf($message, $label) . '</li>';
 				}
-				$ret .= '
-							</ul>
-						</div>';
 			}
-			return $ret;
+			$ret .= '
+						</ul>
+					</div>';
+		}
+		return $ret;
 	}
 } // END class String

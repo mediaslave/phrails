@@ -16,10 +16,14 @@ class HashArray extends Hash
 	 * @return void
 	 * @author Justin Palmer
 	 */
-	public function set($key, $value)
+	public function set($key, $value, $alt_key=null)
 	{
 		if(!$this->isKey($key))
 			$this->array[$key] = array();
-		$this->array[$key][] = $value;
+		if($alt_key === null){
+			$this->array[$key][] = $value;
+		}else{
+			$this->array[$key][$alt_key] = $value;
+		}
 	}
 }

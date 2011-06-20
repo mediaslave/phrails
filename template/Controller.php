@@ -197,6 +197,7 @@ class Controller
 		$this->$action();
 		$this->filters()->run(ControllerFilters::around);
 		$this->filters()->run(ControllerFilters::after);
+		$this->pr_num_queries = ActiveRecord::$num_queries;
 	}
 	
 	/**
