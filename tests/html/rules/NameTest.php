@@ -19,10 +19,11 @@ class NameTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function valid_names()
 	{
-		$names = array('Fred Flintstone',
-				'Fred Flint-stone',
-				  'Fred.Flintstone',
-				    "Fred Flint'Stone"
+		$names = array('Erik Matthew',
+				'Kim Rankin',
+				  'Catlin',
+				    "Chrismichie",
+				      "Othon Gama D'Eça"
 			      );
 		foreach($names as $name){
 			$this->o->value = $name;

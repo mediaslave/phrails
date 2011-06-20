@@ -19,13 +19,13 @@ class EmailTest extends PHPUnit_Framework_TestCase {
      * @test
      * */
     public function valid_emails() {
-        $emails = array('bobert@bobby.com',
-            'bobert@192.168.0.1',
-            'bobby_bobert@email.com',
-            'bobby-bobert@email.com',
-            'Bobby-BoBert@email.com',
-            'Bobby_Bobert@email.com',
-            'Bobert@192.168.240.25'
+        $emails = array('cardoso.ro@ig.com.br',
+            'grosulgennadii@rambler.ru',
+            'enrollments@worldstudy.com.br',
+            'sylvain.loup@hotmail.com',
+            'rafaelrivas.ve@hotmail.com',
+            'v.cruchet@hotmail.com',
+            'dile92@hotmail.com'
         );
         foreach ($emails as $email) {
             $this->o->value = $email;

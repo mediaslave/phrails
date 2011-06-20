@@ -2,7 +2,7 @@
 /**
 * 
 */
-class UsPhoneTest extends PHPUnit_Framework_TestCase
+class StreetTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * undocumented function
@@ -12,20 +12,24 @@ class UsPhoneTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function setUp()
 	{
-		$this->o = new UsPhoneRule();
+		$this->o = new StreetRule();
 	}
 	/**
 	 * @test
 	 **/
+
 	public function valid()
 	{
-		$nums = array(	'123 456 7890',
-				'987-544-3210',
-				'361 727 1256',
-				'936-829 2137',
-				'903-549-3213',
-				'903 597 6200',
-				'817-596-8973'
+		$nums = array(	"Siegfriedstraße",
+				"ª",
+				"Þ",
+				"ƒ",
+				"ªßµÐ",
+				".-,",
+				"#100-200 Nelson St.",
+				"thisaddyß-thatstreet",
+				"Carrera 29  45  94, Of 708 Bucaramanga",
+				"Av. Prof. Othon Gama D'Eça, 900  Loja 13  Térreo  Centro Executivo Casa do Barão"
 			      );
 		foreach($nums as $num){
 			$this->o->value = $num;
@@ -38,16 +42,11 @@ class UsPhoneTest extends PHPUnit_Framework_TestCase
 	 **/
 	public function invalid()
 	{
-		$nums = array(	'12345-6789',
-				'555 55 5555',
-				'555-555555',
-				'555-555555',
-				'5555-55555',
-				'55555-5555',
-				'555555-555',
-				'5555555-55',
-				'55555555-5',
-				'5555555555'
+		$nums = array(	'%$#',
+				'This%2@',
+				')(*&',
+				'*&^%',
+				'!@$'
 			      );
 		foreach($nums as $num){
 			$this->o->value = $num;
