@@ -50,7 +50,7 @@ function image_tag($source, $options='', $from_base=true)
  * @return string
  * @author Justin Palmer
  **/
-function google_javascript_include_tag($library='jquery', $version='1.5.2', $jsapi=true)
+function google_javascript_include_tag($library='jquery', $version='1.6.2', $jsapi=true)
 {
 	$js = '';
 	if($jsapi == true)
