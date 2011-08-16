@@ -55,9 +55,13 @@ class Json
 						$ret .= json_encode($ivalue->props()->export()) . ',';
 					}elseif($ivalue instanceof stdClass){
 						$ret .= json_encode((array) $ivalue) . ',';
+					}else{
+						$ret .= json_encode($ivalue) . ',';
 					}
 				}
 				$ret = rtrim($ret, ',') . ']';
+			}else{
+				$ret .= $value . ',';
 			}
 		}
 		
