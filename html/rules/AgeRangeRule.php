@@ -38,6 +38,14 @@ class AgeRangeRule extends DatabaseRule
 	 **/
 	 public function run(){
 		 $pass = true;
+     
+     $dr = new DateRule();
+     $dr->value = $this->value;
+     
+     if (!$dr->run()) {
+       return false;
+     }
+
 
 		 $age = $this->model->objectify($this->property)->age('%y');
 
