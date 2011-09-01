@@ -20,7 +20,7 @@ class FormBuilder
 	 * 
 	 * @var string
 	 */
-	static private $authenticity_token_error_message = 'Phrails has detected a Cross Site Request Forgery, check it out wikipedia.  The form can not be submitted under these conditions.';
+	static private $authenticity_token_error_message = 'Phrails has detected a Cross Site Request Forgery, check it out on wikipedia.  The form can not be submitted under these conditions.';
 	/**
 	 * The model that is currently being worked on.
 	 * 

@@ -17,6 +17,20 @@ class DatetimeDataType extends DataType{
 		$o = new DateTime($this->value());
 		return $o->format($format);
 	}
+	/**
+	 *
+	 * Calculate the difference from the objectify date to the passed in date
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public function diff($date, $format="%d")
+	{
+		$obj = new DateTime($this->value());
+		$date = new DateTime($date);
+		$interval = $obj->diff($date);
+		return $interval->format($format);
+	}
 	
 	/**
 	 * Calculate the age between two dates
@@ -26,7 +40,7 @@ class DatetimeDataType extends DataType{
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	public function age($format="%Y")
+	public function age($format="%y")
 	{
 		$now = new DateTime();
 		$birth = new Datetime($this->value());
@@ -39,7 +53,7 @@ class DatetimeDataType extends DataType{
 	 * @return integer
 	 * @author Justin Palmer
 	 **/
-	public function year($format = 'Y')
+	public function year($format = '%y')
 	{
 		return $this->format($format);
 	}
@@ -49,7 +63,7 @@ class DatetimeDataType extends DataType{
 	 * @return integer
 	 * @author Justin Palmer
 	 **/
-	public function month($format='m')
+	public function month($format='%m')
 	{
 		return $this->format($format);
 	}
@@ -59,7 +73,7 @@ class DatetimeDataType extends DataType{
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function day($format='d')
+	public function day($format='%d')
 	{
 		return $this->format($format);
 	}
