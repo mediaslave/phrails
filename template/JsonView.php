@@ -16,6 +16,6 @@ class JsonView extends View
 	 * @author Justin Palmer
 	 **/
 	public function process($content){
-		return $content;
+		return Json::encode($content);
 	}
 }

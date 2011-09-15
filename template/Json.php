@@ -31,6 +31,8 @@ class Json
 				}
 			}
 			return rtrim($ret, ',') . ']';
+		}else{
+			return $object;
 		}
 	}
 	
@@ -47,6 +49,7 @@ class Json
 			$ret .= '"' . $key . '":';
 			if($value instanceof stdClass){
 				$ret .= json_encode($value) . ',';
+				continue;
 			}
 			if(is_array($value)){
 				$ret .= '[';

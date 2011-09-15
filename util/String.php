@@ -16,7 +16,7 @@ class String
 	 * @param integer $limit 
 	 * @param string $pad 
 	 * @param string $break 
-	 * @return void
+	 * @return string
 	 * @author Justin Palmer
 	 */
 	public static function truncate($string, $limit, $pad="...", $break=".") { 

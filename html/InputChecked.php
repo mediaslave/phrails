@@ -1,12 +1,12 @@
 <?php
 /**
  * Creates a 'checkbox'.
- * 
+ *
  * @author Justin Palmer
  * @package html
  */
 class InputChecked extends Input
-{		
+{
 	protected $checked = '';
 	protected $checked_value;
 	/**
@@ -19,8 +19,8 @@ class InputChecked extends Input
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $value, $options=null)
@@ -38,7 +38,7 @@ class InputChecked extends Input
 	{
 		return '<input value="' . $this->value . '"' . $this->options . ' ' . $this->checked . '/>';
 	}
-	
+
 	/**
 	 * Should we check it?
 	 *

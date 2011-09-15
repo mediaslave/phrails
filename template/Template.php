@@ -80,7 +80,7 @@ abstract class Template
 	{
 		$this->prepare();
 		//Return the appropriate layout and view or view.
-		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path, $this->route->view_type) 
+		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path) 
 													   : $this->displayWithLayout($this->view_path);
 	}
 	/**
@@ -143,21 +143,20 @@ abstract class Template
 	/**
 	 * @nodoc
 	 */
-	private function displayNoLayout($path, $type)
+	private function displayNoLayout($path)
 	{
-		if($type == 'json'){
-			$callback = null;
-			$jsonify = $this->Controller->pr_view_types->get('json');
-			if(isset($jsonify->callback))
-				$callback = $jsonify->callback;
-			return Json::encode($jsonify->json, $callback);
+		$type = $this->route->view_type;
+		if(is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) || 
+			is_file(Registry::get('pr-framework-install-path') . '/__view__/' . $path)){
+			extract($this->vars(), EXTR_REFS);
+			ob_start();
+			include $path;
+			$content = ob_get_clean();
+		}else{
+			$content = $this->Controller->pr_view_types->get($type)->$type;
 		}
-		extract($this->vars(), EXTR_REFS);
-		ob_start();
-		include $path;
-		$content = ob_get_clean();
 		$this->init();
-		return $content;
+		return $this->View->process($content);
 	}
 	
 	/**

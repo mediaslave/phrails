@@ -1,9 +1,9 @@
 <?php
 /**
  * Form builder holds all of the methods to build forms.
- * 
+ *
  * @todo should not have to register the elements.  Use __call.
- * 
+ *
  * @author Justin Palmer
  * @package html
  */
@@ -11,31 +11,31 @@ class FormBuilder
 {
 	/**
 	 * Constant for the csrf key
-	 * 
+	 *
 	 * @var constant
 	 */
 	const authenticity_token_key = 'phrails-form-authenticity-token';
 	/**
 	 * Authenticity error message;
-	 * 
+	 *
 	 * @var string
 	 */
 	static private $authenticity_token_error_message = 'Phrails has detected a Cross Site Request Forgery, check it out on wikipedia.  The form can not be submitted under these conditions.';
 	/**
 	 * The model that is currently being worked on.
-	 * 
+	 *
 	 * @var Model
 	 */
 	protected $model;
 	/**
 	 * This can be set in the form initializer
-	 * 
+	 *
 	 * @var string
 	 */
 	static protected $class = 'form-error';
 	/**
 	 * This can be set in the form initializer
-	 * 
+	 *
 	 * @var string
 	 */
 	static protected $required_hint = '( Required ) ';
@@ -45,26 +45,26 @@ class FormBuilder
 	protected $disable_required_hint = false;
 	/**
 	 * These are special form builder objects that are loaded in the form initializer
-	 * 
+	 *
 	 * @var Hash
 	 */
 	static protected $Registered;
 	/**
 	 * The Request object.
-	 * 
+	 *
 	 * @var Request
 	 */
 	protected $request;
-	
+
 	/**
 	 * Does this element need to be array.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private $array_it = false;
 	/**
 	 * Does this array_it have a value?
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $array_it_value = '';
@@ -73,7 +73,7 @@ class FormBuilder
 	/**
 	 * Constructor
 	 *
-	 * @param Model $model 
+	 * @param Model $model
 	 * @author Justin Palmer
 	 * @return FormBuilder
 	 */
@@ -116,7 +116,7 @@ class FormBuilder
 			 OptionsParser::findAndDestroy('required', $options) == true)
 			if(!$this->disable_required_hint) $hint = self::$required_hint;
 		$id = FormElement::getId($this->getElementName($property));
-			
+
 		return new Span($hint, "class:" . self::$class) . new Label($text, $id, $options);
 	}
 		/**
@@ -127,7 +127,7 @@ class FormBuilder
 		 * @author Justin Palmer
 		 **/
 		public function text_field($property, $options='')
-		{	
+		{
 			$options = $this->checkForErrors($property, $options);
 			return new InputText($this->getElementName($property), $this->getValue($property), $options);
 		}
@@ -139,7 +139,7 @@ class FormBuilder
 	 * @author Justin Palmer
 	 **/
 	public function password_field($property, $options='')
-	{	
+	{
 		$options = $this->checkForErrors($property, $options);
 		return new InputPassword($this->getElementName($property), $this->getValue($property), $options);
 	}
@@ -154,7 +154,7 @@ class FormBuilder
 	{
 		$options = $this->checkForErrors($property, $options);
 		return new InputHidden($this->getElementName($property), $this->getValue($property), $options);
-	}	
+	}
 	/**
 	 * return a InputFile for a model property
 	 *
@@ -249,7 +249,7 @@ class FormBuilder
 	 * @author Justin Palmer
 	 **/
 	public function select($property, $optionTags, $options='')
-	{		
+	{
 		$optionTags = func_get_args();
 		$property = array_shift($optionTags);
 		$options = array_pop($optionTags);
@@ -270,7 +270,7 @@ class FormBuilder
 			$array[] = new Option($i);
 		return new ArraySelect($this->getElementName($property), $array, $this->getValue($property), $options);
 	}
-	
+
 	/**
 	 * Register a new object with FormBuilder
 	 *
@@ -297,7 +297,7 @@ class FormBuilder
 		$object = self::$Registered->get($name);
 		return new $object($this->getElementName($property),  $this->getValue($property), $options);
 	}
-	
+
 	/**
 	 * Load dynamic form fields
 	 *
@@ -310,7 +310,7 @@ class FormBuilder
 		$property = array_shift($args);
 		$options = array_shift($args);
 		$options = $this->checkForErrors($property, $options);
-		return new $klass($this->getElementName($property), $this->getValue($property), $options);		
+		return new $klass($this->getElementName($property), $this->getValue($property), $options);
 	}
 	/**
 	 * Check to see if the model has errors registered for this element.
@@ -348,7 +348,7 @@ class FormBuilder
 		//Create the element name based off of the model.
 		$this->model->hasProperty($property);
 		$name = $this->model->alias() . "[$property]";
-		
+
 		if($this->array_it){
 			if($this->array_it_value != ''){
 				$name .= '[' . $this->array_it_value . ']';
@@ -358,7 +358,7 @@ class FormBuilder
 		}
 		return $name;
 	}
-	
+
 	/**
 	 * Should this element be an array of elements
 	 *
@@ -377,7 +377,7 @@ class FormBuilder
 		$this->models = $models;
 		return $this;
 	}
-	
+
 	/**
 	 * Get the value depending if the model is null or not
 	 *
@@ -389,30 +389,29 @@ class FormBuilder
 		if ($this->models !== null) {
 			$foreignKey = Inflections::foreignKey($this->model->table_name());
 			foreach ($this->models as $m) {
-				if ($m->$foreignKey == 
+				if ($m->$foreignKey ==
 					$this->array_it_value) {
 					return true;
 				}
 
 			}
 		}
-		
 		//Get the value from the request object if we do not have a model
 		//or get it from the model property if we have a model.
 		$value = $this->request->params($property);
 		if($value !== ''){
 			return $value;
 		}
-		
+
 		if ($this->model instanceof Hash) {
 			return $this->model->get($property);
-		} 
-		
+		}
+
 		if ($this->model instanceof Model) {
 			return $this->model->$property;
 		}
 	}
-	
+
 	/**
 	 * Set the class of when an error happens.  This will be the css class for the form element.
 	 *
@@ -433,7 +432,7 @@ class FormBuilder
 	{
 		self::$required_hint = $value;
 	}
-	
+
 	/**
 	 * Set/Get the form authenticity token this prevents cross site request forgery.
 	 *
@@ -460,9 +459,9 @@ class FormBuilder
 		$request = new Request();
 		if(!$request->has('post') && !$request->has('get') && !$request->has('delete'))
 			return true;
-		return ($request->session(self::authenticity_token_key) == 
+		return ($request->session(self::authenticity_token_key) ==
 				$request->post(self::authenticity_token_key) ||
-				$request->session(self::authenticity_token_key) == 
+				$request->session(self::authenticity_token_key) ==
 				$request->get(self::authenticity_token_key));
 	}
 	/**
@@ -494,5 +493,17 @@ class FormBuilder
 	public function model()
 	{
 		return $this->model;
+	}
+
+	/**
+	 *
+	 * Get the request object to set form element value
+	 *
+	 * @return Request
+	 * @author Justin Palmer
+	 **/
+	public function request()
+	{
+		return $this->request;
 	}
 }

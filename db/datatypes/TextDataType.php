@@ -15,4 +15,22 @@ class TextDataType extends DataType{
 	{
 		return nl2br($this->value());
 	}
+
+	/**
+	 *
+	 * Apply markdown to the text
+	 *
+	 * @return ret
+	 * @author Justin Palmer
+	 **/
+	public function markdown()
+	{
+		static $parser;
+		if (!isset($parser)) {
+			$parser = new Markdown;
+		}
+
+		# Transform text using parser.
+		return $parser->transform($this->value());
+	}
 }

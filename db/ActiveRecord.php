@@ -4,13 +4,13 @@
  *
  * @package db
  * @author Justin Palmer
- */				
+ */
 class ActiveRecord extends SqlBuilder
 {
 	public static $num_queries = 0;
 	/**
 	 * PDOStatement
-	 * 
+	 *
 	 * @var PDOStatement
 	 */
 	private $Statement;
@@ -47,7 +47,7 @@ class ActiveRecord extends SqlBuilder
 	}
 	/**
 	 * insert
-	 * 
+	 *
 	 * Careful no validation!
 	 *
 	 * @return void
@@ -67,7 +67,7 @@ class ActiveRecord extends SqlBuilder
 	}
 	/**
 	 * update
-	 * 
+	 *
 	 * Careful no validation!
 	 *
 	 * @return void
@@ -87,7 +87,7 @@ class ActiveRecord extends SqlBuilder
 		$this->$primary = $p_value;
 		return $this->processCud($query);
 	}
-	
+
 	/**
 	 * truncate a table
 	 *
@@ -118,7 +118,7 @@ class ActiveRecord extends SqlBuilder
 		$invalid_columns = array_diff_key($args_as_keys, $this->props()->export());
 		if(sizeof($invalid_columns) > 0)
 			throw new ActiveRecordInvalidColumnsForUpdateException(get_class($this), array_keys($invalid_columns));
-		
+
 		$props = array_intersect_key($this->props()->export(), $args_as_keys);
 		$model = get_class($this);
 		$model = new $model($props);
@@ -129,16 +129,16 @@ class ActiveRecord extends SqlBuilder
 	}
 	/**
 	 * Find the id's specified and with the primary key
-	 * 
+	 *
 	 * Example:
 	 * <code>
 	 * Person::noo()->where('active = ?', 1)->find(23)
 	 * Person::noo()->find(1,2,3,4)
 	 * </code>
-	 * 
+	 *
 	 * @todo $this->where("$primary IN...") does not use the adapter and should to allow
 	 * nosql and other adapters to modify how that works.
-	 * 
+	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
@@ -201,7 +201,7 @@ class ActiveRecord extends SqlBuilder
 		$args = func_get_args();
 		$primary = $this->primary_key();
 		if($this->$primary !== null)
-			$args[] = $this->$primary; 	
+			$args[] = $this->$primary;
  		if(sizeof($args) > 0){
 			$question_marks = $this->getQuestionMarks($args);
 			$this->where("$primary IN ($question_marks)", $args);
@@ -230,7 +230,7 @@ class ActiveRecord extends SqlBuilder
 	{
 		return '';
 	}
-	
+
 	/**
 	 * findBySql
 	 *
@@ -238,12 +238,12 @@ class ActiveRecord extends SqlBuilder
 	 * @author Justin Palmer
 	 **/
 	protected function findBySql($query, $args, $forceArray=false)
-	{	
+	{
 		self::$num_queries++;
 		$object = (object) array('sql'=>$query, 'params'=>$args);
 		return $this->raw()->processRead($object, $forceArray);
 	}
-	
+
 	/**
 	 * Call a dynamic finder
 	 *
@@ -254,23 +254,23 @@ class ActiveRecord extends SqlBuilder
 	final public function __call($method, $params)
 	{
 		$finder = $this->findDynamicFinder($method);
-		
+
 		$underscore = Inflections::underscore($finder->props);
-		
+
 		$and = explode('_and_', $underscore);
 		$where = implode(' = ?  AND ', $and);
-		
+
 		$or = explode('_or_', $where);
 		if(sizeof($and) > 1 and sizeof($or) > 1)
 			throw new Exception('no and/or combo');
-			
+
 		if((sizeof($and) == 1 && sizeof($or) == 1) && sizeof($params) > 1){
 			$where = "$underscore IN (" . $this->getQuestionMarks($params) . ")";
 		}else{
 			$where = implode(' = ?  OR ', $or);
 			$where .= ' = ?';
 		}
-		
+
 		$this->where('(' . $where . ')', $params);
 		$method = $finder->method;
 		return $this->$method();
@@ -300,7 +300,7 @@ class ActiveRecord extends SqlBuilder
 	 * @author Justin Palmer
 	 **/
 	final protected function lazy($result, $joins, $isLazy=false)
-	{	
+	{
     	$this->reset();
 		foreach($joins as $key => $query){
 			$prop = $query->prop;
@@ -324,7 +324,7 @@ class ActiveRecord extends SqlBuilder
 			}else{
 				$result->$key = $this->processRead($sqlObject, true, $customFetchMode, $query->klass);
 			}
-		}	
+		}
 		return ($isLazy) ? $result->$key : $result;
 	}
 	/**
@@ -352,12 +352,12 @@ class ActiveRecord extends SqlBuilder
 		if($finder === null)
 			throw new UnknownActiveRecordDynamicFinderException($method);
 		return $finder;
-	}	
+	}
 	/**
 	 * create comma separate question marks for the size of the array
 	 *
 	 * @todo should this be in the adapter?
-	 * 
+	 *
 	 * @return string
 	 * @author Justin Palmer
 	 **/
