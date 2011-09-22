@@ -3,20 +3,20 @@
  * Build sql statements
  *
  * @todo named_scope
- * 	
+ *
  * @todo This really sucks.  SqlBuilder really should not be building this join.  The adapter should be.
  * Do to time constraints this is going to have to wait. self::join should be able to take multiple
  * relationships and pass the "config" off to the adapter for build.
- * 
+ *
  * @package db
  * @author Justin Palmer
  */
 class SqlBuilder
 {
 	static private $adapter = null;
-	
+
 	private $Hash;
-	
+
 	private $raw=false;
 	/**
 	 * Constructor
@@ -25,11 +25,11 @@ class SqlBuilder
 	 * @author Justin Palmer
 	 **/
 	public function __construct()
-	{	
+	{
 		self::$adapter = DatabaseAdapter::get();
 		$this->reset();
 	}
-	
+
 	/**
 	 * select text snippet
 	 *
@@ -43,7 +43,7 @@ class SqlBuilder
 			$this->Hash->select($select);
 		return $this;
 	}
-	
+
 	/**
 	 * count
 	 *
@@ -55,28 +55,29 @@ class SqlBuilder
 		$this->Hash->join($join);
 		return $this;
 	}
-	
+
 	/**
 	 * build a join from a schema relationship
-	 * 
+	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	final public function addJoinFromRelationship($relationship)
-	{		
-		$join = '';		
+	{
+		$join = '';
 		if($relationship->type == 'has-one' || $relationship->type == 'belongs-to'){
+			$join = $this->Hash->join();
 			$this->raw();
 			$klass = $relationship->klass;
 			$obj = new $klass;
 			$on = str_replace('?', $this->alias() . "." . $relationship->prop, $relationship->on);
-			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "` 
-						 AS " . $relationship->alias . " 
+			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
+						 AS " . $relationship->alias . "
 						  ON " . $on . " ";
 		}
 		self::join($join);
 	}
-	
+
 	/**
 	 * count
 	 *
@@ -88,7 +89,7 @@ class SqlBuilder
 		$this->Hash->count($column, $as, $distinct);
 		return $this;
 	}
-	
+
 	/**
 	 * table
 	 *
@@ -103,7 +104,7 @@ class SqlBuilder
 		$this->Hash->from($from);
 		return $this;
 	}
-	
+
 	/**
 	 * where
 	 *
@@ -117,9 +118,9 @@ class SqlBuilder
 		($this->Hash->where() != '') ? $this->Hash->where($this->Hash->where() . ' AND ' . $where)
 									 : $this->Hash->where($where);
 		$this->Hash->whereArgs($args);
-		return $this;		
+		return $this;
 	}
-	
+
 	/**
 	 * order
 	 *
@@ -131,7 +132,7 @@ class SqlBuilder
 		$this->Hash->order(func_get_args());
 		return $this;
 	}
-	
+
 	/**
 	 * If limit is not provided the function assumes you want the offset to be zero (0) and the limit to
 	 * be the first parameter passed in.
@@ -148,10 +149,10 @@ class SqlBuilder
 		if($limit === null){
 			$this->Hash->offset(0);
 			$this->Hash->limit($offset);
-		}	
+		}
 		return $this;
 	}
-	
+
 	/**
 	 * group
 	 *
@@ -163,7 +164,7 @@ class SqlBuilder
 		$this->Hash->group($group);
 		return $this;
 	}
-	
+
 	/**
 	 * having
 	 *
@@ -175,7 +176,7 @@ class SqlBuilder
 		$this->Hash->having($having);
 		return $this;
 	}
-	
+
 	/**
 	 * Build the query.  Pass the build onto Adapter.
 	 *
@@ -188,7 +189,7 @@ class SqlBuilder
 		$method = 'build' . ucfirst($method);
 		return $this->adapter()->$method($this->Hash);
 	}
-	
+
 	/**
 	 * return the adapter for use.
 	 *
@@ -211,7 +212,7 @@ class SqlBuilder
 	}
 	/**
 	 * Set the fetchmode to take into account the class or not
-	 * 
+	 *
 	 * If not, it will return the raw results from the pdo
 	 *
 	 * @return void
@@ -222,7 +223,7 @@ class SqlBuilder
 		$this->raw = $value;
 		return $this;
 	}
-	
+
 	/**
 	 * Is the mode raw
 	 *

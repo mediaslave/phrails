@@ -28,6 +28,8 @@ class Json
 					$ret .= json_encode($value->props()->export()) . ',';
 				}elseif($value instanceof stdClass){
 					$ret .= self::encodeStdClass($value) . ',';
+				}else{
+					return json_encode($object);
 				}
 			}
 			return rtrim($ret, ',') . ']';
@@ -35,7 +37,7 @@ class Json
 			return $object;
 		}
 	}
-	
+
 	/**
 	 * Encode a stdClass
 	 *
@@ -62,12 +64,12 @@ class Json
 						$ret .= json_encode($ivalue) . ',';
 					}
 				}
-				$ret = rtrim($ret, ',') . ']';
+				$ret = rtrim($ret, ',') . '],';
 			}else{
 				$ret .= $value . ',';
 			}
 		}
-		
+
 		return rtrim($ret, ',') . '}';
 	}
 }

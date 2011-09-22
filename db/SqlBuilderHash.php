@@ -3,7 +3,7 @@
  * Build sql statements
  *
  * @todo named_scope
- * 
+ *
  * @package db
  * @author Justin Palmer
  */
@@ -15,6 +15,7 @@ class SqlBuilderHash extends Hash
 		$this->doGetSet('where_args', array());
 		$this->doGetSet('count', array());
 		$this->doGetSet('order', array());
+		$this->doGetSet('join', '');
 	}
 
 	/**
@@ -29,8 +30,8 @@ class SqlBuilderHash extends Hash
 			return $this->get($key);
 		}
 		$this->set($key, $value);
-	}	
-	
+	}
+
 	/**
 	 * override Hash::get
 	 *
@@ -51,7 +52,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('select', $value);
 	}
-	
+
 	/**
 	 * table
 	 *
@@ -62,7 +63,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('from', $value);
 	}
-	
+
 	/**
 	 * join
 	 *
@@ -73,7 +74,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('join', $value);
 	}
-	
+
 	/**
 	 * where
 	 *
@@ -82,9 +83,9 @@ class SqlBuilderHash extends Hash
 	 **/
 	public function where($value=null)
 	{
-		return $this->doGetSet('where', $value);		
+		return $this->doGetSet('where', $value);
 	}
-	
+
 	/**
 	 * Get the where_args
 	 *
@@ -105,7 +106,7 @@ class SqlBuilderHash extends Hash
 		}
 		return $this->doGetSet('where_args', $array);
 	}
-	
+
 	/**
 	 * order
 	 *
@@ -124,7 +125,7 @@ class SqlBuilderHash extends Hash
 		//array_values makes sure that the keys are re-indexed.
 		return $this->doGetSet('order', array_values($array));
 	}
-	
+
 	/**
 	 * @return void
 	 * @author Justin Palmer
@@ -141,7 +142,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('offset', $value);
 	}
-	
+
 	/**
 	 * group
 	 *
@@ -152,7 +153,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('group', $value);
 	}
-	
+
 	/**
 	 * having
 	 *
@@ -163,7 +164,7 @@ class SqlBuilderHash extends Hash
 	{
 		return $this->doGetSet('having', $value);
 	}
-	
+
 	/**
 	 * count
 	 *
@@ -183,7 +184,7 @@ class SqlBuilderHash extends Hash
 		$array[] = $o;
 		$this->set('count', $array);
 	}
-	
+
 	/**
 	 * props of a model
 	 *
