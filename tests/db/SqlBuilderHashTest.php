@@ -1,24 +1,24 @@
 <?php
 require_once 'AnsiAdapterMock.php';
 /**
- * 
+ *
  */
 class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	private $o;
 	/**
 	 * The test array that should be the same as the internal
 	 * array of SqlBuilderHash
 	 */
 	private $test;
-	
+
 	public function setUp()
 	{
 		$this->o = new SqlBuilderHash;
-		$this->test = array('select'=>'*', 'where_args'=>array(), 'count'=>array(), 'order'=>array());
+		$this->test = array('select'=>'*', 'where_args'=>array(), 'count'=>array(), 'order'=>array(), 'join'=>'');
 	}
-	
+
 	/**
 	 * @test
 	 **/
@@ -26,7 +26,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals($this->test, $this->o->export());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::select
@@ -39,7 +39,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($select, $this->o->select());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::from
@@ -52,7 +52,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($from, $this->o->from());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::join
@@ -65,7 +65,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($join, $this->o->join());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::where
@@ -78,7 +78,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($where, $this->o->where());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::whereArgs
@@ -88,15 +88,15 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->o->whereArgs(array('foo', 'bar'));
 		$this->test['where_args'] = array('foo', 'bar');
 		$this->assertEquals($this->test, $this->o->export());
-		
+
 		//Second call with array.
 		$this->o->whereArgs(array('baz'));
 		$this->test['where_args'] = array('foo', 'bar', 'baz');
 		$this->assertEquals($this->test, $this->o->export());
-		
+
 		$this->assertEquals(array('foo', 'bar', 'baz'), $this->o->whereArgs());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::order
@@ -106,10 +106,10 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$order = array('foo DESC');
 		$this->o->order($order);
 		$this->test['order'] = $order;
-		$this->assertEquals($this->test, $this->o->export());		
+		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($order, $this->o->order());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::order
@@ -120,10 +120,10 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$expected_order = array('foo', 'bar');
 		$this->o->order($order);
 		$this->test['order'] = $expected_order;
-		$this->assertEquals($this->test, $this->o->export());		
+		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($expected_order, $this->o->order());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::limit
@@ -136,7 +136,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($limit, $this->o->limit());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::offset
@@ -149,7 +149,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($offset, $this->o->offset());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::group
@@ -162,7 +162,7 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($group, $this->o->group());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::having
@@ -175,11 +175,11 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->test, $this->o->export());
 		$this->assertEquals($having, $this->o->having());
 	}
-	
+
 	/**
 	 * Yeah, Call_count, because obviously PHPUnit_Framework_TestCase has a count method
 	 * and does not yell at me telling me so (PHPUnit mark it final!)
-	 * 
+	 *
 	 * @test
 	 * @covers SqlBuilderHash::count
 	 **/
@@ -192,8 +192,8 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->o->count('id', 'count', true);
 		$this->test['count'] = array($o);
 		$this->assertEquals($this->test, $this->o->export());
-		
-		
+
+
 		$o = new stdClass;
 		$o->column = 'di';
 		$o->as = 'count';
@@ -201,11 +201,11 @@ class SqlBuilderHashTest extends PHPUnit_Framework_TestCase
 		$this->o->count('di', 'count', true);
 		$this->test['count'][] = $o;
 		$this->assertEquals($this->test, $this->o->export());
-		
+
 		$this->assertEquals($this->test['count'], $this->o->count());
-		
+
 	}
-	
+
 	/**
 	 * @test
 	 * @covers SqlBuilderHash::props
