@@ -380,7 +380,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processRead($object, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
-			self::$num_queries++;
+		self::$num_queries++;
 		//new \Dbug($object, '', false, __FILE__, __LINE__);
 		$this->reset();
 		$this->Statement = $this->conn()->prepare($object->sql);
@@ -401,7 +401,8 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processCud(stdClass $query)
 	{
-			self::$num_queries++;
+		self::$num_queries++;
+		new \Dbug($query, '', false, __FILE__, __LINE__);
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}

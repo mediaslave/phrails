@@ -66,7 +66,7 @@ class Json
 				}
 				$ret = rtrim($ret, ',') . '],';
 			}else{
-				$ret .= $value . ',';
+				$ret .= '"' . $value . '",';
 			}
 		}
 
