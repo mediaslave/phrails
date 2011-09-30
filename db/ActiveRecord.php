@@ -402,7 +402,7 @@ class ActiveRecord extends SqlBuilder
 	private function processCud(stdClass $query)
 	{
 		self::$num_queries++;
-		new \Dbug($query, '', false, __FILE__, __LINE__);
+		//new \Dbug($query, '', false, __FILE__, __LINE__);
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}
