@@ -4,17 +4,17 @@
 */
 class SearchSqlBuilder
 {
-	
-	private $models; 
+
+	private $models;
 	private $exclude=array();
 	private $only=array();
 	private $where = '';
 	private $where_params = array();
-	
+
 	function __construct(/* \Model $Model, ... */) {
 		$this->models = func_get_args();
 	}
-	
+
 	/**
 	 * Reset all of the vars
 	 *
@@ -28,8 +28,8 @@ class SearchSqlBuilder
 		$this->where = '';
 		$this->where_params = array();
 	}
-	
-	
+
+
 	/**
 	 * undocumented function
 	 *
@@ -40,7 +40,7 @@ class SearchSqlBuilder
 	{
 		return $this->where;
 	}
-	
+
 	/**
 	 * Exclude from the automated system.
 	 *
@@ -51,7 +51,7 @@ class SearchSqlBuilder
 	{
 		$this->exclude = func_get_args();
 	}
-	
+
 	/**
 	 * Only these columns
 	 *
@@ -62,7 +62,7 @@ class SearchSqlBuilder
 	{
 		$this->only = func_get_args();
 	}
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -73,7 +73,7 @@ class SearchSqlBuilder
 	{
 		return $this->where_params;
 	}
-	
+
 	/**
 	 * Prepare the where and the where params for use in a sql build where call.
 	 *
@@ -89,8 +89,8 @@ class SearchSqlBuilder
 		}
 		foreach($this->models as $model){
 			foreach($model->props()->export() as $key => $value){
-				if($value === null || $value == '' || 
-					in_array($key, $this->exclude) || 
+				if($value === null || $value == '' ||
+					in_array($key, $this->exclude) ||
 					(count($this->only) > 0 && !in_array($key, $this->only)) ||
 					in_array($value, $args)){
 					continue;
@@ -98,7 +98,7 @@ class SearchSqlBuilder
 				$column_type = $model->columns()->get($key)->Type;
 				$column_type = array_shift(explode('(', $column_type));
 				switch($column_type){
-					case 'varchar':
+					case $column_type == 'varchar' || $column_type == 'text':
 						$this->where .= '`' . $model->alias() . '`.`' . $key . '` LIKE ? ' . $operand . ' ';
 						$this->where_params[] = '%' . $value . '%';
 						break;
@@ -117,5 +117,5 @@ class SearchSqlBuilder
 		*/
 		$this->where = trim(rtrim(trim($this->where), $operand));
 	}
-	
+
 }

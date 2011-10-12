@@ -237,11 +237,11 @@ class ActiveRecord extends SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	protected function findBySql($query, $args, $forceArray=false)
+	public function findBySql($query, $args, $forceArray=false)
 	{
 		self::$num_queries++;
 		$object = (object) array('sql'=>$query, 'params'=>$args);
-		return $this->raw()->processRead($object, $forceArray);
+		return $this->processRead($object, $forceArray);
 	}
 
 	/**
@@ -253,6 +253,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function __call($method, $params)
 	{
+
 		$finder = $this->findDynamicFinder($method);
 
 		$underscore = Inflections::underscore($finder->props);
