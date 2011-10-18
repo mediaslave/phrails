@@ -8,7 +8,7 @@
 class ControllerTemplate extends TemplateCache
 {
 	protected $layouts_path = 'layouts';
-	
+
 	/**
 	 * Sets the file path and route array.
 	 *
@@ -29,7 +29,7 @@ class ControllerTemplate extends TemplateCache
 			self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
 			//print self::$current_view_path . '<br/>';
 			//exit();
-			
+
 			//Get the file to render from the action of the route.
 			$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
 			$this->setViewPath($file, $Route->view_type);
@@ -68,9 +68,9 @@ class ControllerTemplate extends TemplateCache
 			$this->Controller->pr_layout = null;
 			$this->view_path = 'pr-no-view.html.php';
 		}
-		
+
 	}
-	
+
 	/**
 	 * Set the view path
 	 *
@@ -84,7 +84,7 @@ class ControllerTemplate extends TemplateCache
 		//Make sure the path is set
 		if(self::getCurrentViewPath() !== '')
 			$path = self::getCurrentViewPath() . '/' . $path;
-			
+
 		$path = strtolower($path);
 		//If the view is not html then we will set the layout to null
 		//json will not use a layout.
@@ -96,8 +96,8 @@ class ControllerTemplate extends TemplateCache
 			$path = rtrim($this->Controller->pr_view_path, '\\') . '/' . $path;
 		//Save the sha of the file path.
 		$this->view_path = $path;
-		if(!is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) && !($this->Controller->pr_view_types->get($view_type) instanceof stdClass)){
-			throw new NoViewException();
-		}
+		//if(!is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) && !($this->Controller->pr_view_types->get($view_type) instanceof stdClass)){
+		//	throw new NoViewException();
+		//}
 	}
 }
