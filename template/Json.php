@@ -9,6 +9,17 @@
 class Json
 {
 	/**
+	 *
+	 * Decode a json string
+	 *
+	 * @return array
+	 * @author Justin Palmer
+	 **/
+	public static function decode($string)
+	{
+		return json_decode($string);
+	}
+	/**
 	 * Encode the data
 	 *
 	 * @return void
