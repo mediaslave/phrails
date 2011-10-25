@@ -70,6 +70,7 @@ class FormBuilder
 	protected $array_it_value = '';
 
 	protected $models;
+	protected $modelsForeignKey;
 	/**
 	 * Constructor
 	 *
@@ -373,8 +374,12 @@ class FormBuilder
 		return $this;
 	}
 
-	public function modelsForCheckbox(array $models) {
+	public function modelsForCheckbox(array $models, $foreignKey=null) {
 		$this->models = $models;
+		$this->modelsForeignKey = $foreignKey;
+		if($foreignKey === null){
+				$this->modelsForeignKeyk = Inflections::foreignKey($this->model->table_name());
+		}
 		return $this;
 	}
 
@@ -386,14 +391,14 @@ class FormBuilder
 	 **/
 	public function getValue($property)
 	{
+		//Checkboxes are there models to set the value.
 		if ($this->models !== null) {
-			$foreignKey = Inflections::foreignKey($this->model->table_name());
+			$foreignKey = $this->modelsForeignKey;
 			foreach ($this->models as $m) {
 				if ($m->$foreignKey ==
 					$this->array_it_value) {
 					return true;
 				}
-
 			}
 		}
 		//Get the value from the request object if we do not have a model
