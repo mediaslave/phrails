@@ -11,7 +11,7 @@ class OptionsParser
 	/**
 	 * Parse and return a string in html attribute format.
 	 *
-	 * @param string $options 
+	 * @param string $options
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -22,7 +22,7 @@ class OptionsParser
 	/**
 	 * Parse and return an array of key/value pairs.
 	 *
-	 * @param string $options 
+	 * @param string $options
 	 * @return array
 	 * @author Justin Palmer
 	 */
@@ -36,8 +36,10 @@ class OptionsParser
 	private function parse($options, array $optionExceptions=array(), $array=false)
 	{
 		($array) ? $ret = array() : $ret = '';
-		if(is_array($options))
+		//if it is an array lets do the conversion and return the value.
+		if(is_array($options)){
 			return self::convertTo($options, $optionExceptions, $array);
+		}
 		//Do some processing if we actually have some options.
 		if($options !== null && $options != ''){
 			//All options are comma seperated, make an array out of them.
@@ -46,7 +48,7 @@ class OptionsParser
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -57,7 +59,7 @@ class OptionsParser
 	{
 		$keys = array();
 		($array) ? $ret = array() : $ret = '';
-		foreach($options as $key => $value){			
+		foreach($options as $key => $value){
 			//Get the key/value an array
 			$option = explode(':', $value);
 			$key = trim($option[0]);
@@ -75,12 +77,12 @@ class OptionsParser
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Turn a string from an array
 	 *
 	 * Returns a string in format 'key:value,key:value'
-	 * 
+	 *
 	 * @return string
 	 * @author Justin Palmer
 	 **/
@@ -94,14 +96,14 @@ class OptionsParser
 	}
 	/**
 	 * Search for an option and return it if it exists
-	 *	
+	 *
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
 	public static function find($key, $options)
 	{
 		$array = self::toArray($options);
-		return (array_key_exists($key, $array)) ? $array[$key] 
+		return (array_key_exists($key, $array)) ? $array[$key]
 												: false;
 	}
 	/**
@@ -118,7 +120,7 @@ class OptionsParser
 		self::$options = self::toStringFromArray($array);
 		return self::$options;
 	}
-	
+
 	/**
 	 * Search and destroy the key and return it if it exists
 	 *

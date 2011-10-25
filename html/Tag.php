@@ -87,8 +87,12 @@ abstract class Tag
 	 **/
 	private function addOptions($options)
 	{
-		$options = $this->options . ',' . $options;
-		$this->options = ltrim(rtrim($options, ','), ',');
+		if(is_array($options)){
+			$this->options = array_merge(OptionsParser::toArray($this->options), $options);
+		}else{
+			$options = $this->options . ',' . $options;
+			$this->options = ltrim(rtrim($options, ','), ',');
+		}
 		return $this->options;
 	}
 }
