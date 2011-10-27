@@ -17,7 +17,12 @@ class UniqueDatabaseRule extends DatabaseRule
 	 * @see Rule::run()
 	 **/
 	 public function run(){
-		$record = $this->model->where('`' . $this->property . '` = ? ', $this->value)->count();
-		return parent::run($record->count);
+	 	try {
+	 		$dynamicFinder = 'findFirstBy' . Inflections::classify($this->property);
+	 		$record = $this->model->$dynamicFinder($this->value);
+			return parent::run($record->id != $this->model->id);
+	 	} catch (RecordNotFoundException $e) {
+	 		return true;
+	 	}
 	 }
 } // END class Rule
