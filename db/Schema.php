@@ -1,9 +1,9 @@
 <?php
 /**
  * To define the schema of a model
- * 
+ *
  * @todo Building SQL in schema is bad.  Needs to be done by the adapter.
- * 
+ *
  * @package db
  * @author Justin Palmer
  **/
@@ -39,7 +39,7 @@ class Schema
 	private $last_relationship = null;
 	/**
 	 * The required elements
-	 * 
+	 *
 	 * @var array
 	 */
 	public $required = array();
@@ -68,7 +68,7 @@ class Schema
 		if(!($rule instanceof Rule)) {
 			throw new Exception('Schema::rule expects the last parameter to be a Rule in ' . get_class($this->model));
 		}
-		
+
 		foreach($args as $column) {
 			//Make sure the property exists.
 			$this->model->hasProperty($column);
@@ -81,7 +81,7 @@ class Schema
 				$rules = array();
 			}
 			$rules[] = $rule;
-			$this->rules->set($column, $rules);				
+			$this->rules->set($column, $rules);
 		}
 	}
 	/**
@@ -124,8 +124,8 @@ class Schema
       $namespace = implode('\\', $pieces) . '\\';
     }
 		return $this->prop(Inflections::underscore($table) . '_id')
-					->addOption(array('table' => Inflections::tableize($table)), 'table')
-					->addOption(array('klass' => $namespace . $table), 'klass');
+								->addOption(array('table' => Inflections::tableize($table)), 'table')
+								->addOption(array('klass' => $namespace . $table), 'klass');
 	}
 	/**
 	 * Set the property to access when doing the where
@@ -136,6 +136,16 @@ class Schema
 	public function prop($prop)
 	{
 		return $this->addOption(array('prop' => $prop), 'prop');
+	}
+	/**
+	 * Set the table name
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function table($table_name)
+	{
+		return $this->addOption(array('table' => $table_name), 'table');
 	}
 	/**
 	 * Where claus no dynamic
@@ -150,7 +160,7 @@ class Schema
 		$this->relationships->set($this->last_relationship, $options);
 		return $this;
 	}
-	
+
 	/**
 	 * Set the order by for a relationship
 	 *
@@ -216,7 +226,7 @@ class Schema
 	 * @author Justin Palmer
 	 **/
 	public function hasOne($name)
-	{	
+	{
 		$this->last_relationship = strtolower($name);
 		return $this->addRelationship($name, 'has-one')->className(Inflections::singularize($name));
 	}
@@ -227,7 +237,7 @@ class Schema
 	 * @author Justin Palmer
 	 **/
 	public function hasMany($name)
-	{	
+	{
 		$this->last_relationship = strtolower($name);
 		return $this->addRelationship($name, 'has-many')->className(Inflections::singularize($name));
 	}
@@ -238,9 +248,9 @@ class Schema
 	 * @author Justin Palmer
 	 **/
 	public function belongsTo($name)
-	{	
+	{
 		$this->last_relationship = strtolower($name);
-		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));	
+		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));
 	}
 	/**
 	 * Add the option to the last relationship.
@@ -255,7 +265,7 @@ class Schema
 		$options = $this->relationships->get($this->last_relationship);
 		if($options === null)
 			throw new NoSchemaRelationshipException($name);
-		
+
 		if($name == 'prop' && ($options->type == 'has-many' || $options->type == 'has-one')){
 			$value = $this->model->primary_key();
 		}
@@ -305,7 +315,7 @@ class Schema
 			case ($options->type =='belongs-to' ):
 				//$ret = $this->model->alias() . "." . $this->model->primary_key() . " = " . $options->alias . "." . $options->foreign_key;
 				$ret = $options->alias . '.' . $this->model->primary_key() . ' = ?';
-				break; 
+				break;
 			case ($options->type == 'has-many' || $options->type == 'has-one'):
 				$ret = $options->alias . "." . $options->foreign_key . " = ?";
 				break;
@@ -313,7 +323,7 @@ class Schema
 		if($options->thru != ''){
 			$klass = $options->thru;
 			$klass = new $klass;
-			$options->join = ' INNER JOIN `' . $klass->table_name() . '` AS ' . $klass->alias() . ' 
+			$options->join = ' INNER JOIN `' . $klass->table_name() . '` AS ' . $klass->alias() . '
 									ON ' . $klass->alias() . '.' . Inflections::foreignKey($options->table) . ' = ' . $options->alias . '.id';
 			$ret = $klass->alias() . '.' . $options->foreign_key . ' = ?';
 		}
