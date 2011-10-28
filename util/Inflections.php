@@ -152,7 +152,7 @@ class Inflections
 	/**
 	 * Change a string to plural
 	 *
-	 * @param string $string 
+	 * @param string $string
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -193,7 +193,7 @@ class Inflections
 	/**
 	 * Change a string to singular
 	 *
-	 * @param string $string 
+	 * @param string $string
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -224,8 +224,8 @@ class Inflections
 	/**
 	 * Change a string to plural conditionally.
 	 *
-	 * @param string $count 
-	 * @param string $string 
+	 * @param string $count
+	 * @param string $string
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -245,11 +245,11 @@ class Inflections
 	 **/
 	public static function titleize($string)
 	{
-		$restricted = array('and', 'but', 'or', 'yet', 'for', 'nor', 'so', 'as', 
+		$restricted = array('and', 'but', 'or', 'yet', 'for', 'nor', 'so', 'as',
 							'if', 'once', 'than', 'that', 'till', 'when',
-							'at', 'by', 'down', 'from', 'in', 'into', 'like', 'near', 'of', 
+							'at', 'by', 'down', 'from', 'in', 'into', 'like', 'near', 'of',
 							'off', 'on', 'onto', 'over', 'past', 'to', 'upon', 'with', 'a', 'an', 'the');
-		$array = explode(' ', $string);
+		$array = explode(' ', implode(' ', explode('_', $string)));
 		$string = '';
 		for($i = 0; $i < sizeof($array); $i++){
 			if($i == 0 || !in_array($array[$i], $restricted) || $i == sizeof($array) - 1){
