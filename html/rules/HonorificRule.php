@@ -6,7 +6,7 @@
  * @subpackage rules
  * @author Justin Palmer
  **/
-class InternationalPhoneRule extends PregRule
+class HonorificRule extends PregRule
 {
 	/**
 	 * constructor
