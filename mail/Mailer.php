@@ -4,15 +4,15 @@ require_once('lib/class.phpmailer.php');
 * Mailer class that handles all of the mailings
 */
 class Mailer extends PHPMailer
-{	
+{
 	private static $settings = array();
-	
+
 	private static $dev_email = null;
-	
+
 	public $pr_layout = 'application';
-	
+
 	private $valid_settings = array('deliveryMethod', 'host', 'port', 'username', 'password', 'secure', 'from', 'debug');
-	
+
 	function __construct(array $vars=array(), $exceptions=false)
 	{
 		foreach($vars as $key => $value){
@@ -21,7 +21,7 @@ class Mailer extends PHPMailer
 		parent::__construct($exceptions);
 		$this->settings();
 	}
-	
+
 	/**
 	 * Send an email
 	 *
@@ -35,11 +35,11 @@ class Mailer extends PHPMailer
 		$this->$method();
 		$t = new MailerTemplate($this, $method);
 		$html = $t->display();
-		
+
 		$this->html($html);
 		return parent::Send();
 	}
-	
+
 	/**
 	 * Set the subject
 	 *
@@ -50,7 +50,7 @@ class Mailer extends PHPMailer
 	{
 		$this->Subject = $subject;
 	}
-	
+
 	/**
 	 * Set the text only body
 	 *
@@ -61,7 +61,7 @@ class Mailer extends PHPMailer
 	{
 		$this->AltBody = $text;
 	}
-	
+
 	/**
 	 * Set the html body
 	 *
@@ -72,7 +72,7 @@ class Mailer extends PHPMailer
 	{
 		return parent::MsgHTML($html);
 	}
-	
+
 	/**
 	 * Add an attachment
 	 *
@@ -83,7 +83,7 @@ class Mailer extends PHPMailer
 	{
 		return parent::AddAttachment($path);
 	}
-	
+
 	/**
 	 * Set the to address(es)
 	 *
@@ -94,7 +94,21 @@ class Mailer extends PHPMailer
 	{
 		return $this->setRecipients('AddAddress', $address, $name);
 	}
-	
+
+	/**
+	 *
+	 * Set the reply to email address.
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function replyTo($address, $name='', $clearReplyTo=false)
+	{
+		if($clearReplyTo)
+			$this->ClearReplyTos();
+		return $this->AddReplyTo( $address, $name);
+	}
+
 	/**
 	 * cc an address
 	 *
@@ -105,7 +119,7 @@ class Mailer extends PHPMailer
 	{
 		return $this->setRecipients('AddCC', $address, $name);
 	}
-	
+
 	/**
 	 * bcc an address
 	 *
@@ -116,7 +130,7 @@ class Mailer extends PHPMailer
 	{
 		return $this->setRecipients('AddBCC', $address, $name);
 	}
-	
+
 	/**
 	 * set the debug flag
 	 *
@@ -127,7 +141,7 @@ class Mailer extends PHPMailer
 	{
 		$this->SMTPDebug = $boolean;
 	}
-	
+
 	/**
 	 * Set up the server settings
 	 *
@@ -138,9 +152,9 @@ class Mailer extends PHPMailer
 	{
 		self::$settings = $array;
 	}
-	
+
 	/**
-	 * Set the email if we want all emails sent out to only go 
+	 * Set the email if we want all emails sent out to only go
 	 * to a specific email address and override what the app tells
 	 * it to go to.  This is good for development environments.
 	 *
@@ -151,7 +165,7 @@ class Mailer extends PHPMailer
 	{
 		self::$dev_email = $email;
 	}
-	
+
 	/**
 	 * Set the cc, bcc and to
 	 *
@@ -187,7 +201,7 @@ class Mailer extends PHPMailer
 			$this->$key($val);
 		}
 	}
-	
+
 	/**
 	 * Set the host
 	 *
@@ -198,7 +212,7 @@ class Mailer extends PHPMailer
 	{
 		$this->Host = $host;
 	}
-	
+
 	/**
 	 * Set the port
 	 *
@@ -208,8 +222,8 @@ class Mailer extends PHPMailer
 	private function port($port)
 	{
 		$this->Port = $port;
-	}	
-	
+	}
+
 	/**
 	 * Set the username
 	 *
@@ -221,7 +235,7 @@ class Mailer extends PHPMailer
 		$this->SMTPAuth = true;
 		$this->Username = $username;
 	}
-	
+
 	/**
 	 * Set the password
 	 *
@@ -232,7 +246,7 @@ class Mailer extends PHPMailer
 	{
 		$this->Password = $password;
 	}
-	
+
 	/**
 	 * Authentication tls or ssl
 	 *
@@ -246,7 +260,7 @@ class Mailer extends PHPMailer
 			throw new Exception('Mailer::serverSettings() secure can be "ssl" or "tls"');
 		$this->SMTPSecure = $val;
 	}
-	
+
 	/**
 	 * Sets the AddReplyTo and SetFrom
 	 *
@@ -267,7 +281,7 @@ class Mailer extends PHPMailer
 		$this->AddReplyTo($address, $name);
 		$this->SetFrom($address, $name);
 	}
-	
+
 	/**
 	 * Delivery method
 	 *
@@ -282,6 +296,6 @@ class Mailer extends PHPMailer
 		$this->Mailer = $method;
 		if($method == 'sendmail')
 			parent::IsSendmail();
-			
+
 	}
 }
