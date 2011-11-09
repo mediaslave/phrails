@@ -27,7 +27,7 @@
     <antcall target="pdepend"/>
     <antcall target="phpmd"/>
    </sequential>
-   <antcall target="phpcpd"/>
+   <!--<antcall target="phpcpd"/>-->
    <antcall target="phpcs"/>
    <antcall target="phpdoc"/>
    <antcall target="phploc"/>
@@ -52,11 +52,11 @@
   </exec>
  </target>
 
- <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+ <!--<target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
   <exec executable="phpcpd">
    <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${source}" />
   </exec>
- </target>
+ </target>-->
 
  <target name="phploc" description="Generate phploc.csv">
   <exec executable="phploc">
