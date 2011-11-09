@@ -6,3 +6,4 @@ public
 vendor
 index.php
 docs/*
+build/*
