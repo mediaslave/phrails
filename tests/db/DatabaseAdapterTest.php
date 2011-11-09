@@ -1,13 +1,13 @@
 <?php
 require_once 'DatabaseAdapterMock.php';
 /**
- * 
+ *
  */
 class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	private $stub;
-	
+
 	public function setUp()
 	{
 		$this->stub = $this->getMockForAbstractClass('DatabaseAdapterMock');
@@ -33,7 +33,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->showColumns('users'));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::truncate
@@ -43,9 +43,9 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 		$this->stub->expects($this->any())
 				   ->method('truncate')
 				   ->will($this->returnValue(true));
-		$this->assertEquals('true', $this->stub->truncate('users'));
+		$this->assertEquals(true, $this->stub->truncate('users'));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::showTables
@@ -58,7 +58,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->showTables());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::cacheColumns
@@ -71,7 +71,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Hash', $this->stub->cacheColumns('Users', 'users'));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::buildCreate
@@ -84,7 +84,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->buildCreate(new SqlBuilderHash));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::buildRead
@@ -97,7 +97,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->buildRead(new SqlBuilderHash));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::buildUpdate
@@ -110,7 +110,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->buildUpdate(new SqlBuilderHash));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::buildDelete
@@ -123,7 +123,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('stdClass', $this->stub->buildDelete(new SqlBuilderHash));
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::tick
@@ -136,11 +136,11 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(array(), $this->stub->tick());
 	}
-	
+
 	/**
 	 * Only gets called internally, but needs to be able to overridden
 	 * this is why assertTrue
-	 * 
+	 *
 	 * @test
 	 * @covers DatabaseAdapter::limit
 	 **/
@@ -148,7 +148,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue(true);
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::lastInsertId
@@ -161,7 +161,7 @@ class DatabaseAdapterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(1, $this->stub->lastInsertId());
 	}
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseAdapter::conn
