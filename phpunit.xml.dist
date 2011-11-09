@@ -22,11 +22,15 @@
     <whitelist addUncoveredFilesFromWhitelist="true">
       <exclude>
         <directory suffix=".php">tests</directory>
+        <directory suffix=".php">__view__</directory>
+        <directory suffix=".php">helpers/examples</directory>
       </exclude>
     </whitelist>
     <blacklist>
       <exclude>
         <directory suffix=".php">tests</directory>
+        <directory suffix=".php">__view__</directory>
+        <directory suffix=".php">helpers/examples</directory>
       </exclude>
     </blacklist>
   </filter>
