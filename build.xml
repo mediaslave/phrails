@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="phrails" default="build" basedir=".">
- <property name="source" value="app"/>
+ <property name="source" value="."/>
 
  <target name="clean" description="Clean up and create artifact directories">
   <delete dir="${basedir}/build/api"/>
@@ -27,11 +27,25 @@
     <antcall target="pdepend"/>
     <antcall target="phpmd"/>
    </sequential>
-   <!--<antcall target="phpcpd"/>-->
+   <antcall target="phpcpd"/>
    <antcall target="phpcs"/>
    <antcall target="phpdoc"/>
    <antcall target="phploc"/>
   </parallel>
+ </target>
+
+ <target name="lint">
+  <apply executable="php" failonerror="true">
+   <arg value="-l" />
+
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+   </fileset>
+
+   <fileset dir="${basedir}/tests">
+    <include name="**/*.php" />
+   </fileset>
+  </apply>
  </target>
 
  <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
@@ -52,6 +66,11 @@
   </exec>
  </target>
 
+ <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+  <exec executable="phpcpd">
+   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${source}" />
+  </exec>
+ </target>
 
  <target name="phploc" description="Generate phploc.csv">
   <exec executable="phploc">
