@@ -79,20 +79,20 @@ abstract class Tag
 		return $this->options;
 	}
 	/**
-	 * Add an option to the options string
+	 * Combine the options that are set for any given tag, with the
+	 * options the user wants to add and return it.
 	 *
-	 * @return string
+	 * @param mixed $options
 	 * @return string
 	 * @author Justin Palmer
 	 **/
 	private function addOptions($options)
 	{
-		if(is_array($options)){
-			$this->options = array_merge(OptionsParser::toArray($this->options), $options);
-		}else{
-			$options = $this->options . ',' . $options;
-			$this->options = ltrim(rtrim($options, ','), ',');
+		try {
+			return $this->options = array_merge(OptionsParser::toArray($this->options),
+																				OptionsParser::toArray($options));
+		} catch (OptionParserParseException $e) {
+			throw new InvalidTagPropertiesException($this->options . ',' . $options);
 		}
-		return $this->options;
 	}
 }

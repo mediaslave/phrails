@@ -28,25 +28,24 @@ class OptionsParser
 	 */
 	public static function toArray($options, array $optionExceptions=array())
 	{
-		return self::parse($options, $optionExceptions, true);
+		return self::parse($options, $optionExceptions, array());
 	}
 	/**
 	 * @nodoc
 	 */
-	private function parse($options, array $optionExceptions=array(), $array=false)
+	private function parse($options, array $optionExceptions=array(), $return='')
 	{
-		($array) ? $ret = array() : $ret = '';
 		//if it is an array lets do the conversion and return the value.
 		if(is_array($options)){
-			return self::convertTo($options, $optionExceptions, $array);
+			return self::convertTo($options, $optionExceptions, $return);
 		}
 		//Do some processing if we actually have some options.
 		if($options !== null && $options != ''){
 			//All options are comma seperated, make an array out of them.
 			$options = explode(',', $options);
-			$ret = self::convertTo($options, $optionExceptions, $array);
+			return self::convertTo($options, $optionExceptions, $return);
 		}
-		return $ret;
+		return $return;
 	}
 
 	/**
@@ -55,15 +54,20 @@ class OptionsParser
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function convertTo(array $options, array $optionExceptions, $array)
+	private function convertTo(array $options, array $optionExceptions, $ret)
 	{
 		$keys = array();
-		($array) ? $ret = array() : $ret = '';
+		$do_explode = array_key_exists(0, $options);
 		foreach($options as $key => $value){
 			//Get the key/value an array
-			$option = explode(':', $value);
-			$key = trim($option[0]);
-			$value = trim($option[1]);
+			if($do_explode){
+				$option = explode(':', $value);
+				if(!isset($option[1])){
+					throw new OptionParserParseException($options);
+				}
+				$key = trim($option[0]);
+				$value = trim($option[1]);
+			}
 			if(!in_array($key, $keys)){
 				$keys[] = $key;
 			}else{
@@ -72,8 +76,8 @@ class OptionsParser
 			if(array_key_exists($key, $optionExceptions))
 				$key = $optionExceptions[$key];
 			//Set the option into the appropriate return type.
-			($array) ? $ret[$key] = $value
-					 : $ret .= ' ' . $key . '="' . $value . '"';
+			(is_array($ret)) ? $ret[$key] = $value
+					 		 				 : $ret .= ' ' . $key . '="' . $value . '"';
 		}
 		return $ret;
 	}

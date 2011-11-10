@@ -1,6 +1,6 @@
 <?php
 /**
- * @package helpers 
+ * @package helpers
  * @subpackage view
  */
 
@@ -14,7 +14,7 @@
  * @author Justin Palmer
  */
 function render(){
-	$args = func_get_args(); 
+	$args = func_get_args();
 	return TemplatePartial::render($args);
 }
 
@@ -50,7 +50,7 @@ function image_tag($source, $options='', $from_base=true)
  * @return string
  * @author Justin Palmer
  **/
-function google_javascript_include_tag($library='jquery', $version='1.6.3', $jsapi=true)
+function google_javascript_include_tag($library='jquery', $version='1.6.4', $jsapi=true)
 {
 	$js = '';
 	if($jsapi == true)
@@ -72,17 +72,17 @@ function javascript_include_tag($source, $options='')
 }
 /**
  * Set the content for a certain var from the view.
- * 
- * Use of this method will over right any vars set in the controller 
- * that are used in the layout. 
  *
- * @param string $key 
- * @param string $value 
+ * Use of this method will over right any vars set in the controller
+ * that are used in the layout.
+ *
+ * @param string $key
+ * @param string $value
  * @return void
  * @author Justin Palmer
  */
 function content_for($key, $value){
-	(isset(Template::$ContentFor->$key)) 
+	(isset(Template::$ContentFor->$key))
 					? Template::$ContentFor->$key = Template::$ContentFor->$key . $value
 					: Template::$ContentFor->$key = $value;
 }
@@ -110,8 +110,8 @@ function has_content_for($key)
 
 /**
  * Flash the message on the screen.
- * 
- * You can create your own Flash by extending the <code>Flash</code> class 
+ *
+ * You can create your own Flash by extending the <code>Flash</code> class
  * and implementing the <code>display()</code> method.
  *
  * @return string
@@ -132,11 +132,11 @@ function flash_it(HashArray $flash)
 		}
 		if($div_value != '')
 			$ret .= '<div class="' . $key . '">
-						<ul>' . 
-							$div_value . 
+						<ul>' .
+							$div_value .
 						'</ul>
 					</div>';
-	}	
+	}
 	return $ret;
 }
 
@@ -161,6 +161,6 @@ function cycle($one='one', $two='')
  **/
 function csrf_meta_tag()
 {
-	return new Meta('csrf-token', FormBuilder::authenticityToken()) . "\t" . 
+	return new Meta('csrf-token', FormBuilder::authenticityToken()) . "\t" .
 		   new Meta('csrf-param', FormBuilder::authenticity_token_key);
 }

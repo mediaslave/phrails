@@ -27,6 +27,7 @@ class FormBuilder
 	 * @var Model
 	 */
 	protected $model;
+	protected $alt_element_name;
 	/**
 	 * This can be set in the form initializer
 	 *
@@ -348,7 +349,10 @@ class FormBuilder
 			return $property;
 		//Create the element name based off of the model.
 		$this->model->hasProperty($property);
-		$name = $this->model->alias() . "[$property]";
+		$modelName = $this->model->alias();
+		if($this->alternateElementName() !== null)
+			$modelName = $this->alternateElementName();
+		$name = $modelName . "[$property]";
 
 		if($this->array_it){
 			if($this->array_it_value != ''){
@@ -498,6 +502,19 @@ class FormBuilder
 	public function model()
 	{
 		return $this->model;
+	}
+	/**
+	 *
+	 * Set an alternate element name;
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function alternateElementName($value=null)
+	{
+		if($value !== null)
+			$this->alt_element_name = $value;
+		return $this->alt_element_name;
 	}
 
 	/**
