@@ -1,9 +1,15 @@
-<project name="Phrails" default="build" basedir=".">
- <target name="clean">
-  <!-- Clean up -->
-  <delete dir="build"/>
+<?xml version="1.0" encoding="UTF-8"?>
 
-  <!-- Create build directories -->
+<project name="phrails" default="build" basedir=".">
+ <property name="source" value="."/>
+
+ <target name="clean" description="Clean up and create artifact directories">
+  <delete dir="${basedir}/build/api"/>
+  <delete dir="${basedir}/build/code-browser"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
+
   <mkdir dir="${basedir}/build/api"/>
   <mkdir dir="${basedir}/build/code-browser"/>
   <mkdir dir="${basedir}/build/coverage"/>
@@ -11,72 +17,88 @@
   <mkdir dir="${basedir}/build/pdepend"/>
  </target>
 
- <!-- Run unit tests and generate junit.xml and clover.xml -->
- <target name="phpunit">
-  <exec dir="${basedir}" executable="phpunit" failonerror="true">
-   <arg line="--bootstrap ${basedir}/tests/bootstrap.php 
-			  --log-junit ${basedir}/build/logs/junit.xml 
-			  --coverage-clover ${basedir}/build/logs/clover.xml tests"/>
-  </exec>
+ <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+  <exec executable="phpunit" failonerror="true"/>
  </target>
 
- <target name="code-coverage">   
-  <exec dir="${basedir}"
-        executable="phpunit"
-        failonerror="true">
-   <arg line="--bootstrap tests/bootstrap.php --coverage-html build/coverage ."/>
-  </exec>
- </target>
-
- <!-- Run pdepend, phpmd, phpcpd, and phpcs in parallel -->
- <target name="parallelTasks">
-  <parallel>
-   <antcall target="pdepend"/>
-   <antcall target="phpmd"/>
+ <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
+  <parallel threadCount="2">
+   <sequential>
+    <antcall target="pdepend"/>
+    <antcall target="phpmd"/>
+   </sequential>
    <antcall target="phpcpd"/>
    <antcall target="phpcs"/>
    <antcall target="phpdoc"/>
+   <antcall target="phploc"/>
   </parallel>
  </target>
 
- <!-- Generate jdepend.xml and software metrics charts -->
- <target name="pdepend">
+ <target name="lint">
+  <apply executable="php" failonerror="true">
+   <arg value="-l" />
+
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+   </fileset>
+
+   <fileset dir="${basedir}/tests">
+    <include name="**/*.php" />
+   </fileset>
+  </apply>
+ </target>
+
+ <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
   <exec executable="pdepend">
-   <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml --ignore=tests ." />
+   <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
+              --jdepend-chart=${basedir}/build/pdepend/dependencies.svg
+              --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
+              ${basedir}" />
   </exec>
  </target>
 
- <!-- Generate pmd.xml -->
- <target name="phpmd">
+ <target name="phpmd" description="Generate pmd.xml using PHPMD">
   <exec executable="phpmd">
-   <arg line=". xml codesize,unusedcode --reportfile ${basedir}/build/logs/pmd.xml --exclude tests,mail/lib,util/Dbug.php,util/Markdown.php" />
+   <arg line="${basedir}
+              xml
+              codesize,design,naming,unusedcode
+              --reportfile ${basedir}/build/logs/pmd.xml" />
   </exec>
  </target>
 
- <!-- Generate pmd-cpd.xml -->
- <target name="phpcpd">
+ <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
   <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --exclude tests ." />
+   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${basedir}" />
   </exec>
  </target>
 
- <!-- Generate checkstyle.xml
- <target name="phpcs">
+ <target name="phploc" description="Generate phploc.csv">
+  <exec executable="phploc">
+   <arg line="--log-csv ${basedir}/build/logs/phploc.csv ${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
   <exec executable="phpcs" output="/dev/null">
-   <arg line="standard=MySource extensions=php report=checkstyle report-file=${basedir}/build/logs/checkstyle.xml ." />
-  </exec>
- </target> -->
-
- <!-- Generate API documentation -->
- <target name="phpdoc">
-  <exec executable="phpdoc">
-   <arg line="-d . -ti Phrails -o HTML:frames:earthli -i .git/,tests/,*examples/,__view__/ -t build/api" />
+   <arg line="--report=checkstyle
+              --report-file=${basedir}/build/logs/checkstyle.xml
+              --standard=PEAR
+              --ignore=${basedir}/tests/*,${basedir}/mail/lib/*
+              ${basedir}" />
   </exec>
  </target>
 
- <target name="phpcb">
+ <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
+  <exec executable="phpdoc">
+   <arg line="-d ${basedir} -t ${basedir}/build/api --ignore ${basedir}/tests/*,${basedir}/mail/lib/*" />
+  </exec>
+ </target>
+
+ <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
   <exec executable="phpcb">
-   <arg line="--log    ${basedir}/build/logs --source . --output ${basedir}/build/code-browser" />
+   <arg line="--log    ${basedir}/build/logs
+              --source ${basedir}
+              --output ${basedir}/build/code-browser" />
   </exec>
  </target>
 
