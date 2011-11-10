@@ -53,13 +53,13 @@
    <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
               --jdepend-chart=${basedir}/build/pdepend/dependencies.svg
               --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
-              ${source}" />
+              ${basedir}" />
   </exec>
  </target>
 
  <target name="phpmd" description="Generate pmd.xml using PHPMD">
   <exec executable="phpmd">
-   <arg line="${source}
+   <arg line="${basedir}
               xml
               codesize,design,naming,unusedcode
               --reportfile ${basedir}/build/logs/pmd.xml" />
@@ -68,13 +68,13 @@
 
  <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
   <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${source}" />
+   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${basedir}" />
   </exec>
  </target>
 
  <target name="phploc" description="Generate phploc.csv">
   <exec executable="phploc">
-   <arg line="--log-csv ${basedir}/build/logs/phploc.csv ${source}" />
+   <arg line="--log-csv ${basedir}/build/logs/phploc.csv ${basedir}" />
   </exec>
  </target>
 
@@ -83,20 +83,21 @@
    <arg line="--report=checkstyle
               --report-file=${basedir}/build/logs/checkstyle.xml
               --standard=PEAR
-              ${source}" />
+              --ignore=${basedir}/tests/*,${basedir}/mail/lib/*
+              ${basedir}" />
   </exec>
  </target>
 
  <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
   <exec executable="phpdoc">
-   <arg line="-d ${source} -t ${basedir}/build/api --ignore=${basedir}/tests/*,${basedir}/mail/lib/*" />
+   <arg line="-d ${basedir} -t ${basedir}/build/api --ignore=${basedir}/tests/*,${basedir}/mail/lib/*" />
   </exec>
  </target>
 
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
   <exec executable="phpcb">
    <arg line="--log    ${basedir}/build/logs
-              --source ${source}
+              --source ${basedir}
               --output ${basedir}/build/code-browser" />
   </exec>
  </target>
