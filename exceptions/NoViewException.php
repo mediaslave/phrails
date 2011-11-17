@@ -5,9 +5,5 @@
 */
 class NoViewException extends Exception
 {
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
+
 }
