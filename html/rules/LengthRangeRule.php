@@ -1,11 +1,14 @@
 <?php
 /**
- * Is the current model property an integer.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class LengthRangeRule extends Rule
 {
 	public $min;
@@ -24,7 +27,7 @@ class LengthRangeRule extends Rule
 		$this->message = str_replace('{max}', $max, $message);
 		parent::__construct();
 	}
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

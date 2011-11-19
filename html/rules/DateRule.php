@@ -1,11 +1,14 @@
 <?php
 /**
- * Is the current model property an integer.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class DateRule extends PregRule
 {
 	/**
@@ -29,7 +32,7 @@ class DateRule extends PregRule
 		if($this->value === null)
 			return true;
 		$boolean = parent::run();
-		
+
 		if($boolean){
 			//Split the date into an array via dashes.
 			$date = preg_split('/\-/', $this->value);
@@ -38,7 +41,7 @@ class DateRule extends PregRule
 				$boolean = FALSE;
 			}
 		}
-		
+
 		return $boolean;
 	}
 } // END class Rule

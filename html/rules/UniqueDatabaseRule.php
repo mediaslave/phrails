@@ -1,11 +1,14 @@
 <?php
 /**
- * Is the value for a given column unique in the db
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
- * @author Dave Kerschner
- **/
+ * @author Justin Palmer
+ */
 class UniqueDatabaseRule extends DatabaseRule
 {
 	/**

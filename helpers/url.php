@@ -1,10 +1,9 @@
 <?php
 /**
  * The helpers to helper to deal with url's, paths.
- *
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  * @package helpers
- * @subpackage url
+ * @author Justin Palmer
  */
 /**
  * Return the path of a route with arguments passed if given.
@@ -47,7 +46,7 @@ function aurl($name, $options=null)
 	$assets = array_values($assets);
 	if($assets === null){
 		return url($name, $options);
-	}	
+	}
 	$url = $assets[$acount] . path($name, $options);
 	($acount == (count($assets) - 1)) ? $acount = 0 : $acount++;
 	return $url;
@@ -56,9 +55,9 @@ function aurl($name, $options=null)
  * This will create a link.
  *
  * Options are parsed into attributes in format attribute-name:value
- * 
+ *
  * link_to('home', path('home'), 'class:menu,id:home-menu')
- * 
+ *
  * @param string $display
  * @param string $path
  * @param string $options

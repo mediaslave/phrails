@@ -1,11 +1,14 @@
 <?php
 /**
- * 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
- * @author Dave Kerschner
- **/
+ * @author Justin Palmer
+ */
 class AgeRangeRule extends DatabaseRule
 {
 
@@ -21,14 +24,14 @@ class AgeRangeRule extends DatabaseRule
 		$this->message = '%s must be at least ' . $lower_bound . ' years old.';
 
 		parent::__construct($customMessage);
-		
+
 		if($upper_bound !== null) {
 			$this->message = '%s must be less than ' . $upper_bound . ' years old at least ' . $lower_bound . ' years old.';
 			if ($lower_bound > $upper_bound) {
 				throw new Exception("Lower bound $lower_bound can not be greater than upper bound $upper_bound");
 			}
 		}
-		
+
 		$this->lower_bound = $lower_bound;
 		$this->upper_bound = $upper_bound;
 	}
@@ -38,10 +41,10 @@ class AgeRangeRule extends DatabaseRule
 	 **/
 	 public function run(){
 		 $pass = true;
-     
+
      $dr = new DateRule();
      $dr->value = $this->value;
-     
+
      if (!$dr->run()) {
        return false;
      }
@@ -53,11 +56,11 @@ class AgeRangeRule extends DatabaseRule
 			 $pass = false;
 		 }
 
-		 if($this->upper_bound !== null 
+		 if($this->upper_bound !== null
 				&& $age >= $this->upper_bound) {
 			 $pass = false;
 		 }
-		 
+
 		 return parent::run(!$pass);
 	 }
 } // END class Rule

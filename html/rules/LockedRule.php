@@ -1,11 +1,14 @@
 <?php
 /**
- * If the model property is locked then it can not be written to.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class LockedRule extends Rule
 {
 	/**

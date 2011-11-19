@@ -1,13 +1,14 @@
 <?php
 /**
- * Does the value match a uri.
- *
- * @todo This constructor sucks!  The second regex supports localhost, where the first does not.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class UriRule extends PregRule
 {
 	/**

@@ -1,16 +1,19 @@
 <?php
 /**
- * Is the current model property an integer.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class ContentTypeRule extends PregRule
 {
 
 	private $type;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -30,7 +33,7 @@ class ContentTypeRule extends PregRule
 		$message = '%s should be one of the following file types: ' . implode(', ', $array) . ', type given: ' . $type;
 		parent::__construct($preg, $message);
 	}
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

@@ -1,7 +1,11 @@
 <?php
 /**
-* No view created for the request.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
 * @package exceptions
+* @author Justin Palmer
 */
 class InvalidTagPropertiesException extends Exception
 {

@@ -1,5 +1,11 @@
 <?php
 /**
+ * Text helpers
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package helpers
+ * @author Justin Palmer
+ */
+/**
  * Formats a number grouped by the thousands.
  *
  * @return void

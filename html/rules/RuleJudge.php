@@ -1,19 +1,26 @@
 <?php
 /**
-* 
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package html
+ * @subpackage rules
+ * @author Justin Palmer
+ */
 class RuleJudge
 {
 	private $Props;
 	private $Schema;
 	private $errors = array();
-	
+
 	function __construct(Hash $Props, Schema $Schema)
 	{
 		$this->Props = $Props;
 		$this->Schema = $Schema;
 	}
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -25,7 +32,7 @@ class RuleJudge
 	{
 		$last_prop_name = '';
 		$Hash = new Hash();
-		
+
 		foreach($this->Props->export() as $property => $value){
 			if(empty($this->errors))
 				$last_prop_name = $property;
@@ -39,25 +46,25 @@ class RuleJudge
         continue;
       }
 
-			//if the value is null and it is not a required property then lets just 
+			//if the value is null and it is not a required property then lets just
 			//continue onto the next property, nothing to do here.
-			if((($value instanceof Expression) || 
+			if((($value instanceof Expression) ||
           $value === null ||
-          $value == '') && 
+          $value == '') &&
 				!in_array($property, $this->Schema->required)){
 				continue;
 			}
 
 			//Run the rules for the property if there are any.
 			$this->runRulesForProperty($property, $value, $Model);
-			
+
 		}
 		if(!empty($this->errors)){
 			$Hash->set($Model->alias() . '[' . $property . ']', $this->errors);
 		}
 		return $Hash;
 	}
-	
+
 	/**
 	 * Run the rule for a property
 	 *

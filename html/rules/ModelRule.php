@@ -1,14 +1,17 @@
 <?php
 /**
- * Run a function in the model to validate a field
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
- * @author Dave Kerschner
- **/
+ * @author Justin Palmer
+ */
 class ModelRule extends Rule
 {
-	
+
 	/**
 	 * The method in the Model to call to validate the field
 	 *
@@ -17,13 +20,13 @@ class ModelRule extends Rule
 	 */
 	private $method;
 
-	
+
 	public function __construct($method, $message) {
 		$this->method = $method;
 		$this->message = $message;
 		parent::__construct();
 	}
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

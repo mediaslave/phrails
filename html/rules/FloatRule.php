@@ -1,18 +1,21 @@
 <?php
 /**
- * Is the current model property a float.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
- * @author Dave Kerschner
- **/
+ * @author Justin Palmer
+ */
 class FloatRule extends Rule
 {
 	/**
 	 * @see Rule::message
 	 */
 	public $message = '%s should be a decimal number.';
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

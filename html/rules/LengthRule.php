@@ -1,11 +1,14 @@
 <?php
 /**
- * Is the current model property an integer.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class LengthRule extends Rule
 {
 	public $length;
@@ -20,7 +23,7 @@ class LengthRule extends Rule
 		$this->length = $length;
 		$this->message = str_replace('{length}', $length, $message);
 	}
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

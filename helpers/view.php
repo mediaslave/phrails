@@ -1,7 +1,9 @@
 <?php
 /**
+ * View helpers
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  * @package helpers
- * @subpackage view
+ * @author Justin Palmer
  */
 
 /**

@@ -1,11 +1,14 @@
 <?php
 /**
- * Is the current model property an integer.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class IntegerRangeRule extends Rule
 {
 	public $min;
@@ -25,7 +28,7 @@ class IntegerRangeRule extends Rule
 		$this->message = '';
 		parent::__construct($message);
 	}
-	
+
 	/**
 	 * @see Rule::run()
 	 **/

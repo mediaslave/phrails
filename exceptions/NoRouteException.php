@@ -1,11 +1,15 @@
 <?php
 /**
-* No route for the expected path.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
 * @package exceptions
+* @author Justin Palmer
 */
 class NoRouteException extends Exception
 {
-	
+
 	function __construct($message="The route specified does not exist.")
 	{
 		parent::__construct($message);

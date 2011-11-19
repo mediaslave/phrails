@@ -1,9 +1,8 @@
 <?php
 /**
  * Text helpers
- *
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  * @package helpers
- * @subpackage form
  * @author Justin Palmer
  */
 /**
@@ -34,7 +33,7 @@ function submit_tag($name, $value, $options='')
  **/
 function form_tag($action, $options='')
 {
-	return new Form($action, $options) . 
+	return new Form($action, $options) .
 		   new InputHidden(FormBuilder::authenticity_token_key, FormBuilder::authenticityToken());
 }
 /**

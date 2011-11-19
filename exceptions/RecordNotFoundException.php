@@ -1,11 +1,15 @@
 <?php
 /**
-* The record could not be found.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
 * @package exceptions
+* @author Justin Palmer
 */
 class RecordNotFoundException extends Exception
 {
-	
+
 	function __construct($query, $params)
 	{
 		$query = preg_replace('/\?/', '%s', $query);

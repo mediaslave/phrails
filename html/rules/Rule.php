@@ -1,11 +1,14 @@
 <?php
 /**
- * base rule
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package html
  * @subpackage rules
  * @author Justin Palmer
- **/
+ */
 class Rule
 {
 	/**
@@ -31,7 +34,7 @@ class Rule
 	 * @var string
 	 */
 	public $model;
-	
+
 	/**
 	 * The default message that should be returned.
 	 *
@@ -49,7 +52,7 @@ class Rule
 	/**
 	 * Constructor
 	 *
-	 * @param string $customMessage	
+	 * @param string $customMessage
 	 * @return Rule
 	 * @author Justin Palmer
 	 **/
