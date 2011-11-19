@@ -1,6 +1,8 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package html
+ * @subpackage rules
  */
 /**
  * class description
@@ -17,9 +19,9 @@ class ContentTypeRule extends PregRule
 	/**
 	 * Constructor
 	 *
-	 * @params $name Name of the $_FILES array to look into.
-	 * @params $array of content types.
-	 * @params $message that you would like displayed if it fails.
+	 * @param $name Name of the $_FILES array to look into.
+	 * @param $array of content types.
+	 * @param $message that you would like displayed if it fails.
 	 * @return ContentTypeRule
 	 * @author Justin Palmer
 	 **/

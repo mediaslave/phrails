@@ -1,4 +1,14 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
 //Running PHPUnit 3.5.15 this is to fix bug
 require_once('PHP/Token/Stream/Autoload.php');
 

@@ -1,6 +1,16 @@
 <?php
 /**
-* 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+*
 */
 class HashArrayTest extends PHPUnit_Framework_TestCase
 {
@@ -15,9 +25,9 @@ class HashArrayTest extends PHPUnit_Framework_TestCase
 		$o->set('quo', 'faz');
 		$this->assertTrue($o->isKey('foo'));
 		$this->assertTrue($o->isKey('quo'));
-		$control = array('foo' => 
-								array('bar', 'baz'), 
-						 'quo' => 
+		$control = array('foo' =>
+								array('bar', 'baz'),
+						 'quo' =>
 								array('faz'));
 		$this->assertEquals($control, $o->export());
 	}

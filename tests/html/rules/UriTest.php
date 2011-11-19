@@ -1,6 +1,16 @@
 <?php
 /**
-* 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+*
 */
 class UriTest extends PHPUnit_Framework_TestCase
 {
@@ -25,7 +35,7 @@ class UriTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue($this->o->run());
 		}
 	}
-	
+
 	/**
 	 * @test
 	 **/
@@ -35,6 +45,6 @@ class UriTest extends PHPUnit_Framework_TestCase
 		foreach($uris as $uri){
 			$this->o->value = $uri;
 			$this->assertFalse($this->o->run());
-		}	
+		}
 	}
 }

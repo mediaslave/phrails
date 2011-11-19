@@ -1,11 +1,21 @@
 <?php
 /**
-* 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+*
 */
 class RoutesHashTest extends PHPUnit_Framework_TestCase
 {
 	public $o;
-	
+
 	public function setUp()
 	{
 		$this->o = new RoutesHash();

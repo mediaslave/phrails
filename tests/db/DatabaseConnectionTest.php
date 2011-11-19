@@ -1,11 +1,21 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
 require_once 'DatabaseConnectionMock.php';
 /**
- * 
+ *
  */
 class DatabaseConnectionTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	/**
 	 * @test
 	 * @covers DatabaseConnection::connect
@@ -14,8 +24,8 @@ class DatabaseConnectionTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue(DatabaseConnectionMock::connect());
 	}
-	
-	
+
+
 	/**
 	 * @test
 	 * @covers DatabaseConnection::disconnect

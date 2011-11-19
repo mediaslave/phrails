@@ -1,6 +1,7 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package template
  */
 /**
  * class description
@@ -68,7 +69,6 @@ abstract class Template
 	/**
 	 * Sets the file path and route array.
 	 *
-	 * @refactor
 	 * @return void
 	 * @author Justin Palmer
 	 **/

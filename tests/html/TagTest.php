@@ -1,23 +1,33 @@
 <?php
 /**
- * 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+ *
  */
 class TagTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	/**
 	 * @test
 	 **/
 	public function options()
 	{
 		$stub = $this->getMockForAbstractClass('Tag', array('class:foo'));
-		
+
 		$this->assertEquals(' class="foo"', $stub->options());
-		
+
 		$stub = $this->getMockForAbstractClass('Tag', array('class:bar,alt:quo'));
-		
+
 		$this->assertEquals(' class="bar" alt="quo"', $stub->options());
-		
+
 	}
 	/**
 	 * @test
@@ -35,7 +45,7 @@ class TagTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('<a>', $stub->start());
 		$this->assertEquals('</a>', $stub->end());
-		
+
 		$stub->display('A Link!');
 		$this->assertEquals('<a>A Link!</a>' . "\n", $stub->__toString());
 	}

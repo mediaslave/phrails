@@ -1,9 +1,11 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package db
  */
 
 /**
+* @todo refactor
 * @todo break this apart to handle multiple types of databases.  Now it is set to handle mysql.
 * @todo this really is just hacked out, I really need to refactor this.  It fits my needs for now.
 * The stack should turn into a hash of stacks, the key would be the timestamp with milliseconds every time
@@ -190,7 +192,6 @@ abstract class Migration extends Model
 	/**
 	 * migrate the system
 	 *
-   * @refactor
 	 * @return void
 	 * @author Justin Palmer
 	 **/

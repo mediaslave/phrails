@@ -1,10 +1,20 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
  * Database adapter
  *
  * @package db
  * @author Justin Palmer
- */				
+ */
 abstract class DatabaseAdapterMock extends DatabaseAdapter
 {
 

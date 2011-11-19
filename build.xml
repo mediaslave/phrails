@@ -91,7 +91,7 @@
 
  <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
   <exec executable="phpdoc">
-   <arg line="-d ${basedir} -t ${basedir}/build/api -i *Test.php,*phpmailer*,class.smtp.php" />
+   <arg line="-d ${basedir} -t ${basedir}/build/api -i *Test.php,*phpmailer*,class.smtp.php,*html.php" />
   </exec>
  </target>
 

@@ -1,4 +1,14 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
 require_once 'DatabaseAdapterMock.php';
 /**
  *

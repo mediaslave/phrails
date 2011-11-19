@@ -1,10 +1,11 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package mail
  */
- /**
-  * @see lib/class.phpmailer.php
-  */
+/**
+ * @see lib/class.phpmailer.php
+ */
 require_once('lib/class.phpmailer.php');
 /**
  * class description

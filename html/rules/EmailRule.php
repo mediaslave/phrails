@@ -1,5 +1,10 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package html
+ * @subpackage rules
+ */
+/**
  * Is the current model property an integer.
  *
  * @package html

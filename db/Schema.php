@@ -1,6 +1,7 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package db
  */
 /**
  * To define the schema of a model

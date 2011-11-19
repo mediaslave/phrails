@@ -1,13 +1,23 @@
 <?php
 /**
- * 
- * 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+ *
+ *
  * @package db
  * @author Justin Palmer
- */				
+ */
 class DatabaseConnectionMock extends DatabaseConnection
-{	
-	
+{
+
 	/**
 	 * Hack to get the right connection information to the pdo construct.
 	 *
@@ -18,7 +28,7 @@ class DatabaseConnectionMock extends DatabaseConnection
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Disconnect from the db
 	 *
@@ -26,7 +36,7 @@ class DatabaseConnectionMock extends DatabaseConnection
 	 * @author Justin Palmer
 	 **/
 	static public function disconnect(){}
-	
+
 	/**
 	 * Destruct will disconnect from the database
 	 *

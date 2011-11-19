@@ -1,6 +1,7 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package util
  */
 /**
  * Thanks to http://www.eval.ca/articles/php-pluralize (MIT license)

@@ -1,6 +1,8 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package html
+ * @subpackage rules
  */
 /**
  * class description

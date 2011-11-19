@@ -1,11 +1,21 @@
 <?php
 /**
-* 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+*
 */
 class HashTest extends PHPUnit_Framework_TestCase
 {
 	public $o;
-	
+
 	public function setUp()
 	{
 		$array = array('foo'=>'bar');
@@ -16,7 +26,7 @@ class HashTest extends PHPUnit_Framework_TestCase
 	 */
 	public function Export()
 	{
-		$this->assertArrayHasKey('foo', $this->o->export());	
+		$this->assertArrayHasKey('foo', $this->o->export());
 	}
 	/**
 	 * @test
@@ -51,7 +61,7 @@ class HashTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(empty($array));
 		$this->assertTrue($this->o->isEmpty());
 	}
-	
+
 	/**
 	 * @test
 	 **/

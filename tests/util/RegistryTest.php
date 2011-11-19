@@ -1,13 +1,23 @@
 <?php
 /**
-* 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
+/**
+*
 */
 class RegistryTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	public function setUp()
 	{
-		
+
 	}
 	/**
 	 * @test
@@ -24,7 +34,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	{
 		Registry::set('foo', 'bar');
 		$this->assertEquals('bar', Registry::get('foo'));
-		
+
 		Registry::set('baz', array('quo'=>'fuo', 'one'=>1));
 		$this->assertInstanceOf('stdClass', Registry::get('baz'));
 	}

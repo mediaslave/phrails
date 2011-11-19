@@ -1,10 +1,12 @@
 <?php
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package template
  */
 /**
  * class description
  *
+ * @todo refactor
  * @package template
  * @author Justin Palmer
  */
@@ -15,7 +17,6 @@ class ControllerTemplate extends TemplateCache
 	/**
 	 * Sets the file path and route array.
 	 *
-	 * @refactor
 	 * @return void
 	 * @author Justin Palmer
 	 **/

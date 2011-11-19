@@ -1,14 +1,24 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * @package tests
+ */
+/**
+ * Description
+ *
+ * @package tests
+ * @author Justin Palmer
+ */
 require_once 'AnsiAdapterMock.php';
 /**
- * 
+ *
  */
 class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 {
-	
+
 	private $stub;
 	private $o;
-	
+
 	public function setUp()
 	{
 		$this->stub = $this->getMockForAbstractClass('AnsiAdapterMock');
@@ -23,14 +33,14 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 		$expected = new stdClass;
 		$expected->sql = "INSERT INTO `users` (`id`,`first_name`,`last_name`) VALUES (?,?,?)";
 		$expected->params = array(1, 'Justin', 'Palmer');
-		
+
 		$this->o->from('`users`');
 		$this->o->props(new Hash(array('id' => 1,
 									   'first_name' => 'Justin',
 									   'last_name'  => 'Palmer')));
 		$actual = $this->stub->buildCreate($this->o);
 		$this->assertEquals($expected, $actual);
-		
+
 		//Using Expression
 		$expected->sql = "INSERT INTO `users` (`id`,`first_name`,`last_name`,`created_on`) VALUES (?,?,?,NOW())";
 		$this->o->props(new Hash(array('id' => 1,
@@ -39,10 +49,10 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 									   'created_on' => new Expression('NOW()'))));
 		$actual = $this->stub->buildCreate($this->o);
 		$this->assertEquals($actual, $expected);
-		
+
 	}
 
-	
+
 	/**
 	 * @test
 	 * @covers AnsiAdapter::buildRead
@@ -66,7 +76,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 		$actual = $this->stub->buildRead($this->o);
 		$this->assertEquals($expected, $actual);
 	}
-	
+
 	/**
 	 * @test
 	 * @covers AnsiAdapter::buildUpdate
@@ -84,7 +94,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 									   'last_name'  => 'Palmer')));
 		$actual = $this->stub->buildUpdate($this->o);
 		$this->assertEquals($expected, $actual);
-		
+
 		//With Expression
 		$expected->sql = "UPDATE `users`  SET `first_name` = ?,`last_name` = ?,`created_on` = NOW() WHERE id = ?";
 		$this->o->props(new Hash(array('first_name' => 'Justin',
@@ -93,7 +103,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 		$actual = $this->stub->buildUpdate($this->o);
 		$this->assertEquals($expected, $actual);
 	}
-	
+
 	/**
 	 * @test
 	 * @covers AnsiAdapter::buildDelete
@@ -103,15 +113,15 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 		$expected = new stdClass;
 		$expected->sql = "DELETE FROM `users` WHERE id = ?";
 		$expected->params = array(1);
-		
+
 		$this->o->from('`users`');
 		$this->o->where('id = ?');
 		$this->o->whereArgs(array(1));
-		
+
 		$actual = $this->stub->buildDelete($this->o);
 		$this->assertEquals($expected, $actual);
 	}
-	
+
 	/**
 	 * @test
 	 * @covers AnsiAdapter::tick
@@ -122,7 +132,7 @@ class AnsiAdapterTest extends PHPUnit_Framework_TestCase
 		$actual = $this->stub->tick('foo', 'bar', 'baz');
 		$expected = array('`foo`', '`bar`', '`baz`');
 		$this->assertEquals($expected, $actual);
-	
+
 		//Tick a single item.
 		$actual = $this->stub->tick('foo');
 		$expected = '`foo`';
