@@ -1,9 +1,14 @@
 <?php
 /**
-* A object to deal with various framework properties.
-* @package util 
-*/
-class Registry	
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package util
+ * @author Justin Palmer
+ */
+class Registry
 {
 	/**
 	 * A Hash to store the properties
@@ -25,8 +30,8 @@ class Registry
 	/**
 	 * Set a property
 	 *
-	 * @param string $key 
-	 * @param mixed $value 
+	 * @param string $key
+	 * @param mixed $value
 	 * @return void
 	 * @author Justin Palmer
 	 */
@@ -64,7 +69,7 @@ class Registry
 	/**
 	 * Get a property
 	 *
-	 * @param string $key 
+	 * @param string $key
 	 * @return mixed
 	 * @author Justin Palmer
 	 */

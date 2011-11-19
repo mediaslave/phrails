@@ -1,27 +1,34 @@
-<?php	
+<?php
 /**
-* @todo refactor like ModelFilters.
-* @todo Use __call instead of defining each method that does the same thing
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @todo refactor like ModelFilters.
+ * @todo Use __call instead of defining each method that does the same thing
+ * @package template
+ * @author Justin Palmer
+ */
 class ControllerFilters extends Filters
 {
 	/**
 	 * The constants for this class
 	 */
-	
+
 	const around = 'around';
-	
+
 	const except = 'except';
-	
+
 	function __construct($object)
 	{
 		if(!$object instanceof Controller)
 			throw new Exception("'ControllerFilters' expects a 'Controller' as it's first parameter");
 		parent::__construct($object);
 	}
-	
+
 	/**
-	 * Add to public child methods. If no actions were specified we will add 
+	 * Add to public child methods. If no actions were specified we will add
 	 * all of the actions of this controller to the actions array.
 	 *
 	 * @return array
@@ -43,7 +50,7 @@ class ControllerFilters extends Filters
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function run($type)	
+	public function run($type)
 	{
 		$run = true;
 		$action = $this->object->pr_action;
@@ -81,7 +88,7 @@ class ControllerFilters extends Filters
 		}
 		parent::remove($type, $filter);
 	}
-	
+
 	/**
 	 * Set a before filter for.
 	 *
@@ -94,7 +101,7 @@ class ControllerFilters extends Filters
 		$filter = array_shift($actions);
 		$this->add(self::before, $filter, $actions);
 	}
-	
+
 	/**
 	 * Set a before filter except.
 	 *
@@ -102,12 +109,12 @@ class ControllerFilters extends Filters
 	 * @author Justin Palmer
 	 **/
 	public function beforeExcept($filter, $actions)
-	{			
+	{
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add($this->exceptName(self::before), $filter, $actions);
 	}
-	
+
 	/**
 	 * Set an around filter for.
 	 *
@@ -120,7 +127,7 @@ class ControllerFilters extends Filters
 		$filter = array_shift($actions);
 		$this->add(self::around, $filter, $actions);
 	}
-	
+
 	/**
 	 * Set an around filter except.
 	 *
@@ -133,7 +140,7 @@ class ControllerFilters extends Filters
 		$filter = array_shift($actions);
 		$this->add($this->exceptName(self::around), $filter, $actions);
 	}
-	
+
 	/**
 	 * Set an after filter for.
 	 *
@@ -144,7 +151,7 @@ class ControllerFilters extends Filters
 	{
 		$actions = func_get_args();
 		$filter = array_shift($actions);
-		$this->add(self::after, $filter, $actions);	
+		$this->add(self::after, $filter, $actions);
 	}
 	/**
 	 * Set an after filter except.
@@ -156,9 +163,9 @@ class ControllerFilters extends Filters
 	{
 		$actions = func_get_args();
 		$filter = array_shift($actions);
-		$this->add($this->exceptName(self::after), $filter, $actions);	
+		$this->add($this->exceptName(self::after), $filter, $actions);
 	}
-	
+
 	/**
 	 * Get the except name
 	 *
@@ -169,23 +176,23 @@ class ControllerFilters extends Filters
 	{
 		return $this->getName($type, self::except);
 	}
-	
+
 	/**
 	 * Reset the filters for the controller
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function reset(){
 		$filters = new Hash;
 		$filters->set(self::before, new Hash);
 		$filters->set($this->exceptName(self::before), new Hash);
-		
+
 		$filters->set(self::around	, new Hash);
 		$filters->set($this->exceptName(self::around), new Hash);
-		
+
 		$filters->set(self::after	, new Hash);
 		$filters->set($this->exceptName(self::after) , new Hash);
 		$this->filters = $filters;
 	}
-	
+
 }

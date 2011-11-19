@@ -1,26 +1,30 @@
 <?php
 /**
-* Base class for all tags.
-* @author Justin Palmer
-* @package html
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package html
+ * @author Justin Palmer
+ */
 abstract class AssetTag extends Tag
 {
-	
+
 	/**
 	 * The source of the url.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $source;
 	private static $asset_num = 0;
 	protected $path = 'public/images/';
-	
+
 	function __construct($source, $options, $from_base=true) {
 		$this->setSource($source, $from_base);
 		parent::__construct($options);
 	}
-	
+
 	/**
 	 * Set the source.
 	 *
@@ -42,7 +46,7 @@ abstract class AssetTag extends Tag
 		}
 		$this->source = $source;
 	}
-	
+
 	/**
 	 * Check if we have asset uri and return a source if we do.
 	 *
@@ -61,7 +65,7 @@ abstract class AssetTag extends Tag
 		}
 		return $source;
 	}
-	
+
 	/**
 	 * Add the asset host to the path
 	 *

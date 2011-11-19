@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class InputImage extends Input
 {
@@ -11,8 +14,8 @@ class InputImage extends Input
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $src, $alt, $options=null)

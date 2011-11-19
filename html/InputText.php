@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a input 'text'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class InputText extends Input
 {
@@ -11,8 +14,8 @@ class InputText extends Input
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $value, $options=null)

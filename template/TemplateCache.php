@@ -1,7 +1,9 @@
 <?php
 /**
- * TemplateCache class handles the hand off from the controller to the view
- * with cache support.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer
@@ -57,10 +59,10 @@ abstract class TemplateCache extends Template
 	 * @author Justin Palmer
 	 **/
 	public function display()
-	{		
+	{
 		//If the cache type is null just return the template.
 		//Or, if the cache_type is not one of the supported cache_types
-		if($this->view_path === null  || 
+		if($this->view_path === null  ||
 			(!$this->Controller->pr_do_cache) ||
 		   (!$this->isValidCacheType())
 		  )

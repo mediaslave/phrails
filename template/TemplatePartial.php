@@ -1,16 +1,19 @@
 <?php
 /**
- * A class to handle all of the partial methods of the Template.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package template
+ * @author Justin Palmer
  */
 class TemplatePartial
 {
 	/**
 	 * Render a partial for the template.
 	 *
-	 * @param mixed $args 
+	 * @param mixed $args
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -24,8 +27,8 @@ class TemplatePartial
 	 * Get the file specified by render()
 	 *
 	 * @see render
-	 * @param string $file 
-	 * @param array $array 
+	 * @param string $file
+	 * @param array $array
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -43,7 +46,7 @@ class TemplatePartial
 	 * Figure out if the path should include the current views path.
 	 * Or, if it should just take the path as it is.
 	 *
-	 * @param string $file 
+	 * @param string $file
 	 * @return string
 	 * @author Justin Palmer
 	 */

@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class ArraySelect extends Select
 {
@@ -11,9 +14,9 @@ class ArraySelect extends Select
 	 * Constructor
 	 *
 	 * @param string $name
-	 * @param string $selectedValue 
-	 * @param Option $optionsTags 
-	 * @param string or array $options 
+	 * @param string $selectedValue
+	 * @param Option $optionsTags
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, array $array, $selectedValue=null, $options=null)

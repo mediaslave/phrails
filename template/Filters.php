@@ -1,24 +1,30 @@
-<?php	
+<?php
 /**
-* 
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package template
+ * @author Justin Palmer
+ */
 abstract class Filters
 {
 	/**
 	 * The constants for this class
 	 */
 	const before = 'before';
-	
+
 	const after = 'after';
 	/**
 	 * Filters hash that holds all of the filters and different states.
-	 * 
+	 *
 	 * @var Hash
 	 */
 	protected $filters;
 	/**
 	 * Object that the filters will be run with.
-	 * 
+	 *
 	 * @var Controller|Model
 	 */
 	protected $object;
@@ -30,7 +36,7 @@ abstract class Filters
 		$this->object = $object;
 		$this->reset();
 	}
-	
+
 	/**
 	 * Add the filter to the correct hash.
 	 *
@@ -56,7 +62,7 @@ abstract class Filters
 		}
 		$this->filters->set($type, $Set);
 	}
-	
+
 	/**
 	 * remove a filter
 	 *
@@ -69,7 +75,7 @@ abstract class Filters
 		$Set = $this->filters->get($type);
 		$Set->remove($filter);
 	}
-	
+
 	/**
 	 * Get the except name
 	 *
@@ -80,7 +86,7 @@ abstract class Filters
 	{
 		return $pre . '-' . $post;
 	}
-	
+
 	/**
 	 * Add to all methods if you are a controller
 	 *
@@ -88,7 +94,7 @@ abstract class Filters
 	 * @author Justin Palmer
 	 **/
 	abstract protected function addToMethods($actions);
-	
+
 	/**
 	 * Run the type of filter
 	 *
@@ -96,14 +102,14 @@ abstract class Filters
 	 * @author Justin Palmer
 	 **/
 	abstract public function run($type);
-	
+
 	/**
 	 * Clear all filters.
-	 * 
+	 *
 	 * @return void
 	 */
 	abstract protected function reset();
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -113,5 +119,5 @@ abstract class Filters
 	public function filters()
 	{
 		return $this->filters;
-	}	
+	}
 }

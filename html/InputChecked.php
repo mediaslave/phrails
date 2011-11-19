@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'checkbox'.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
- * @author Justin Palmer
  * @package html
+ * @author Justin Palmer
  */
 class InputChecked extends Input
 {

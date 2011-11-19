@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Form extends Element
 {
@@ -11,8 +14,8 @@ class Form extends Element
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($action, $options=null)

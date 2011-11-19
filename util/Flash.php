@@ -1,10 +1,13 @@
 <?php
 /**
- * The flash for the view.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
- * @package util
+ * @package template
  * @author Justin Palmer
- **/
+ */
 abstract class Flash
 {
 	/**

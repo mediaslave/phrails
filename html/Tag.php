@@ -1,9 +1,13 @@
 <?php
 /**
-* Base class for all tags.
-* @author Justin Palmer
-* @package html
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package html
+ * @author Justin Palmer
+ */
 abstract class Tag
 {
 	/**

@@ -1,38 +1,41 @@
 <?php
 /**
- * String class
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package util
  * @author Justin Palmer
- **/
+ */
 class String
 {
 	/**
 	 * Truncate a string based on the params given.
-	 * 
+	 *
 	 * Based off Kyle Neath's truncate function.
 	 *
-	 * @param string $string 
-	 * @param integer $limit 
-	 * @param string $pad 
-	 * @param string $break 
+	 * @param string $string
+	 * @param integer $limit
+	 * @param string $pad
+	 * @param string $break
 	 * @return string
 	 * @author Justin Palmer
 	 */
-	public static function truncate($string, $limit, $pad="...", $break=".") { 
-	    if(strlen($string) <= $limit) return $string; 
-	    if(false !== ($breakpoint = strpos($string, $break, $limit))) { 
-	        if($breakpoint < strlen($string) - 1) { 
-	            $string = substr($string, 0, $breakpoint) . $pad; 
-	        } 
-	    } 
+	public static function truncate($string, $limit, $pad="...", $break=".") {
+	    if(strlen($string) <= $limit) return $string;
+	    if(false !== ($breakpoint = strpos($string, $break, $limit))) {
+	        if($breakpoint < strlen($string) - 1) {
+	            $string = substr($string, 0, $breakpoint) . $pad;
+	        }
+	    }
 	    return $string;
 	}
-	
+
 	/**
 	 * Escape the passed in var.
 	 *
-	 * @param string $value 
+	 * @param string $value
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -45,7 +48,7 @@ class String
 	/**
 	 * Decode the passed in var.
 	 *
-	 * @param string $value 
+	 * @param string $value
 	 * @return string
 	 * @author Justin Palmer
 	 */

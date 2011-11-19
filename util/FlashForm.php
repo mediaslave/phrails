@@ -1,12 +1,14 @@
 <?php
 /**
- * The flash for the view.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @todo Create a way to set the FlashForm::class through the 'form.php' initializer.  FlashForm::setClass('form-errors); (Static $class)
- * 
- * @package util
+ * @package template
  * @author Justin Palmer
- **/
+ */
 class FlashForm extends Flash
 {
 	protected $array = array();
@@ -32,7 +34,7 @@ class FlashForm extends Flash
 		$this->title = array_pop($args);
 		//instantiate an array for the errors.
 		$array = array();
-		
+
 		foreach($args as $model){
 			$array = array_merge($array, $model->errors()->export());
 		}

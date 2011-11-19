@@ -1,10 +1,13 @@
 <?php
 /**
- * Interface for caching
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer
- **/
+ */
 abstract class Cache
 {
 	/**
@@ -62,7 +65,7 @@ abstract class Cache
 	 * @author Justin Palmer
 	 **/
 	abstract public function get();
-	
+
 	/**
 	 * Cache the current value.
 	 *

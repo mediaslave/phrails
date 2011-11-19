@@ -1,21 +1,21 @@
 <?php
 /**
- * Namespace
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  */
 /**
- * PageBlock
- */
-/**
- * ClassBlock
+ * class description
+ *
+ * @package template
+ * @author Justin Palmer
  */
 class Session{
-	
+
 	//In seconds
 	public static $timeout = '1800';
-	
+
 	//The key
 	public static $key = 'phrails_session_key';
-	
+
 	/**
 	 * has the session expired
 	 *
@@ -34,10 +34,10 @@ class Session{
 				$boolean = true;
 				Session::start();
 			}
-		}	
+		}
 		return $boolean;
-	}	
-	
+	}
+
 	/**
 	 * Start the session
 	 *
@@ -48,6 +48,6 @@ class Session{
 	{
 		$Request = new Request();
 		$Request->session(self::$key, time());
-	}	
-	
+	}
+
 }

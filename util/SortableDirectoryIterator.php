@@ -1,13 +1,13 @@
-<?
+<?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package util
  * @author Justin Palmer
  */
-
-/**
-* Allows you to pass in a method to sort by.  This can be any method that is is available
-* from the DirectoryIterator item method.
-*/
 class SortableDirectoryIterator implements IteratorAggregate {
 
 

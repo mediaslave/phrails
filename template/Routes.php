@@ -1,7 +1,9 @@
 <?php
 /**
- * Routes helps the user build out routes so that the app
- * knows what to do with certain page requests.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer
@@ -23,13 +25,13 @@ class Routes{
 	public function __construct(){
 		self::$Hash = new RoutesHash();
 	}
-	
+
 	/**
 	 * Declare the root route
 	 *
-	 * @param string $path 
-	 * @param string $controller 
-	 * @param string $action 
+	 * @param string $path
+	 * @param string $controller
+	 * @param string $action
 	 * @return void
 	 * @author Justin Palmer
 	 */
@@ -40,13 +42,13 @@ class Routes{
 	/**
 	 * Add a route to the hash.
 	 *
-	 * @param string $name 
-	 * @param string $path 
-	 * @param string $controller 
-	 * @param string $action 
+	 * @param string $name
+	 * @param string $path
+	 * @param string $controller
+	 * @param string $action
 	 * @return void
 	 * @author Justin Palmer
-	 */			
+	 */
 	function add($name, $path, $controller, $action, $namespace=null){
 		self::$Hash->route($name, $path, $controller, $action, $namespace);
 	}
@@ -55,8 +57,8 @@ class Routes{
 	 *
 	 * index, edit, create, delete
 	 *
-	 * @param string $name 
-	 * @param string $controller 
+	 * @param string $name
+	 * @param string $controller
 	 * @return void
 	 * @author Justin Palmer
 	 */
@@ -73,7 +75,7 @@ class Routes{
 		}
 		$path = preg_replace('/([a-z])([A-Z])/', '$1-$2', $name_for_path . $name_for_path_end);
 		$path = strtolower('/' . $path);
-		
+
 		//If the singular and the plural are the same add -index to the index route.
 		$index = $name = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', str_replace('\\', '-', $name)));
 		$singular = Inflections::singularize($name);
@@ -90,8 +92,8 @@ class Routes{
 	/**
 	 * Return the path for the given named route
 	 *
-	 * @param string $name 
-	 * @param string $options 
+	 * @param string $name
+	 * @param string $options
 	 * @return string
 	 * @author Justin Palmer
 	 */

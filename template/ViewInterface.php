@@ -1,8 +1,13 @@
 <?php
-
 /**
-* 
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package template
+ * @author Justin Palmer
+ */
 interface ViewInterface
 {
 	/**
@@ -13,7 +18,7 @@ interface ViewInterface
 	 * @author Justin Palmer
 	 **/
 	public function process($content);
-	
+
 	/**
 	 * get the class name of the view
 	 *

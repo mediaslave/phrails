@@ -1,13 +1,16 @@
 <?php
 /**
- * The flash for the view.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package util
  * @author Justin Palmer
- **/
+ */
 class Reflections extends ReflectionClass
 {
-	
+
 	/**
 	 * Get an array of child methods that are public.
 	 *
@@ -18,7 +21,7 @@ class Reflections extends ReflectionClass
 	{
 		$ret = array();
 		$declaringMethods = $this->getMethods(ReflectionMethod::IS_PUBLIC);
-		
+
 		foreach($declaringMethods as $method) {
 		    $parentClass = $this->getMethod($method->getName())
 		                            ->getDeclaringClass()

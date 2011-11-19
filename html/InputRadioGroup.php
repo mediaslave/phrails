@@ -1,18 +1,21 @@
 <?php
 /**
- * Radio Group needs to have name and id in the array elements
- * 
- * @author Justin Palmer
- * @package html
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  */
-class InputRadioGroup 
-{	
+/**
+ * class description
+ *
+ * @package html
+ * @author Justin Palmer
+ */
+class InputRadioGroup
+{
 	private $name, $array, $selectedValue, $options;
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param array $array - stdClass or comparable 
+	 * @param string $display
+	 * @param array $array - stdClass or comparable
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $array, $selectedValue=null, $options=null)

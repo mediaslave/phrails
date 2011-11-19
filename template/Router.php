@@ -1,26 +1,29 @@
 <?php
 /**
- * Route the request to the correct controller and action
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer
  */
 class Router
-{	
+{
 	/**
 	 * The extension of the request
 	 *
 	 * @var string
 	 */
 	private $extension = "html";
-	
+
 	static private $tag_expression = "/{([a-zA-Z\_\-]*?)}/i";
-	
+
 	/**
 	 * Route the request
 	 *
 	 * @todo this method can be clean up considerably.
-	 * 
+	 *
 	 * @return Controller
 	 * @author Justin Palmer
 	 **/
@@ -49,7 +52,7 @@ class Router
 			//Make sure the user has implemented the action
 			if(!method_exists($Controller, $action))
 				throw new NoActionException();
-				
+
 		}catch(NoRouteException $e){
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoRoute',
@@ -59,7 +62,7 @@ class Router
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoRoute';
-		}catch(NoControllerException $e){	
+		}catch(NoControllerException $e){
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoController',
 											'requested' => $controller,
@@ -67,7 +70,7 @@ class Router
 			$Controller = new Controller();
 			$Controller->pr_layout = null;
 			$Controller->pr_action = 'prNoController';
-		}catch(NoActionException $e){	
+		}catch(NoActionException $e){
 			Registry::set('pr-route', array('controller' => '',
 											'action' => 'prNoAction',
 											'no_action' => $action,
@@ -127,7 +130,7 @@ class Router
 				break;
 			}
 			$controller = preg_replace('/([^\s])([A-Z])/', '\1-\2', $route->controller);
-			
+
 			$first = $second = '/' . strtolower($controller) . '/' . $route->action;
 			$second = $second . '/';
 			if($first == $request_uri || $second == $request_uri)
@@ -168,7 +171,7 @@ class Router
 	}
 	/**
 	 * Get the request uri for comparison.
-	 * 
+	 *
 	 * @todo str_replace in both cases below should be replaced with preg_replace.
 	 */
 	private function requestUri()
@@ -199,7 +202,7 @@ class Router
 		//print $extension[0] . '<br/>';
 		return str_replace('.' . $this->extension, '', $extension[0]);
 	}
-	
+
 	/**
 	 * Get the tag expression
 	 *

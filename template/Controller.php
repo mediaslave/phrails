@@ -1,9 +1,10 @@
 <?php
 /**
- * Base controller
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
- * @todo Implement pr_from_cache_message.  This really needs re-thought.  There should be an easier way.
- * 
  * @package template
  * @author Justin Palmer
  */
@@ -29,13 +30,13 @@ class Controller
 	public $pr_action;
 	/**
 	 * The view path.  If you want to change the path to which the views live on
-	 * 
+	 *
 	 * @var string
 	 */
 	public $pr_view_path;
 	/**
 	 * Should caching be performed on this method.
-	 *	
+	 *
 	 * @var boolean
 	 */
 	public $pr_do_cache = false;
@@ -51,7 +52,7 @@ class Controller
 	 * @var string
 	 */
 	protected $pr_cache_except = array();
-	
+
 	/**
 	 * Filters object
 	 *
@@ -66,15 +67,15 @@ class Controller
 	public $pr_from_cache_message = '<!-- pr_from_cache -->';
 	/**
 	 * Holds the flash object for the current view.
-	 * 
+	 *
 	 * @var HashArray
 	 */
 	public $flash = null;
 	/**
 	 * This is so that you can set static vars that will be public upon instantiation.
-	 * 
+	 *
 	 * Helpful for setting controller vars when in an initializer.
-	 * 
+	 *
 	 * @var Hash
 	 */
 	private static $public_vars = null;
@@ -84,10 +85,10 @@ class Controller
 	 * @var Hash
 	 */
 	public $pr_view_types;
-	
+
 	/**
 	 * Initialize some vars
-	 * 
+	 *
 	 * @return Controller
 	 * @author Justin Palmer
 	 */
@@ -105,7 +106,7 @@ class Controller
 		}
 		$this->setStaticPublicVars();
 	}
-	
+
 	/**
 	 * Run the correct action if we don't need to cache
 	 *
@@ -199,7 +200,7 @@ class Controller
 		$this->filters()->run(ControllerFilters::after);
 		$this->pr_num_queries = ActiveRecord::$num_queries;
 	}
-	
+
 	/**
 	 * Is the action in the cacheable actions?
 	 *
@@ -288,7 +289,7 @@ class Controller
 	{
 		return $this->pr_filters;
 	}
-	
+
 	/**
 	 * Flash the view with items.
 	 *
@@ -300,7 +301,7 @@ class Controller
 		if($key !== null && $value === null)
 			return $this->flash->set('default', $key);
 		if($key !== null && $value !== null)
-			return $this->flash->set($key, $value);	
+			return $this->flash->set($key, $value);
 		return $this->flash;
 	}
 	/**

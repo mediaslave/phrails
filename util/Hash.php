@@ -1,9 +1,13 @@
 <?php
 /**
- * A Hash that sets an array with key/value pairs.
- * 
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @todo if an array is passed to set as the $value turn it into an stdClass.
  * @package util
+ * @author Justin Palmer
  */
 class Hash
 {
@@ -17,19 +21,19 @@ class Hash
 	/**
 	 * Constructor
 	 *
-	 * @param array $array 
+	 * @param array $array
 	 * @return Hash
 	 * @author Justin Palmer
 	 */
 	public function __construct(array $array=array())
 	{
-		$this->array = $array;								
+		$this->array = $array;
 	}
 	/**
 	 * Set a key/value pair
 	 *
-	 * @param string $key 
-	 * @param mixed $value 
+	 * @param string $key
+	 * @param mixed $value
 	 * @return void
 	 * @author Justin Palmer
 	 */
@@ -40,7 +44,7 @@ class Hash
 	/**
 	 * Get a value for the given key
 	 *
-	 * @param string $key 
+	 * @param string $key
 	 * @return mixed
 	 * @author Justin Palmer
 	 */
@@ -48,7 +52,7 @@ class Hash
 	{
 		return $this->_get($key);
 	}
-	
+
 	/**
 	 * Get
 	 *
@@ -71,7 +75,7 @@ class Hash
 	/**
 	 * Is there a key in the Hash?
 	 *
-	 * @param string $key 
+	 * @param string $key
 	 * @return boolean
 	 * @author Justin Palmer
 	 */
@@ -79,7 +83,7 @@ class Hash
 	{
 		return (isset($this->array[$key]));
 	}
-	
+
 	/**
 	 * Get the keys of the hash
 	 *
@@ -111,7 +115,7 @@ class Hash
 	{
 		return $this->array;
 	}
-	
+
 	/**
 	 * Empty the hash
 	 *

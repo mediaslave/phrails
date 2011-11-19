@@ -1,11 +1,12 @@
 <?php
 /**
- * Form builder holds all of the methods to build forms.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
- * @todo should not have to register the elements.  Use __call.
- *
- * @author Justin Palmer
  * @package html
+ * @author Justin Palmer
  */
 class FormBuilder
 {

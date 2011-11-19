@@ -1,22 +1,25 @@
 <?php
 /**
- * Creates a link.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Meta extends Tag
 {
 	protected $hasEndTag = false;
-	
+
 	private $name;
 	private $content;
 	/**
 	 * Constructor
 	 *
-	 * @param string $name 
-	 * @param string $content 
-	 * @param string or array $options 
+	 * @param string $name
+	 * @param string $content
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $content, $options=null)
@@ -32,7 +35,7 @@ class Meta extends Tag
 	{
 		return '<meta name="' . $this->name . '" content="' . $this->content . '"' . $this->options . ' />';
 	}
-	
+
 	/**
 	 * @see Tag::end();
 	 **/

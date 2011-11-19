@@ -1,6 +1,9 @@
 <?php
 /**
- * A Hash to deal with routes.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package util
  * @author Justin Palmer
@@ -16,8 +19,8 @@ class RoutesHash extends Hash{
 	/**
 	 * Set the current route.
 	 *
-	 * @param string $key 
-	 * @param mixed $value 
+	 * @param string $key
+	 * @param mixed $value
 	 * @return void
 	 * @author Justin Palmer
 	 */
@@ -31,8 +34,8 @@ class RoutesHash extends Hash{
 	/**
 	 * Get the current route.
 	 *
-	 * @param string $name 
-	 * @param string $key 
+	 * @param string $name
+	 * @param string $key
 	 * @return mixed
 	 * @author Justin Palmer
 	 */
@@ -44,10 +47,10 @@ class RoutesHash extends Hash{
 	/**
 	 * Set a route.
 	 *
-	 * @param string $name 
-	 * @param string $path 
-	 * @param string $controller 
-	 * @param string $action 
+	 * @param string $name
+	 * @param string $path
+	 * @param string $controller
+	 * @param string $action
 	 * @return void
 	 * @author Justin Palmer
 	 */

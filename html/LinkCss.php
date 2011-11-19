@@ -1,7 +1,12 @@
 <?php
 /**
- * Creates a css link.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class LinkCss extends Link
 {
@@ -11,19 +16,19 @@ class LinkCss extends Link
 	 * @var boolean
 	 */
 	protected $hasEndTag = false;
-	
+
 	protected $path = 'public/stylesheets/';
 	/**
 	 * Default the options.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $options = 'type:text/css,rel:stylesheet';
 	/**
 	 * Return a linkCss object
 	 *
-	 * @param string $path 
-	 * @param string $options 
+	 * @param string $path
+	 * @param string $options
 	 * @return LinkCss
 	 * @author Justin Palmer
 	 */

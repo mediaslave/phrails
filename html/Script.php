@@ -1,7 +1,12 @@
 <?php
 /**
- * Creates a script tag.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Script extends AssetTag
 {
@@ -9,8 +14,8 @@ class Script extends AssetTag
 	/**
 	 * Return a script object
 	 *
-	 * @param string $source 
-	 * @param string $options 
+	 * @param string $source
+	 * @param string $options
 	 * @return LinkCss
 	 * @author Justin Palmer
 	 */

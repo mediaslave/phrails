@@ -1,6 +1,9 @@
 <?php
 /**
- * Template class handles the hand off from the controller to the view.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer

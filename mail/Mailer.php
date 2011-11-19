@@ -1,8 +1,17 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+ /**
+  * @see lib/class.phpmailer.php
+  */
 require_once('lib/class.phpmailer.php');
 /**
-* Mailer class that handles all of the mailings
-*/
+ * class description
+ *
+ * @package mail
+ * @author Justin Palmer
+ */
 class Mailer extends PHPMailer
 {
 	private static $settings = array();

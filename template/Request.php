@@ -1,14 +1,17 @@
 <?php
 /**
- * A Hash that holds all of the global vars, POST, GET, FILES, SESSION, COOKIE, REQUEST, SERVER, ENV
- * (in the above order when using params())
- * 
- * @package util
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package template
+ * @author Justin Palmer
  */
 class Request extends Hash
 {
 	private $do_unset = false;
-	
+
 	private $types = array('post'		=>'_POST',
 				   		   'env'		=>'_ENV',
 						   'server'		=>'_SERVER',
@@ -23,18 +26,18 @@ class Request extends Hash
 	/**
 	 * Constructor
 	 *
-	 * @param array $array 
+	 * @param array $array
 	 * @return Hash
 	 * @author Justin Palmer
 	 */
 	public function __construct()
-	{	
-		parent::__construct(array_merge($_ENV, $_SERVER, $_REQUEST, $_COOKIE, $_SESSION, $_FILES, $_GET, $_POST));							
+	{
+		parent::__construct(array_merge($_ENV, $_SERVER, $_REQUEST, $_COOKIE, $_SESSION, $_FILES, $_GET, $_POST));
 	}
 	/**
 	 * Get a value for the given key
 	 *
-	 * @param string $key 
+	 * @param string $key
 	 * @return mixed
 	 * @author Justin Palmer
 	 */
@@ -46,10 +49,10 @@ class Request extends Hash
 			return $this->stripSlashes(parent::get($key));
 		}
 	}
-	
+
 	/**
 	 * Get or set a GET ITEM.
-	 * 
+	 *
 	 * We can not use __call here because we are overloading the parent::get
 	 *
 	 * @return mixed
@@ -98,7 +101,7 @@ class Request extends Hash
 			$type = $this->types[$type];
 		return (isset($GLOBALS[$type]) && !empty($GLOBALS[$type]));
 	}
-	
+
 	private function perform($type, $key, $value)
 	{
 		if($this->do_unset){
@@ -118,7 +121,7 @@ class Request extends Hash
 		$var = (isset($GLOBALS[$type][$key])) ? $GLOBALS[$type][$key] : null;
 		return $this->stripSlashes($var);
 	}
-	
+
 	private function stripSlashes($var){
 		if(is_array($var)){
 			$ret = array();

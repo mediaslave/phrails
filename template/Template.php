@@ -1,6 +1,9 @@
 <?php
 /**
- * Template class handles the hand off from the controller to the view.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package template
  * @author Justin Palmer
@@ -38,21 +41,21 @@ abstract class Template
 	 * @var array
 	 */
 	protected $route;
-	
+
 	protected $layouts_path = 'layouts/';
-	
+
 	private $request;
-	
-	
+
+
 	static private $view_types = array('html' => 'HtmlView',
 							   		   'json' => 'JsonView');
-							
+
 	protected $View;
-	
+
 	/**
 	 * Create a new Template
 	 *
-	 * @param Controller $controller 
+	 * @param Controller $controller
 	 * @return Template
 	 * @author Justin Palmer
 	 */
@@ -72,7 +75,7 @@ abstract class Template
 	abstract protected function prepare();
 	/**
 	 * Return the template in a string.
-	 *	
+	 *
 	 * @return string
 	 * @author Justin Palmer
 	 */
@@ -80,7 +83,7 @@ abstract class Template
 	{
 		$this->prepare();
 		//Return the appropriate layout and view or view.
-		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path) 
+		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path)
 													   : $this->displayWithLayout($this->view_path);
 	}
 	/**
@@ -96,7 +99,7 @@ abstract class Template
 	}
 	/**
 	 * Get the declared vars that are available to the template.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function vars()
@@ -122,7 +125,7 @@ abstract class Template
 	public static function getCurrentViewPath()
 	{
 		return strtolower(self::$current_view_path);
-	}	
+	}
 
 	/**
 	 * @nodoc
@@ -146,7 +149,7 @@ abstract class Template
 	private function displayNoLayout($path)
 	{
 		$type = $this->route->view_type;
-		if(is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) || 
+		if(is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) ||
 			is_file(Registry::get('pr-framework-install-path') . '/__view__/' . $path)){
 			extract($this->vars(), EXTR_REFS);
 			ob_start();
@@ -158,7 +161,7 @@ abstract class Template
 		$this->init();
 		return $this->View->process($content);
 	}
-	
+
 	/**
 	 * init
 	 *
@@ -169,7 +172,7 @@ abstract class Template
 	{
 		self::$ContentFor = new stdClass;
 	}
-	
+
 	/**
 	 * The params that the server knows about
 	 *
@@ -181,7 +184,7 @@ abstract class Template
 		return ($key !== null) ? $this->request->$key
 							   : $this->request;
 	}
-	
+
 	/**
 	 * Register a valid view type
 	 *
@@ -192,7 +195,7 @@ abstract class Template
 	{
 		self::$view_types[$key] = $view->class_name();
 	}
-	
+
 	/**
 	 * is registered view
 	 *

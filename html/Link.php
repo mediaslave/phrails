@@ -1,18 +1,20 @@
 <?php
 /**
-* Creates an 'link' tag used in the header tag of most requests.
-* 
-* @todo take an array for the options.
-* @author Justin Palmer
-* @package html
-*/
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
+ * @package html
+ * @author Justin Palmer
+ */
 class Link extends AssetTag
 {
 	/**
 	 * Constructor
 	 *
-	 * @param string $path 
-	 * @param string or array $options 
+	 * @param string $path
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($path, $options=null)

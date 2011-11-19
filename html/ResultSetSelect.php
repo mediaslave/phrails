@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class ResultSetSelect extends Select
 {
@@ -15,9 +18,9 @@ class ResultSetSelect extends Select
 	 * Constructor
 	 *
 	 * @param string $name
-	 * @param string $selectedValue 
-	 * @param Option $optionsTags 
-	 * @param string or array $options 
+	 * @param string $selectedValue
+	 * @param Option $optionsTags
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, array $resultSet, $selectedValue=null, $options=null, $optionDisplay='name', $id='id', $optgroup='optgroup')
@@ -37,9 +40,9 @@ class ResultSetSelect extends Select
 		$this->createOptGroup();
 		parent::__construct($name, $selectedValue, null, $options);
 	}
-	
+
 	/**
-	 * Fill the Group HashArray or the display depending on if the 
+	 * Fill the Group HashArray or the display depending on if the
 	 * result set has an optgroup property
 	 *
 	 * @return void
@@ -57,7 +60,7 @@ class ResultSetSelect extends Select
 			$this->Group->set($record->$optgroup, $option);
 		}
 	}
-	
+
 	/**
 	 * Create the optgroup if we need to
 	 *

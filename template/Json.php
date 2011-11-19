@@ -1,11 +1,13 @@
 <?php
 /**
- * Json
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
- * @refactor
  * @package template
  * @author Justin Palmer
- **/
+ */
 class Json
 {
 	/**

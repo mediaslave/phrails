@@ -1,13 +1,15 @@
 <?php
-// Thanks to http://www.eval.ca/articles/php-pluralize (MIT license)
-//           http://dev.rubyonrails.org/browser/trunk/activesupport/lib/active_support/inflections.rb (MIT license)
-//           http://www.fortunecity.com/bally/durrus/153/gramch13.html
-//           http://www2.gsu.edu/~wwwesl/egw/crump.htm
-//
 /**
- * Inflections provides many methods that helps with the Model, helpers and ...
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * Thanks to http://www.eval.ca/articles/php-pluralize (MIT license)
+ *           http://dev.rubyonrails.org/browser/trunk/activesupport/lib/active_support/inflections.rb (MIT license)
+ *           http://www.fortunecity.com/bally/durrus/153/gramch13.html
+ *           http://www2.gsu.edu/~wwwesl/egw/crump.htm
  *
  * @package util
+ * @author Justin Palmer
  */
 class Inflections
 {

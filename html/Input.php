@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Input extends FormElement
 {

@@ -1,20 +1,23 @@
 <?php
 /**
- * Creates a input 'hidden'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class InputHidden extends Input
 {
 	protected $options = 'type:hidden';
-	
+
 	protected $is_hidden = true;
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $value, $options=null)

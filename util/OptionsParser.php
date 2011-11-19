@@ -1,6 +1,9 @@
 <?php
 /**
- * Parses the options string that are sent in.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
  *
  * @package util
  * @author Justin Palmer

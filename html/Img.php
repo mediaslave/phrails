@@ -1,7 +1,12 @@
 <?php
 /**
- * Creates a img tag.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Img extends AssetTag
 {
@@ -11,20 +16,20 @@ class Img extends AssetTag
 	 * @var boolean
 	 */
 	protected $hasEndTag = false;
-	
+
 	/**
 	 * The source of the url.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $source;
-	
+
 	protected $path = 'public/images/';
 	/**
 	 * Return a linkCss object
 	 *
-	 * @param string $source 
-	 * @param string $options 
+	 * @param string $source
+	 * @param string $options
 	 * @return LinkCss
 	 * @author Justin Palmer
 	 */

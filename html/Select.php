@@ -1,9 +1,12 @@
 <?php
 /**
- * Creates a 'label'.
- * 
- * @author Justin Palmer
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package html
+ * @author Justin Palmer
  */
 class Select extends FormElement
 {
@@ -11,9 +14,9 @@ class Select extends FormElement
 	 * Constructor
 	 *
 	 * @param string $name
-	 * @param string $selectedValue 
-	 * @param Option $optionsTags 
-	 * @param string or array $options 
+	 * @param string $selectedValue
+	 * @param Option $optionsTags
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($name, $selectedValue, $optionTags, $options=null)
@@ -26,7 +29,7 @@ class Select extends FormElement
 		//is a prompt option and prepare if so.
 		if(!$options instanceof Option && !is_array($options)){
 			$options = $this->preparePrompt($options);
-		//If $options is an instance of Option, then we need to add it back to our 
+		//If $options is an instance of Option, then we need to add it back to our
 		//array of Option instances.
 		}else{
 			$args[] = $options;
@@ -35,7 +38,7 @@ class Select extends FormElement
 		//If args is an array it could be an array of options.
 		if(is_array($args[0]))
 			$args = $args[0];
-		//$args is now the optionTags after stripping out $name, $selectedValue and $options off of the 
+		//$args is now the optionTags after stripping out $name, $selectedValue and $options off of the
 		//func_get_args array.
 		if($args[0] !== null){
 			foreach($args as $option){

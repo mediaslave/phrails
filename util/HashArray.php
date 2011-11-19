@@ -1,9 +1,12 @@
 <?php
 /**
- * A HashArray allows you to add multiple items to a key. Get will then return an array of items.
- * 
- * @todo if an array is passed to set as the $value turn it into an stdClass.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+ * class description
+ *
  * @package util
+ * @author Justin Palmer
  */
 class HashArray extends Hash
 {
@@ -11,8 +14,8 @@ class HashArray extends Hash
 	/**
 	 * Set a key/value pair
 	 *
-	 * @param string $key 
-	 * @param mixed $value 
+	 * @param string $key
+	 * @param mixed $value
 	 * @return void
 	 * @author Justin Palmer
 	 */
