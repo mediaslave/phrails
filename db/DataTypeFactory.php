@@ -1,8 +1,11 @@
-<?
+<?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
 
 /**
-* Datatype factory attempts to get an object that represents the 
-* datatype that a specific model column is.		
+* @package db
+* @author Justin Palmer
 */
 class DataTypeFactory
 {
@@ -13,8 +16,8 @@ class DataTypeFactory
 	 * @author Justin Palmer
 	 **/
 	static public function process($datatype, $value)
-	{	
-		
+	{
+
 		try{
 			$arr = explode('(', $datatype);
 			$datatype = ucfirst(array_shift($arr)) . 'DataType';

@@ -1,15 +1,14 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * The base model.
  *
- * 
+ *
  * @package db
  * @author Justin Palmer
  **/
-
-/**
-* 
-*/
 abstract class Model extends ActiveRecord
 {
 	/**
@@ -26,7 +25,7 @@ abstract class Model extends ActiveRecord
 	 * @var string
 	 */
 	protected $table_name;
-	
+
 	/**
 	 * The database name for this project
 	 */
@@ -50,11 +49,11 @@ abstract class Model extends ActiveRecord
 	 *
 	 * @author Justin Palmer
 	 * @var Hash
-	 */	
+	 */
 	protected $props;
 	/**
 	 * An array of properties that have changed.
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var array
 	 */
@@ -77,7 +76,7 @@ abstract class Model extends ActiveRecord
   public $validateNulls = false;
 	/**
 	 * The filters for the model
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var ModelFilters
 	 */
@@ -98,32 +97,32 @@ abstract class Model extends ActiveRecord
 		}
 		$this->alias = Inflections::singularize($this->table_name);
 		$this->database_name = DatabaseConfiguration::get('database');
-		
+
 		parent::__construct();
-		
+
 		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name);
-		
+
 		//new Dbug($this->columns, '', false, __FILE__, __LINE__);
-		
+
 		$this->props = new Hash();
 		$this->errors = new Hash();
 		if(is_array($array)){
 			$this->setProperties($array);
 		}
-		
+
 		$this->filters = new ModelFilters();
 		$this->schema = new Schema($this);
-		
+
 		$this->init();
 	}
-	
+
 	/**
-	 * Create a new model object to perform queries on. 
-	 * 
+	 * Create a new model object to perform queries on.
+	 *
 	 * This is because PHP will not allow method declarations with the keyword `new`.
 	 * We are using the phonetic spelling.
 	 *
-	 * @param array $props 
+	 * @param array $props
 	 * @return Model
 	 * @author Justin Palmer
 	 **/
@@ -132,13 +131,13 @@ abstract class Model extends ActiveRecord
 		$model = get_called_class();
 		return new $model($props);
 	}
-	
+
 	/**
 	 * Save the model
 	 *
 	 * @todo there has to be a better way to do this.  We should not return false,
 	 * but we also do not want every save call wrapped in a try/catch block.
-	 * 
+	 *
 	 * @return boolean
 	 * @author Justin Palmer
 	 **/
@@ -155,7 +154,7 @@ abstract class Model extends ActiveRecord
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Validate the model props against the schema
 	 *
@@ -169,9 +168,9 @@ abstract class Model extends ActiveRecord
 			$this->errors->set('authenticity-token', FormBuilder::getAuthenticityErrorMessage());
 			return false;
 		}
-    
+
 		$Judge = new RuleJudge($this->props, $this->schema);
-		
+
 		$this->errors = $Judge->judge($this);
 		if(!$this->errors->isEmpty()){
 			return false;
@@ -192,7 +191,7 @@ abstract class Model extends ActiveRecord
       return $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
     }
   }
-	
+
 	/**
 	 * __get model properties
 	 *
@@ -210,7 +209,7 @@ abstract class Model extends ActiveRecord
 		//If it is a relationship that is not set then run the query and return the key.
 		if (!isset($this->$key)){
 			return $this->loadRelationship($key);
-		} 
+		}
 	}
 	/**
 	 * __set model properties
@@ -242,7 +241,7 @@ abstract class Model extends ActiveRecord
 	 * @author Justin Palmer
 	 **/
 	final public function hasProperty($column)
-	{	
+	{
 		if(!$this->columns->isKey($column))
 			throw new NoColumnInTableException($column, $this->table_name());
 		return true;
@@ -359,10 +358,10 @@ abstract class Model extends ActiveRecord
 		$this->filters->setModelClassName(get_class($this));
 		return $this->filters;
 	}
-	
+
 	/**
 	 * run a filter(s)
-	 * 
+	 *
 	 * $this->filter('beforeSave')
 	 *
 	 * @return boolean if any filter returns false or throws an exception return false.
@@ -395,7 +394,7 @@ abstract class Model extends ActiveRecord
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Try to return a datatype object for the specified column
 	 *
@@ -411,7 +410,7 @@ abstract class Model extends ActiveRecord
 		}
 		return $this->$key;
 	}
-	
+
 	/**
 	 * To string returns the props
 	 *

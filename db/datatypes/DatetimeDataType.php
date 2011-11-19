@@ -1,6 +1,12 @@
-<?
+<?php
 /**
-* Base datatype.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @subpackage datatypes
+* @author Justin Palmer
 */
 class DatetimeDataType extends DataType{
 

@@ -1,10 +1,16 @@
-<?
+<?php
 /**
-* Base datatype.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @subpackage datatypes
+* @author Justin Palmer
 */
 class TextDataType extends DataType{
-	
-	
+
+
 	/**
 	 * Run an nl2br on the value
 	 *

@@ -1,8 +1,9 @@
 <?php
 /**
- * load the framework paths
+ * @package framework
+ * @author Justin Palmer
  */
-add_include_directory(__DIR__ . '/__view__');				
+add_include_directory(__DIR__ . '/__view__');
 add_include_directory(__DIR__ . '/db');
 add_include_directory(__DIR__ . '/db/datatypes');
 add_include_directory(__DIR__ . '/exceptions');
@@ -14,11 +15,11 @@ add_include_directory(__DIR__ . '/util');
 
 /**
  * If the user of the framework defines their own __autoload, we will let them
- * for them to do so, they will need to call our autoload if theirs does not load 
+ * for them to do so, they will need to call our autoload if theirs does not load
  * anything.
  */
 
-//If the user defines an __autoload then we will load it 
+//If the user defines an __autoload then we will load it
 if(function_exists('__autoload'))
 	spl_autoload_register('__autoload');
 //Load our autoload function.
@@ -27,7 +28,6 @@ spl_autoload_register('autoload');
  * Autoload method to load items from the app.
  *
  * @param string $class_name
- * @package framework
  * @author Justin Palmer
  */
 function autoload($class_name){
@@ -40,9 +40,9 @@ function autoload($class_name){
 	}else{
 		$path = $class_name;
 	}
-	
+
 	$included = include_once(ltrim(str_replace('\\', '/', $path), '/') . '.php');
-	
+
 	if($included === false){
 		//die($class_name);
 		if(substr($class_name, -10) == 'Controller'){
@@ -61,7 +61,6 @@ function autoload($class_name){
  * @param string $extension
  * @param boolean $do_folders
  * @return void
- * @package framework
  * @author Justin Palmer
  */
 function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
@@ -81,6 +80,7 @@ function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
 /**
  * Add an include directory for the project
  *
+ * @param string $path
  * @return void
  * @author Justin Palmer
  **/
@@ -91,6 +91,8 @@ function add_include_directory($path)
 /**
  * Initialize the plugin.
  *
+ * @param string $plugin
+ * @param string $alt_path
  * @return void
  * @author Justin Palmer
  **/
@@ -107,6 +109,7 @@ function add_plugin($plugin, $alt_path=null)
 /**
  * Set the install path.
  *
+ * @param string $base_uri
  * @return void
  * @author Justin Palmer
  **/

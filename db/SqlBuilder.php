@@ -1,5 +1,8 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * Build sql statements
  *
  * @todo named_scope

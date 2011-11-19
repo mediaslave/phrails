@@ -1,4 +1,8 @@
 <?
+/**
+ * @package util
+ * @author Justin Palmer
+ */
 
 /**
 * Allows you to pass in a method to sort by.  This can be any method that is is available
@@ -10,9 +14,9 @@ class SortableDirectoryIterator implements IteratorAggregate {
 	private $array = array();
 	private $method = 'getFileName';
 	private $doHidden = false;
-	
+
 	/**
-	 * 
+	 *
 	 */
     public function __construct($path) {
 
@@ -38,13 +42,13 @@ class SortableDirectoryIterator implements IteratorAggregate {
 
 	/**
 	 * Sort the items by the correct method
-	 * 
+	 *
 	 * @DonaldKnuth
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function sort($args) {	
+	private function sort($args) {
 		$method = $this->method;
 		foreach($args as $path){
 			if (!(is_dir($path))) {

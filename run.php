@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package framework
+ * @author Justin Palmer
+ */
 session_start();
 
 //Load all of the helper methods

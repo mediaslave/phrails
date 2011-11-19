@@ -1,13 +1,20 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
 
+/**
+ * @package db
+ * @author Justin Palmer
+ */
 class PhrailsMigration extends Model{
-	
+
 	protected $primary_key = 'version';
-	
+
 	public function init(){
-		
+
 	}
-	
+
 	/**
 	 * Create the table if need be.
 	 *
@@ -24,7 +31,7 @@ class PhrailsMigration extends Model{
 		$this->setColumns();
 		return $boolean;
 	}
-	
+
 	/**
 	 * Special init because the table may not be there and the columns get cached, we need to call this after createTableIfNotExists
 	 *

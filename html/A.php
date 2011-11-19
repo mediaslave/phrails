@@ -1,7 +1,10 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * Creates a link.
- * 
+ *
  * @author Justin Palmer
  * @package html
  */
@@ -10,9 +13,9 @@ class A extends Tag
 	/**
 	 * Constructor
 	 *
-	 * @param string $display 
-	 * @param string $path 
-	 * @param string or array $options 
+	 * @param string $display
+	 * @param string $path
+	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
 	function __construct($display, $path, $options=null)

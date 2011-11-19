@@ -1,16 +1,19 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * Mysql adapter
  *
  * @package db
  * @author Justin Palmer
- */				
+ */
 class MysqlAdapter extends AnsiAdapter
 {
-	
+
 	/**
 	 * Store the column structure in a hash.
-	 * 
+	 *
 	 * @todo move to base DatabaseAdapter and take a third parameter for the field to make into the Hash key.
 	 *
 	 * @return Hash
@@ -28,7 +31,7 @@ class MysqlAdapter extends AnsiAdapter
 				$cache->set($column->Field, $column);
 			}
 			self::$ColumnsCache->set($class_name, $cache);
-			return $cache;	
+			return $cache;
 		}
 	}
 }

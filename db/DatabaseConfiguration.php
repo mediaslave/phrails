@@ -1,12 +1,14 @@
 <?php
 /**
- * 
- * 
- * @package db
- * @author Justin Palmer
- */				
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @author Justin Palmer
+*/
 class DatabaseConfiguration
-{	
+{
 	/**
 	 * Implemented drivers
 	 *
@@ -14,18 +16,18 @@ class DatabaseConfiguration
 	 * @var array
 	 */
 	static private $types = array('mysql'=>'Mysql');
-	
+
 	/**
 	 * The configuration for the database
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var stdClass
 	 */
 	static private $Config = null;
-	
+
 	/**
 	 * Add a type to the available types.  You must create your own driver and adapter when doing this.
-	 * 
+	 *
 	 * @param string $name - The key of the type array
 	 * @param string $class_prefix - The prefix of the class ($class_prefix . 'Adapter', $class_prefix . 'Driver')
 	 * @return void
@@ -35,7 +37,7 @@ class DatabaseConfiguration
 	{
 		self::$types[$name] = $class_prefix;
 	}
-	
+
 	/**
 	 * Get a var from the config
 	 *
@@ -64,7 +66,7 @@ class DatabaseConfiguration
 		return self::$types[$Config->driver];
 	}
 
-	
+
 	/**
 	 * Get the config for the db.
 	 *
@@ -74,7 +76,7 @@ class DatabaseConfiguration
 	static public function getConfig()
 	{
 		$Config = self::$Config;
-		if(self::$Config === null) 
+		if(self::$Config === null)
 			self::$Config = $Config = Registry::get('pr-db-config');
 		return $Config;
 	}

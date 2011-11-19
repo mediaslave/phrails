@@ -1,18 +1,21 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * Mysql adapter
- * 
+ *
  * @todo shouldn't transaction, beginTransaction, commit, rollBack, savepoint all be in the
  * DatabaseAdapter as abstract and the DatabaseAdapter implement Transactional?
  *
  * @package db
  * @author Justin Palmer
- */				
+ */
 abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 {
 	static private $savepoints = array();
 	static private $savepoint_counter = 0;
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -32,7 +35,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Begin a transaction or set a savepoint
 	 *
@@ -56,7 +59,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
         }
         self::$savepoint_counter++;
 	}
-	
+
 	/**
 	 * Set a savepoint
 	 *
@@ -69,7 +72,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		self::$savepoints[] = $name;
 		$this->conn()->exec('SAVEPOINT ' . $name);
 	}
-	
+
 	/**
 	 * Release a savepoint or commit
 	 *
@@ -84,9 +87,9 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
         } else {
             $this->conn()->exec("RELEASE SAVEPOINT " . $savepoint);
         }
-	 
+
 	}
-	
+
 	/**
 	 * Rollback to a savepoint or rollback
 	 *
@@ -101,15 +104,15 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
         } else {
             $this->conn()->exec("ROLLBACK TO SAVEPOINT " . $savepoint);
         }
-		
+
 	}
-	
+
 	/**
 	 * Show columns
 	 *
 	 * We use this style instead of {query()} because up to 5.3.3.? there
 	 * was a bug in the cli.
-	 * 
+	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
@@ -119,7 +122,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
-	
+
 	/**
 	 * Truncate a table
 	 *
@@ -131,7 +134,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		$stmt = $this->conn()->prepare("TRUNCATE TABLE `$table_name`");
 		return $stmt->execute();
 	}
-	
+
 	/**
 	 * Show tables
 	 *
@@ -142,7 +145,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	{
 		return $this->conn()->query("SHOW TABLES");
 	}
-	
+
 
 	/**
 	 * Build the create (insert) query for the adapter
@@ -195,7 +198,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 			$sql .= $this->limit($Hash->offset(), $Hash->limit());
 		return (object) array('sql' => $sql, 'params'=>$Hash->whereArgs());
 	}
-	
+
 	/**
 	 * Build the update (update) query for the adapter
 	 *
@@ -238,7 +241,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 			$sql .= $this->limit($Hash->offset(), $Hash->limit());
 		return (object) array('sql' => $sql, 'params'=>$Hash->whereArgs());
 	}
-	
+
 	/**
 	 * Back tick the items passed in.
 	 *
@@ -257,7 +260,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * get the last insert id
 	 *
@@ -294,7 +297,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	{
 		if(sizeof($Hash->count()) == 0)
 			return '';
-		$ret = '';	
+		$ret = '';
 		if($Hash->select() != '')
 			$ret .= ', ';
 		foreach($Hash->count() as $count){

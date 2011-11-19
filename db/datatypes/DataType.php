@@ -1,16 +1,22 @@
-<?
+<?php
 /**
-* Base datatype.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @subpackage datatypes
+* @author Justin Palmer
 */
 class DataType
 {
 	protected $value;
-	
+
 	public function __construct($value)
 	{
 		$this->value = $value;
 	}
-	
+
 	/**
 	 * Get the value.
 	 *

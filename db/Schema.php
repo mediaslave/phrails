@@ -1,5 +1,8 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
  * To define the schema of a model
  *
  * @todo Building SQL in schema is bad.  Needs to be done by the adapter.

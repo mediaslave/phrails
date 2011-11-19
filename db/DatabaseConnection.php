@@ -1,20 +1,22 @@
 <?php
 /**
- * 
- * 
- * @package db
- * @author Justin Palmer
- */				
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @author Justin Palmer
+*/
 class DatabaseConnection
-{	
+{
 	/**
 	 * The pdo object
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var PDO
 	 */
 	static protected $pdo = null;
-	
+
 	/**
 	 * Hack to get the right connection information to the pdo construct.
 	 *
@@ -34,7 +36,7 @@ class DatabaseConnection
 			throw new DatabaseConnectionException($e->getMessage());
 		}
 	}
-	
+
 	/**
 	 * Disconnect from the db
 	 *
@@ -45,7 +47,7 @@ class DatabaseConnection
 	{
 		self::$pdo = null;
 	}
-	
+
 	/**
 	 * Destruct will disconnect from the database
 	 *

@@ -1,10 +1,12 @@
 <?php
 /**
- * Database adapter
- *
- * @package db
- * @author Justin Palmer
- */				
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @author Justin Palmer
+*/
 abstract class DatabaseAdapter
 {
 	/**
@@ -14,18 +16,18 @@ abstract class DatabaseAdapter
 	const READ   = 'read';
 	const UPDATE = 'update';
 	const DELETE = 'delete';
-	
+
 	/**
 	 * Database connection
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var PDO
 	 */
 	private $conn = null;
-	
+
 	/**
 	 * Hash table to store table column information
-	 * 
+	 *
 	 * @author Justin Palmer
 	 * @var Hash
 	 */
@@ -42,7 +44,7 @@ abstract class DatabaseAdapter
 		if(!(self::$ColumnsCache instanceof Hash))
 			self::$ColumnsCache = new Hash();
 	}
-	
+
 	/**
 	 * Show columns
 	 *
@@ -50,7 +52,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function showColumns($table_name);
-	
+
 	/**
 	 * Show the tables
 	 *
@@ -58,7 +60,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function showTables();
-	
+
 	/**
 	 * Truncate a table
 	 *
@@ -66,7 +68,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function truncate($table_name);
-		
+
 	/**
 	 * Store the columns for a table.
 	 *
@@ -74,7 +76,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function cacheColumns($class_name, $table_name, $forceReload=false);
-	
+
 	/**
 	 * Build the create (insert) query for the adapter
 	 *
@@ -83,7 +85,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function buildCreate(SqlBuilderHash $Hash);
-	
+
 	/**
 	 * Build the read (select) query for the adapter
 	 *
@@ -92,7 +94,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function buildRead(SqlBuilderHash $Hash);
-	
+
 	/**
 	 * Build the update (update) query for the adapter
 	 *
@@ -101,7 +103,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function buildUpdate(SqlBuilderHash $Hash);
-	
+
 	/**
 	 * Build the delete (delete) query for the adapter
 	 *
@@ -110,15 +112,15 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract public function buildDelete(SqlBuilderHash $Hash);
-	
+
 	/**
 	 * Back tick the items needed
-	 * 
+	 *
 	 * @return array
 	 * @author Justin Palmer
 	 **/
 	abstract public function tick(/* items_to_tick */);
-	
+
 	/**
 	 * The limit string for a query.
 	 *
@@ -126,7 +128,7 @@ abstract class DatabaseAdapter
 	 * @author Justin Palmer
 	 **/
 	abstract protected function limit($offset, $limit);
-	
+
 	/**
 	 * get the last insert id
 	 *

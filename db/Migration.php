@@ -1,10 +1,15 @@
 <?php
+/**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
 
 /**
 * @todo break this apart to handle multiple types of databases.  Now it is set to handle mysql.
 * @todo this really is just hacked out, I really need to refactor this.  It fits my needs for now.
-* The stack should turn into a hash of stacks, the key would be the timestamp with milliseconds every time 
+* The stack should turn into a hash of stacks, the key would be the timestamp with milliseconds every time
 * createTable or updateTable is called.  That way messages can then be queue.
+* @package db
+* @author Justin Palmer
 */
 abstract class Migration extends Model
 {
@@ -19,11 +24,11 @@ abstract class Migration extends Model
 	 * The type relects if we are doing alter or create.
 	 */
 	private $type;
-	
+
 	/**
 	 * Migration class.
 	 *
-	 * 
+	 *
 	 * @return Migration
 	 * @author Justin Palmer
 	 */
@@ -33,8 +38,8 @@ abstract class Migration extends Model
 		$this->config = DatabaseConfiguration::getConfig();
 		$this->stack = array();
 	}
-	
-	
+
+
 	/**
 	 * Create table
 	 *
@@ -56,7 +61,7 @@ abstract class Migration extends Model
 		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(\n\t%s\n)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
 		$this->integer($primary, 'auto:true');
 	}
-	
+
 	/**
 	 * Alter table
 	 *
@@ -78,16 +83,16 @@ abstract class Migration extends Model
 			$operation .= " CHARACTER SET $charset";
 		if($collation !== null)
 			$operation .= " COLLATE $collation";
-		if($raw != true) 
+		if($raw != true)
 			$name = Inflections::tableize($name);
 
 		$this->table = $name;
 		$this->statement = "ALTER TABLE `" . $this->config->database . "`.`" . $name . "` \n\t%s\n $operation";
 	}
-	
+
 
 	/**
-	 * Executes migrations if there are any to run 
+	 * Executes migrations if there are any to run
 	 *
 	 * @author Dave Kerschner
 	 * @access private
@@ -149,7 +154,7 @@ abstract class Migration extends Model
 
       $this->log($query);
     }
-		
+
 		if($query != "" && !$stmt->execute() ) {
 			print("ERROR: " . get_class($this) . "\n");
 			var_dump($stmt->errorInfo());
@@ -174,7 +179,7 @@ abstract class Migration extends Model
 				var_dump($stmt->errorInfo());
 				var_dump($query);
 				print("\n");
-				die(); 
+				die();
 			}
 			$this->log($query);
 		}
@@ -214,7 +219,7 @@ abstract class Migration extends Model
 		$o .= '=============================================================' . "\n";
 		$this->operations .= $o;
 	}
-	
+
 	/**
 	 * int
 	 *
@@ -225,7 +230,7 @@ abstract class Migration extends Model
 	{
 		$this->add('INT', $name, $options);
 	}
-	
+
 	/**
 	 * float
 	 *
@@ -237,7 +242,7 @@ abstract class Migration extends Model
 		$invalid = array('auto');
 		$this->add('FLOAT', $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * float
 	 *
@@ -249,8 +254,8 @@ abstract class Migration extends Model
 		$invalid = array('auto');
 		$this->add('DECIMAL', $name, $options, $invalid);
 	}
-	
-	
+
+
 	/**
 	 * Boolean is actually a int(1)
 	 *
@@ -262,7 +267,7 @@ abstract class Migration extends Model
 		$invalid = array('auto');
 		$this->add('BOOL', $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * enum
 	 *
@@ -271,7 +276,7 @@ abstract class Migration extends Model
 	 * @author Justin Palmer
 	 **/
 	public function enum($name, Array $key_value, $options=''){}
-	
+
 	/**
 	 * varchar
 	 *
@@ -283,7 +288,7 @@ abstract class Migration extends Model
 		$invalid = array('auto');
 		$this->add("VARCHAR", $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * text
 	 *
@@ -295,7 +300,7 @@ abstract class Migration extends Model
 		$invalid = array('limit', 'primary', 'index', 'unique', 'auto');
 		$this->add("TEXT", $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * date
 	 *
@@ -329,7 +334,7 @@ abstract class Migration extends Model
 		$invalid = array('null', 'index', 'unique', 'default', 'auto');
 		$this->add('DATETIME', $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * timestamp
 	 *
@@ -366,21 +371,21 @@ abstract class Migration extends Model
 		$invalid = array('index', 'unique', 'default', 'auto');
 		$this->add('BLOB', $name, $options, $invalid);
 	}
-	
+
 	/**
 	 * timestamps
-	 * 
+	 *
 	 * This will create a datetime column for created_at and updated_at.
 	 *
 	 * @return void
 	 * @author Justin Palmer
 	 **/
 	public function timestamps()
-	{	
+	{
 		$this->datetime('updated_at');
-		$this->datetime('created_at');	
+		$this->datetime('created_at');
 	}
-	
+
 	/**
 	 * Add reference to another table
 	 *
@@ -409,7 +414,7 @@ abstract class Migration extends Model
 		$column = Inflections::underscore($table) . '_id';
 		$this->drop($column);
 	}
-	
+
 	/**
 	 * Add the type to the stack for us to build the query
 	 *
@@ -446,19 +451,19 @@ abstract class Migration extends Model
 		}
 		if(isset($options['default']))
 			$bit .= " DEFAULT '" . $options['default'] . "'";
-			
+
 		if(isset($options['auto']))
 			$bit .= " AUTO_INCREMENT PRIMARY KEY";
-			
+
 		if(isset($options['after']))
 			$bit .= " AFTER `" . $options['after'] . "`";
-		
+
 		if(isset($options['primary']) && $options['primary'] == 'true' && !isset($options['auto']))
 			$this->primary($this->table, $name);
-			
+
 		$this->stack[] = $bit . "\n\t";
 	}
-	
+
 	/**
 	 * Make a column unique
 	 *
@@ -480,7 +485,7 @@ abstract class Migration extends Model
 	{
 		$this->doIndex(func_get_args(), 'UNIQUE', 'DROP');
 	}
-	
+
 	/**
 	 * Make a column unique
 	 *
@@ -502,7 +507,7 @@ abstract class Migration extends Model
 	{
 		$this->doIndex(func_get_args(), 'INDEX', 'DROP');
 	}
-	
+
 	/**
 	 * Make a primary key
 	 *
@@ -513,7 +518,7 @@ abstract class Migration extends Model
 	{
 		$this->alter($table, "ADD PRIMARY KEY(`$column`)");
 	}
-	
+
 	/**
 	 * Alter table
 	 *
@@ -524,7 +529,7 @@ abstract class Migration extends Model
 	{
 		$this->alter_stack[] = "ALTER TABLE `" . $this->config->database . "`.`" . Inflections::tableize($table) . "` " . $alter;
 	}
-	
+
 	/**
 	 * Get the current table
 	 *
@@ -535,7 +540,7 @@ abstract class Migration extends Model
 	{
 		return $this->table;
 	}
-	
+
 	/**
 	 *
 	 * This method is for unique() and index() to prevent duplicate code.
@@ -552,7 +557,7 @@ abstract class Migration extends Model
 		foreach($args as $value){
 			$unique .= "`$value`, ";
 		}
-		$unique = rtrim($unique, ', '); 
+		$unique = rtrim($unique, ', ');
 		$items = "  (" . $unique . ")";
 		if($add_drop == 'DROP'){
 			$items = '';
@@ -567,7 +572,7 @@ abstract class Migration extends Model
 	 * @author Justin Palmer
 	 **/
 	abstract public function up();
-	
+
 	/**
 	 * down
 	 *
@@ -575,6 +580,6 @@ abstract class Migration extends Model
 	 * @author Justin Palmer
 	 **/
 	abstract public function down();
-	
+
 	public function init(){}
 }

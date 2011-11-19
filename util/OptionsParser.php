@@ -31,7 +31,11 @@ class OptionsParser
 		return self::parse($options, $optionExceptions, array());
 	}
 	/**
-	 * @nodoc
+	 * Parse the options and convert it to the requested.
+	 *
+	 * @param mixed $options
+	 * @param array $optionExceptions - array('remote'=>'data-remote')
+	 * @param mixed $return - What are we returning?
 	 */
 	private function parse($options, array $optionExceptions=array(), $return='')
 	{

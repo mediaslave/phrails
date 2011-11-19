@@ -1,6 +1,11 @@
 <?php
 /**
-*
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+
+/**
+* @package db
+* @author Justin Palmer
 */
 class ModelFilters
 {

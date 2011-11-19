@@ -1,6 +1,10 @@
-<?
+<?php
 /**
-* @todo take in multiple models.  Only handles one model at the moment.
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ */
+/**
+* @package db
+* @author Justin Palmer
 */
 class SearchSqlBuilder
 {
