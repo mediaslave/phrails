@@ -198,6 +198,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function delete(/* id's */)
 	{
+		//Prepare the query with the given id's passed in
 		$args = func_get_args();
 		$primary = $this->primary_key();
 		if($this->$primary !== null)
@@ -208,7 +209,19 @@ class ActiveRecord extends SqlBuilder
 		}
 		$this->from($this->database_name(), $this->table_name());
 		$query = $this->build(DatabaseAdapter::DELETE);
-		return $this->processCud($query);
+
+		//Transactional safe delete.
+		try{
+			$this->adapter()->beginTransaction();
+			$this->filter('beforeDelete');
+			if(!$this->processCud($query)) throw new FailedActiveRecordDeleteException();
+			$this->filter('afterDelete');
+			$this->adapter()->commit();
+		}catch(Exception $e){
+			$this->adapter()->rollBack();
+			return false;
+		}
+		return true;
 	}
 	/**
 	 * Get the last insert id.
@@ -302,8 +315,10 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final protected function lazy($result, $joins, $isLazy=false)
 	{
-    	$this->reset();
+    $this->reset();
 		foreach($joins as $key => $query){
+			//new \Dbug($query, '', false, __FILE__, __LINE__);
+			//new \Dbug($this->props(), '', false, __FILE__, __LINE__);
 			$prop = $query->prop;
 			$obj = $this->select($query->alias .".*");
 			$obj = parent::join($query->join)

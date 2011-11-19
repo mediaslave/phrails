@@ -3,6 +3,6 @@
 * If the rule does not override the $message var the we will throw an exception.
 * @package exceptions
 */
-class FailedActiveRecordCreateUpdateException extends Exception
+class FailedActiveRecordDeleteException extends Exception
 {
 }

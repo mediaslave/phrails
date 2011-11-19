@@ -3,10 +3,10 @@
 * Base datatype.
 */
 class DatetimeDataType extends DataType{
-	
+
 	/**
 	 * Format a date into the format specified
-	 * 
+	 *
 	 * Follows the formatting of the PHP <code>DateTime</code> class
 	 *
 	 * @return mixed
@@ -31,12 +31,12 @@ class DatetimeDataType extends DataType{
 		$interval = $obj->diff($date);
 		return $interval->format($format);
 	}
-	
+
 	/**
 	 * Calculate the age between two dates
 	 *
 	 * Format is specified by the PHP <code>DateInterval::format</code> method.
-	 * 
+	 *
 	 * @return string
 	 * @author Justin Palmer
 	 **/
@@ -76,5 +76,16 @@ class DatetimeDataType extends DataType{
 	public function day($format='%d')
 	{
 		return $this->format($format);
+	}
+	/**
+	 *
+	 * Add via DateInterval
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	public function datetime()
+	{
+		return new DateTime($this->value());
 	}
 }

@@ -1,14 +1,15 @@
-<?php	
+<?php
 /**
-* 
+*
 */
 class ModelFilters
 {
-	private $valid_filters = array('beforeValidate', 'afterValidate', 
-								   'beforeSave', 'afterSave', 
-								   'afterCommit', 
-								   'beforeCreate', 'afterCreate', 
-								   'beforeUpdate', 'afterUpdate');
+	private $valid_filters = array('beforeValidate', 'afterValidate',
+								   'beforeSave', 'afterSave',
+								   'afterCommit',
+								   'beforeCreate', 'afterCreate',
+								   'beforeUpdate', 'afterUpdate',
+								   'beforeDelete', 'afterDelete');
 	private $model_class_name;
 	//static private $Hash;
 	private $Hash;
@@ -28,7 +29,7 @@ class ModelFilters
 		}
 		return new ModelFilters();
 	}
-	
+
 	/**
 	 * Set a filter
 	 *
@@ -41,7 +42,7 @@ class ModelFilters
 			throw new Exception('unknown model filter: ' . $filter);
 		$this->Hash->set($this->model_class_name, $filter, array_shift($callback));
 	}
-	
+
 	/**
 	 * Get the filters for the model and the type
 	 *
@@ -55,7 +56,7 @@ class ModelFilters
 		$ModelFilters = $this->Hash->get($this->model_class_name);
 		return ($ModelFilters instanceof HashArray) ? $ModelFilters->get($filter) : null;
 	}
-	
+
 	/**
 	 * set the model class name
 	 *
@@ -66,7 +67,7 @@ class ModelFilters
 	{
 		$this->model_class_name = $name;
 	}
-	
+
 	/**
 	 * Export the Hash
 	 *
@@ -80,11 +81,11 @@ class ModelFilters
 }
 
 /**
-* 
+*
 */
 class ModelFiltersHash extends Hash
 {
-	
+
 	//run before-validate
 	//run after-validate
 	//run before-save
@@ -94,7 +95,7 @@ class ModelFiltersHash extends Hash
 	//run after-create
 	//run before-update
 	//run after-update
-	
+
 	/**
 	 * undocumented function
 	 *
@@ -110,6 +111,6 @@ class ModelFiltersHash extends Hash
 		$HashArray->set($filter, $callback);
 		parent::set($model, $HashArray);
 	}
-	
-	
+
+
 }
