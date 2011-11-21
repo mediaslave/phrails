@@ -1,5 +1,6 @@
 <?php
 /**
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
  * @todo convert array to stdClass for pr-db-config
  * @package framework
  * @author Justin Palmer
