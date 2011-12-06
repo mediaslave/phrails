@@ -29,8 +29,11 @@ abstract class FormElement extends Element
 			}
 			$this->options .= "name:$name";
 		}
-		if($value !== null)
+		if($value !== null){
 			$this->value = $value;
+		}else{
+			$this->value = OptionsParser::findAndDestroy('value', $options);
+		}
 		if(!$this->is_hidden){
 			$id = self::getId($name);
 			$this->options .= ",id:$id";

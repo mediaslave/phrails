@@ -24,6 +24,10 @@ class InputRadioGroup
 		$this->name = $name;
 		$this->array = $array;
 		$this->selectedValue = $selectedValue;
+		$value = OptionsParser::findAndDestroy('value', $options);
+		if($value !== false){
+			$this->selectedValue = $value;
+		}
 		$this->options = $options;
 	}
 	/**

@@ -20,7 +20,6 @@ class Textarea extends FormElement
 	 */
 	function __construct($name, $value, $options=null)
 	{
-		$this->display = $value;
 		parent::__construct($name, null, $options);
 	}
 	/**
@@ -28,7 +27,7 @@ class Textarea extends FormElement
 	 */
 	public function start()
 	{
-		return '<textarea' . $this->options . '>';
+		return '<textarea' . $this->options . '>' . $this->value;
 	}
 	/**
 	 * @see Tag::end();

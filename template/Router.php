@@ -99,7 +99,6 @@ class Router
 	{
 		//Get the correct request_uri
 		$request_uri = $this->requestUri();
-		//print $request_uri . '<br/>';
 		//Find the closest route
 		$close_route = $this->findRoute($request_uri);
 		$ret = $close_route['ret'];
@@ -187,6 +186,7 @@ class Router
 			$request_uri[0] = '/' . str_replace(Registry::get('pr-install-path'), '', $request_uri[0]);
 		//print $request_uri[0] . '<br/>';
 		//var_dump(Registry::get('pr-install-path'));
+		$request_uri[0] = str_replace('//', '/', $request_uri[0]);
 		if($request_uri[0] == '')
 			$request_uri[0] = '/';
 		$extension = explode('.', $request_uri[0]);
