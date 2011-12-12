@@ -1,7 +1,7 @@
 <?php
 /**
  * Text helpers
- * * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
+ * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package helpers
  * @author Justin Palmer
  */
