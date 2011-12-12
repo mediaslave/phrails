@@ -119,7 +119,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function showColumns($table_name)
 	{
-		$stmt = $this->conn()->prepare("SHOW COLUMNS FROM `$table_name`");
+		$stmt = $this->conn()->prepare("SHOW COLUMNS FROM $table_name");
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
@@ -132,7 +132,7 @@ abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 	 **/
 	public function truncate($table_name)
 	{
-		$stmt = $this->conn()->prepare("TRUNCATE TABLE `$table_name`");
+		$stmt = $this->conn()->prepare("TRUNCATE TABLE $table_name");
 		return $stmt->execute();
 	}
 

@@ -91,17 +91,14 @@ abstract class Model extends ActiveRecord
 	 **/
 	public function __construct($array=array())
 	{
-		//Generate the table name if it is not set.
-		if($this->table_name === null){
-			$klass = explode('\\', get_class($this));
-			$this->table_name = Inflections::tableize(array_pop($klass));
+		$this->table_name(true);
+		if($this->alias === null){
+			$this->alias(Inflections::singularize($this->table_name));
 		}
-		$this->alias = Inflections::singularize($this->table_name);
-		$this->database_name = DatabaseConfiguration::get('database');
-
+		$this->database_name(DatabaseConfiguration::get('database'));
 		parent::__construct();
 
-		$this->columns = $this->adapter()->cacheColumns(get_class($this), $this->table_name);
+		$this->columns = $this->adapter()->cacheColumns(get_class($this), '`' . $this->database_name . '`.`' . $this->table_name . '`');
 
 		//new Dbug($this->columns, '', false, __FILE__, __LINE__);
 
@@ -324,8 +321,13 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	final public function table_name()
+	final public function table_name($set=false)
 	{
+		//Generate the table name if it is not set.
+		if($this->table_name === null && $set = true){
+			$klass = explode('\\', get_class($this));
+			$this->table_name = Inflections::tableize(array_pop($klass));
+		}
 		return $this->table_name;
 	}
 	/**
@@ -334,8 +336,11 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	final public function database_name()
+	final public function database_name($name=null)
 	{
+		if($name !== null && $this->database_name === null){
+			$this->database_name = $name;
+		}
 		return $this->database_name;
 	}
 	/**

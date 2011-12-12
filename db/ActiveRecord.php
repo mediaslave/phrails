@@ -323,10 +323,12 @@ class ActiveRecord extends SqlBuilder
 		foreach($joins as $key => $query){
 			//new \Dbug($query, '', false, __FILE__, __LINE__);
 			//new \Dbug($this->props(), '', false, __FILE__, __LINE__);
+			$klass = $query->klass;
+			$klass = new $klass();
 			$prop = $query->prop;
 			$obj = $this->select($query->alias .".*");
 			$obj = parent::join($query->join)
-				 		->from($this->database_name(), $query->table, $query->alias)
+				 		->from($klass->database_name(), $klass->table_name(), $query->alias)
 				 		->where($query->where . $query->on, $this->$prop)
 				 		->order($query->order_by);
 			$sqlObject = $this->build(DatabaseAdapter::READ);
