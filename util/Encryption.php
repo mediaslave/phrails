@@ -1,6 +1,6 @@
 <?
 /**
- * @license https://raw.github.com/mediaslave/phrails/master/LICENSE
+ * * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package util
  */
 /**
