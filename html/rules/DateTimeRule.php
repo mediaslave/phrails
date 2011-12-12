@@ -9,7 +9,6 @@
  *
  * @package html
  * @subpackage rules
- * @author Justin Palmer
  */
 class DateTimeRule extends PregRule
 {

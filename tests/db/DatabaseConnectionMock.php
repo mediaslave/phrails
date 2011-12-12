@@ -7,13 +7,11 @@
  * Description
  *
  * @package tests
- * @author Justin Palmer
  */
 /**
  *
  *
  * @package db
- * @author Justin Palmer
  */
 class DatabaseConnectionMock extends DatabaseConnection
 {

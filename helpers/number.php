@@ -3,13 +3,11 @@
  * Text helpers
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package helpers
- * @author Justin Palmer
  */
 /**
  * Formats a number grouped by the thousands.
  *
  * @return void
- * @author Justin Palmer
  **/
 function number_with_delimiter($num, $delimiter=',', $seperator='.')
 {

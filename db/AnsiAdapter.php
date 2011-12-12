@@ -10,7 +10,6 @@
  * DatabaseAdapter as abstract and the DatabaseAdapter implement Transactional?
  *
  * @package db
- * @author Justin Palmer
  */
 abstract class AnsiAdapter extends DatabaseAdapter implements Transactional
 {

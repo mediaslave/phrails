@@ -8,7 +8,6 @@
  *
  * @todo Create a way to set the FlashForm::class through the 'form.php' initializer.  FlashForm::setClass('form-errors); (Static $class)
  * @package template
- * @author Justin Palmer
  */
 class FlashForm extends Flash
 {

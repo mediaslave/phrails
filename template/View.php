@@ -7,7 +7,6 @@
  * class description
  *
  * @package template
- * @author Justin Palmer
  */
 abstract class View implements ViewInterface
 {

@@ -7,7 +7,6 @@
  * class description
  *
  * @package util
- * @author Justin Palmer
  */
 class Reflections extends ReflectionClass
 {

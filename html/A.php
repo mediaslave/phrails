@@ -6,7 +6,6 @@
 /**
  * Creates a link.
  *
- * @author Justin Palmer
  * @package html
  */
 class A extends Tag

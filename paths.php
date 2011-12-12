@@ -2,7 +2,6 @@
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package framework
- * @author Justin Palmer
  */
 add_include_directory(__DIR__ . '/__view__');
 add_include_directory(__DIR__ . '/db');
@@ -29,7 +28,6 @@ spl_autoload_register('autoload');
  * Autoload method to load items from the app.
  *
  * @param string $class_name
- * @author Justin Palmer
  */
 function autoload($class_name){
 	$path = str_replace(PR_APPLICATION_NAMESPACE, '', $class_name);
@@ -62,7 +60,6 @@ function autoload($class_name){
  * @param string $extension
  * @param boolean $do_folders
  * @return void
- * @author Justin Palmer
  */
 function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
 	$glob = $folder . '/*' . $extension;
@@ -83,7 +80,6 @@ function include_all_in_folder ($folder, $extension='.php', $do_folders=false) {
  *
  * @param string $path
  * @return void
- * @author Justin Palmer
  **/
 function add_include_directory($path)
 {
@@ -95,7 +91,6 @@ function add_include_directory($path)
  * @param string $plugin
  * @param string $alt_path
  * @return void
- * @author Justin Palmer
  **/
 function add_plugin($plugin, $alt_path=null)
 {
@@ -112,7 +107,6 @@ function add_plugin($plugin, $alt_path=null)
  *
  * @param string $base_uri
  * @return void
- * @author Justin Palmer
  **/
 function set_install_path($base_uri='/')
 {

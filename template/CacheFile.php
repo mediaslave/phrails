@@ -8,7 +8,6 @@
  *
  * @todo cache message is hard coded, should be able to change this.
  * @package template
- * @author Justin Palmer
  */
 class CacheFile extends Cache
 {

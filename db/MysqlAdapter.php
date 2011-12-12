@@ -7,7 +7,6 @@
  * Mysql adapter
  *
  * @package db
- * @author Justin Palmer
  */
 class MysqlAdapter extends AnsiAdapter
 {

@@ -7,7 +7,6 @@
  * class description
  *
  * @package html
- * @author Justin Palmer
  */
 abstract class Element extends Tag
 {

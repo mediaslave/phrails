@@ -13,7 +13,6 @@
  * relationships and pass the "config" off to the adapter for build.
  *
  * @package db
- * @author Justin Palmer
  */
 class SqlBuilder
 {

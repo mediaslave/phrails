@@ -3,7 +3,6 @@
  * The helpers to helper to deal with url's, paths.
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package helpers
- * @author Justin Palmer
  */
 /**
  * Return the path of a route with arguments passed if given.
@@ -25,7 +24,6 @@ function path($name, $options=null)
  * Get the full url with pr-domain-uri
  *
  * @return void
- * @author Justin Palmer
  **/
 function url($name, $options=null)
 {
@@ -36,7 +34,6 @@ function url($name, $options=null)
  * Asset url
  *
  * @return void
- * @author Justin Palmer
  **/
 function aurl($name, $options=null)
 {
@@ -76,7 +73,6 @@ function link_to($display, $path, $options=null)
  * @param string $path
  * @param string $options
  * @return string
- * @author Justin Palmer
  **/
 function link_to_if($condition, $display, $path, $options=null)
 {
@@ -96,7 +92,6 @@ function link_to_if($condition, $display, $path, $options=null)
  * @param string $path
  * @param string $options
  * @return string
- * @author Justin Palmer
  **/
 function link_to_unless($condition, $display, $path, $options=null)
 {

@@ -9,7 +9,6 @@
  * @todo named_scope
  *
  * @package db
- * @author Justin Palmer
  */
 class SqlBuilderHash extends Hash
 {

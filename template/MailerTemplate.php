@@ -8,7 +8,6 @@
  *
  * @todo refactor
  * @package template
- * @author Justin Palmer
  */
 class MailerTemplate extends TemplateCache
 {

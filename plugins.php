@@ -2,7 +2,6 @@
 /**
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package framework
- * @author Justin Palmer
  */
 //Load any plugin ini files and store them in pr-plugin-$filename
 $plugin_inis = "config/*.ini";

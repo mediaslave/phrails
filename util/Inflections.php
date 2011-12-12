@@ -10,7 +10,6 @@
  *           http://www2.gsu.edu/~wwwesl/egw/crump.htm
  *
  * @package util
- * @author Justin Palmer
  */
 class Inflections
 {

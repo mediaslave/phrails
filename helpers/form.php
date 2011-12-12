@@ -3,13 +3,11 @@
  * Text helpers
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package helpers
- * @author Justin Palmer
  */
 /**
  * Image submit button
  *
  * @return string
- * @author Justin Palmer
  **/
 function image_submit_tag($name, $src, $alt, $options='')
 {
@@ -19,7 +17,6 @@ function image_submit_tag($name, $src, $alt, $options='')
  * Submit button
  *
  * @return string
- * @author Justin Palmer
  **/
 function submit_tag($name, $value, $options='')
 {
@@ -29,7 +26,6 @@ function submit_tag($name, $value, $options='')
  * Form tag
  *
  * @return string
- * @author Justin Palmer
  **/
 function form_tag($action, $options='')
 {
@@ -40,7 +36,6 @@ function form_tag($action, $options='')
  * Return the end form tag
  *
  * @return string
- * @author Justin Palmer
  **/
 function end_form_tag()
 {

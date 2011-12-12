@@ -7,7 +7,6 @@
  * Description
  *
  * @package tests
- * @author Justin Palmer
  */
 /**
  * @todo why does this mock builder not work?

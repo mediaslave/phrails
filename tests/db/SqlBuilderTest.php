@@ -7,7 +7,6 @@
  * Description
  *
  * @package tests
- * @author Justin Palmer
  */
 /**
  *

@@ -3,7 +3,6 @@
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @todo convert array to stdClass for pr-db-config
  * @package framework
- * @author Justin Palmer
  */
 //We seperate this from run so that we can run rake tasks and other items
 //when the app is not running.

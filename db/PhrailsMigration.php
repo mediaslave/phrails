@@ -6,7 +6,6 @@
 
 /**
  * @package db
- * @author Justin Palmer
  */
 class PhrailsMigration extends Model{
 

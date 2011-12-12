@@ -9,7 +9,6 @@
  * @todo refactor like ModelFilters.
  * @todo Use __call instead of defining each method that does the same thing
  * @package template
- * @author Justin Palmer
  */
 class ControllerFilters extends Filters
 {

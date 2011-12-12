@@ -8,7 +8,6 @@
  *
  * @todo if an array is passed to set as the $value turn it into an stdClass.
  * @package util
- * @author Justin Palmer
  */
 class Hash
 {

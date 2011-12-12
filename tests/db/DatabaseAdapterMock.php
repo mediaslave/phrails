@@ -7,13 +7,11 @@
  * Description
  *
  * @package tests
- * @author Justin Palmer
  */
 /**
  * Database adapter
  *
  * @package db
- * @author Justin Palmer
  */
 abstract class DatabaseAdapterMock extends DatabaseAdapter
 {

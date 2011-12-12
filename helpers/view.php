@@ -3,7 +3,6 @@
  * View helpers
  * @license https://raw.github.com/mediaslave/phrails/master/LICENSE The MIT License
  * @package helpers
- * @author Justin Palmer
  */
 
 /**
@@ -13,7 +12,6 @@
  * @param string
  * @param array
  * @return string
- * @author Justin Palmer
  */
 function render(){
 	$args = func_get_args();
@@ -27,7 +25,6 @@ function render(){
  * @param string $file
  * @param string $options=''
  * @return string
- * @author Justin Palmer
  **/
 function stylesheet_link_tag($file, $options='')
 {
@@ -37,7 +34,6 @@ function stylesheet_link_tag($file, $options='')
  * Create an img tag.
  *
  * @return void
- * @author Justin Palmer
  **/
 function image_tag($source, $options='', $from_base=true)
 {
@@ -50,7 +46,6 @@ function image_tag($source, $options='', $from_base=true)
  * @param string $version
  * @param boolean $jsapi - Include the google jsapi library?
  * @return string
- * @author Justin Palmer
  **/
 function google_javascript_include_tag($library='jquery', $version='1.7.0', $jsapi=true)
 {
@@ -66,7 +61,6 @@ function google_javascript_include_tag($library='jquery', $version='1.7.0', $jsa
  * @param string $source
  * @param string $options
  * @return string
- * @author Justin Palmer
  **/
 function javascript_include_tag($source, $options='')
 {
@@ -81,7 +75,6 @@ function javascript_include_tag($source, $options='')
  * @param string $key
  * @param string $value
  * @return void
- * @author Justin Palmer
  */
 function content_for($key, $value){
 	(isset(Template::$ContentFor->$key))
@@ -93,7 +86,6 @@ function content_for($key, $value){
  *
  * @param string $key
  * @return string $key
- * @author Justin Palmer
  **/
 function get_content_for($key){
 	return (isset(Template::$ContentFor->$key)) ? Template::$ContentFor->$key : null ;
@@ -103,7 +95,6 @@ function get_content_for($key){
  *
  * @param string $key
  * @return boolean
- * @author Justin Palmer
  **/
 function has_content_for($key)
 {
@@ -117,7 +108,6 @@ function has_content_for($key)
  * and implementing the <code>display()</code> method.
  *
  * @return string
- * @author Justin Palmer
  **/
 function flash_it(HashArray $flash)
 {
@@ -146,7 +136,6 @@ function flash_it(HashArray $flash)
  * Cycle through to given strings
  *
  * @return string
- * @author Justin Palmer
  **/
 function cycle($one='one', $two='')
 {
@@ -159,7 +148,6 @@ function cycle($one='one', $two='')
  * Meta tags to validate the form
  *
  * @return string
- * @author Justin Palmer
  **/
 function csrf_meta_tag()
 {

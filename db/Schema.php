@@ -9,7 +9,6 @@
  * @todo Building SQL in schema is bad.  Needs to be done by the adapter.
  *
  * @package db
- * @author Justin Palmer
  **/
 class Schema
 {

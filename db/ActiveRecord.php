@@ -7,7 +7,6 @@
  * ActiveRecord
  *
  * @package db
- * @author Justin Palmer
  */
 class ActiveRecord extends SqlBuilder
 {

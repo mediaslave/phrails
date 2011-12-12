@@ -11,7 +11,6 @@ require_once('lib/class.phpmailer.php');
  * class description
  *
  * @package mail
- * @author Justin Palmer
  */
 class Mailer extends PHPMailer
 {

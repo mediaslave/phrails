@@ -8,7 +8,6 @@
  *
  *
  * @package db
- * @author Justin Palmer
  **/
 abstract class Model extends ActiveRecord
 {
