@@ -17,6 +17,13 @@ class ActiveRecord extends SqlBuilder
 	 * @var PDOStatement
 	 */
 	private $Statement;
+
+	/**
+	 * Store the last query that was ran.
+	 *
+	 * @var stdClass
+	 */
+	 private $lastQuery=null;
 	/**
 	 * Save
 	 *
@@ -239,12 +246,16 @@ class ActiveRecord extends SqlBuilder
 	/**
 	 * Get the last query
 	 *
-	 * @return void
+	 * @return stdClass
+	 * @throws Exception
 	 * @author Justin Palmer
 	 **/
 	final public function lastQuery()
 	{
-		return '';
+		if($this->lastQuery === null){
+			throw new Exception('No queries have been recorded.');
+		}
+		return $this->lastQuery;
 	}
 
 	/**
@@ -399,16 +410,16 @@ class ActiveRecord extends SqlBuilder
 	 * @throws RecordNotFoundException
 	 * @author Justin Palmer
 	 **/
-	private function processRead($object, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
+	private function processRead(stdClass $query, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
 		self::$num_queries++;
-		//new \Dbug($object, '', false, __FILE__, __LINE__);
+		$this->lastQuery = $query;
 		$this->reset();
-		$this->Statement = $this->conn()->prepare($object->sql);
+		$this->Statement = $this->conn()->prepare($query->sql);
 		$this->setFetchMode($customFetchMode, $customFetchClass);
-		$this->Statement->execute(array_values($object->params));
+		$this->Statement->execute(array_values($query->params));
 		if($forceArray == false && $this->Statement->rowCount() == 0)
-			throw new RecordNotFoundException($object->sql, $object->params);
+			throw new RecordNotFoundException($query->sql, $query->params);
 		if($forceArray == false && $this->Statement->rowCount() == 1){
 			return $this->Statement->fetch();
 		}
@@ -423,7 +434,7 @@ class ActiveRecord extends SqlBuilder
 	private function processCud(stdClass $query)
 	{
 		self::$num_queries++;
-		//new \Dbug($query, '', false, __FILE__, __LINE__);
+		$this->lastQuery = $query;
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}
