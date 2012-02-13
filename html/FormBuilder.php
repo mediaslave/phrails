@@ -383,7 +383,7 @@ class FormBuilder
 		$this->models = $models;
 		$this->modelsForeignKey = $foreignKey;
 		if($foreignKey === null){
-				$this->modelsForeignKeyk = Inflections::foreignKey($this->model->table_name());
+				$this->modelsForeignKey = Inflections::foreignKey($this->model->table_name());
 		}
 		return $this;
 	}
