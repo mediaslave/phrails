@@ -19,7 +19,7 @@ class Textarea extends FormElement
 	 */
 	function __construct($name, $value, $options=null)
 	{
-		parent::__construct($name, null, $options);
+		parent::__construct($name, $value, $options);
 	}
 	/**
 	 * @see Tag::start()

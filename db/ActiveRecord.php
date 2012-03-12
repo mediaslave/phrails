@@ -23,7 +23,7 @@ class ActiveRecord extends SqlBuilder
 	 *
 	 * @var stdClass
 	 */
-	 private $lastQuery=null;
+	 static private $lastQuery=null;
 	/**
 	 * Save
 	 *
@@ -252,10 +252,10 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function lastQuery()
 	{
-		if($this->lastQuery === null){
+		if(self::$lastQuery === null){
 			throw new Exception('No queries have been recorded.');
 		}
-		return $this->lastQuery;
+		return self::$lastQuery;
 	}
 
 	/**
@@ -329,7 +329,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final protected function lazy($result, $joins, $isLazy=false)
 	{
-    $this->reset();
+    	$this->reset();
 		foreach($joins as $key => $query){
 			//new \Dbug($query, '', false, __FILE__, __LINE__);
 			//new \Dbug($this->props(), '', false, __FILE__, __LINE__);
@@ -413,7 +413,7 @@ class ActiveRecord extends SqlBuilder
 	private function processRead(stdClass $query, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
 		self::$num_queries++;
-		$this->lastQuery = $query;
+		self::$lastQuery = $query;
 		$this->reset();
 		$this->Statement = $this->conn()->prepare($query->sql);
 		$this->setFetchMode($customFetchMode, $customFetchClass);
@@ -434,7 +434,7 @@ class ActiveRecord extends SqlBuilder
 	private function processCud(stdClass $query)
 	{
 		self::$num_queries++;
-		$this->lastQuery = $query;
+		self::$lastQuery = $query;
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}
