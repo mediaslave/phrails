@@ -148,7 +148,7 @@ class Schema
 	 **/
 	public function table($table_name)
 	{
-		return $this->addOption(array('table' => $table_name), 'table');
+		return $this->addOption(array('table' => Inflections::tableize($table_name)), 'table');
 	}
 	/**
 	 * Where claus no dynamic

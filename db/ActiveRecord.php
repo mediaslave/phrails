@@ -38,13 +38,9 @@ class ActiveRecord extends SqlBuilder
 			$this->filter('beforeSave');
 			$primary = $this->primary_key();
 			if($this->$primary === null){
-				$this->filter('beforeCreate');
 				if(!$this->create()) throw new FailedActiveRecordCreateUpdateException();
-				$this->filter('afterCreate');
 			}else{
-				$this->filter('beforeUpdate');
 				if(!$this->update()) throw new FailedActiveRecordCreateUpdateException();
-				$this->filter('afterUpdate');
 			}
 			$this->filter('afterSave');
 			$this->adapter()->commit();
@@ -65,6 +61,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function create()
 	{
+		$this->filter('beforeCreate');
 		$primary = $this->primary_key();
 		$this->from($this->database_name(), $this->table_name());
 		if($this->columns->isKey('created_at')){
@@ -73,6 +70,7 @@ class ActiveRecord extends SqlBuilder
 		$query = $this->build(DatabaseAdapter::CREATE);
 		$boolean = $this->processCud($query);
 		$this->$primary = $this->lastInsertId();
+		$this->filter('afterCreate');
 		return $boolean;
 	}
 	/**
@@ -85,6 +83,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function update()
 	{
+		$this->filter('beforeUpdate');
 		$primary = $this->primary_key();
 		$p_value = $this->$primary;
 		$this->$primary = null;
@@ -95,7 +94,9 @@ class ActiveRecord extends SqlBuilder
 		}
 		$query = $this->build(DatabaseAdapter::UPDATE);
 		$this->$primary = $p_value;
-		return $this->processCud($query);
+		$boolean = $this->processCud($query);
+		$this->filter('afterUpdate');
+		return $boolean;
 	}
 
 	/**
@@ -290,7 +291,7 @@ class ActiveRecord extends SqlBuilder
 
 		$or = explode('_or_', $where);
 		if(sizeof($and) > 1 and sizeof($or) > 1)
-			throw new Exception('no and/or combo');
+			throw new Exception('No and/or dynamic finders.');
 
 		if((sizeof($and) == 1 && sizeof($or) == 1) && sizeof($params) > 1){
 			$where = "$underscore IN (" . $this->getQuestionMarks($params) . ")";
@@ -331,8 +332,6 @@ class ActiveRecord extends SqlBuilder
 	{
     	$this->reset();
 		foreach($joins as $key => $query){
-			//new \Dbug($query, '', false, __FILE__, __LINE__);
-			//new \Dbug($this->props(), '', false, __FILE__, __LINE__);
 			$klass = $query->klass;
 			$klass = new $klass();
 			$prop = $query->prop;
@@ -446,7 +445,11 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function setFetchMode($custom=null, $customClass=null)
 	{
-		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_class($this));
+		$class = $customClass;
+		if(is_null($customClass)){
+			$class = get_class($this);
+		}
+		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $class);
 		if($this->isRaw()){
 			$this->Statement->setFetchMode(PDO::FETCH_OBJ);
 		}elseif($custom instanceof Closure){

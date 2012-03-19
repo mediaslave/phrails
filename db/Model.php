@@ -440,8 +440,9 @@ abstract class Model extends ActiveRecord
 			$array[$key] = (isset($array[$key])) ? $array[$key] : null;
 		}
 		//Set all of the props.
-		foreach($array as $key => $value)
+		foreach($array as $key => $value){
 			$this->$key = $value;
+		}
 	}
 	/**
 	 * init

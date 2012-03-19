@@ -32,16 +32,17 @@ class TemplatePartial
 	 * @return string
 	 * @author Justin Palmer
 	 */
-	private function get($file, array $array = array())
+	private function get($_file, array $array = array())
 	{
-    if(!empty($array))
-      extract($array);
-    ob_start();
-    $included = include $file;
-    if($included === false)
-      throw new Exception("The template at the path '$file' does not exist.");
-    return ob_get_clean();
-  }
+		self::checkExtractVars($array);
+	    if(!empty($array))
+	      extract($array);
+	    ob_start();
+	    $_included = include $_file;
+	    if($_included === false)
+	      throw new Exception("The template at the path '$_file' does not exist.");
+	    return ob_get_clean();
+	}
 	/**
 	 * Figure out if the path should include the current views path.
 	 * Or, if it should just take the path as it is.
@@ -56,5 +57,19 @@ class TemplatePartial
 		if(!$match)
 			$file = Template::getCurrentViewPath() . '/_' . $file . '.html.php';
 		return $file;
+	}
+
+	/**
+	 * Check to make sure that the vars for $_included and $_file are not used,
+	 * these are special values
+	 * 
+	 * @throws Exception
+	 * @return void
+	 */
+	public function checkExtractVars(array $array){
+		if(in_array('_included', array_keys($array)) || 
+			in_array('_file', array_keys($array))){
+			throw new Exception('TemplatePartial::render can not be passed vars that have a key of "_included" or "_file"');
+		}
 	}
 }
