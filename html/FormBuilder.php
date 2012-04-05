@@ -330,9 +330,10 @@ class FormBuilder
 		//if we have a model then let's see if there are errors and if so set
 		//the css class to the correct thing.
 		if($this->model->errors()->isKey($this->getElementName($property))){
-			if($options != '')
-				$options .= ',';
-			$options .= 'class:' . self::$class;
+			if($options != '' && !is_array($options)){
+				$options = OptionsParser::toArray($options);
+			}
+			$options['class'] = self::$class;
 		}
 		$this->array_it = $array_it;
 		return $options;

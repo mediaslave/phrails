@@ -77,8 +77,10 @@ class DatabaseConfiguration
 	static public function getConfig()
 	{
 		$Config = self::$Config;
-		if(self::$Config === null)
+		if(self::$Config === null){
 			self::$Config = $Config = Registry::get('pr-db-config');
+		}
+		Registry::$Hash->remove('pr-db-config');
 		return $Config;
 	}
 

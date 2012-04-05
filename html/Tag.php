@@ -94,7 +94,7 @@ abstract class Tag
 	{
 		try {
 			return $this->options = array_merge(OptionsParser::toArray($this->options),
-																				OptionsParser::toArray($options));
+												OptionsParser::toArray($options));
 		} catch (OptionParserParseException $e) {
 			throw new InvalidTagPropertiesException($this->options . ',' . $options);
 		}

@@ -97,6 +97,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function before($filter, $actions=null)
 	{
+		$this->remove(self::before, $filter);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add(self::before, $filter, $actions);
@@ -110,6 +111,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function beforeExcept($filter, $actions)
 	{
+		$this->remove(self::before, $filter, true);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add($this->exceptName(self::before), $filter, $actions);
@@ -123,6 +125,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function around($filter, $actions=null)
 	{
+		$this->remove(self::around, $filter);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add(self::around, $filter, $actions);
@@ -136,6 +139,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function aroundExcept($filter, $actions)
 	{
+		$this->remove(self::around, $filter, true);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add($this->exceptName(self::around), $filter, $actions);
@@ -149,6 +153,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function after($filter, $actions=null)
 	{
+		$this->remove(self::after, $filter);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add(self::after, $filter, $actions);
@@ -161,6 +166,7 @@ class ControllerFilters extends Filters
 	 **/
 	public function afterExcept($filter, $actions)
 	{
+		$this->remove(self::after, $filter, true);
 		$actions = func_get_args();
 		$filter = array_shift($actions);
 		$this->add($this->exceptName(self::after), $filter, $actions);

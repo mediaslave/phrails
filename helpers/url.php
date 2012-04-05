@@ -76,7 +76,6 @@ function link_to($display, $path, $options=null)
  **/
 function link_to_if($condition, $display, $path, $options=null)
 {
-	//var_dump($condition);
 	$ret = '';
 	if($condition){
 		$ret = link_to($display, $path, $options);

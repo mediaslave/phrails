@@ -27,7 +27,7 @@ class Select extends FormElement
 		$options = array_pop($args);
 		//if $options is not an instance of Option we need to see if there
 		//is a prompt option and prepare if so.
-		if(!$options instanceof Option && !is_array($options)){
+		if(!$options instanceof Option){
 			$options = $this->preparePrompt($options);
 		//If $options is an instance of Option, then we need to add it back to our
 		//array of Option instances.
