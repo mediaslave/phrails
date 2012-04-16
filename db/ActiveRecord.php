@@ -281,28 +281,15 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function __call($method, $params)
 	{
-
-		$finder = $this->findDynamicFinder($method);
-
-		$underscore = Inflections::underscore($finder->props);
-
-		$and = explode('_and_', $underscore);
-		$where = implode(' = ?  AND ', $and);
-
-		$or = explode('_or_', $where);
-		if(sizeof($and) > 1 and sizeof($or) > 1)
-			throw new Exception('No and/or dynamic finders.');
-
-		if((sizeof($and) == 1 && sizeof($or) == 1) && sizeof($params) > 1){
-			$where = "$underscore IN (" . $this->getQuestionMarks($params) . ")";
-		}else{
-			$where = implode(' = ?  OR ', $or);
-			$where .= ' = ?';
+		try {
+			return $this->findByDynamicFinder($method, $params);
+		} catch (UnknownActiveRecordDynamicFinderException $e) {
+			if(!$this->schema->relationships->isKey($method)){
+				throw $e;
+			}
+			$this->schema->setLastRelationship($method)->whereParams($params);
+			return $this->lazy($this, array($method=>$this->schema->relationships->get($method)), true);
 		}
-
-		$this->where('(' . $where . ')', $params);
-		$method = $finder->method;
-		return $this->$method();
 	}
 	/**
 	 * Join the tables passed in based off the Schema.
@@ -335,12 +322,15 @@ class ActiveRecord extends SqlBuilder
 			$klass = $query->klass;
 			$klass = new $klass();
 			$prop = $query->prop;
+			$whereParams = $query->whereParams;
+			$whereParams[] = $this->$prop;
 			$obj = $this->select($query->alias .".*");
 			$obj = parent::join($query->join)
 				 		->from($klass->database_name(), $klass->table_name(), $query->alias)
-				 		->where($query->where . $query->on, $this->$prop)
+				 		->where($query->where . $query->on, $whereParams)
 				 		->order($query->order_by);
 			$sqlObject = $this->build(DatabaseAdapter::READ);
+
 			//Function to set the fetchmode for the class
 			$customFetchMode = function($statement, $klass){
 				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);
@@ -367,7 +357,7 @@ class ActiveRecord extends SqlBuilder
 	 * @throws UnknownActiveRecordDynamicFinderException
 	 * @author Justin Palmer
 	 **/
-	private function findDynamicFinder($method)
+	private function findByDynamicFinder($method, $params)
 	{
 		$registered_finders = array('findFirst', 'find', 'findAll', 'count', 'delete');
 		$finder = null;
@@ -382,7 +372,25 @@ class ActiveRecord extends SqlBuilder
 		}
 		if($finder === null)
 			throw new UnknownActiveRecordDynamicFinderException($method);
-		return $finder;
+		$underscore = Inflections::underscore($finder->props);
+
+		$and = explode('_and_', $underscore);
+		$where = implode(' = ?  AND ', $and);
+
+		$or = explode('_or_', $where);
+		if(sizeof($and) > 1 and sizeof($or) > 1)
+			throw new Exception('No and/or dynamic finders.');
+
+		if((sizeof($and) == 1 && sizeof($or) == 1) && sizeof($params) > 1){
+			$where = "$underscore IN (" . $this->getQuestionMarks($params) . ")";
+		}else{
+			$where = implode(' = ?  OR ', $or);
+			$where .= ' = ?';
+		}
+
+		$this->where('(' . $where . ')', $params);
+		$method = $finder->method;
+		return $this->$method();
 	}
 	/**
 	 * create comma separate question marks for the size of the array

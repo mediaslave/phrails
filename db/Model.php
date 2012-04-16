@@ -175,19 +175,19 @@ abstract class Model extends ActiveRecord
 		return true;
 	}
 
-  /**
-   * reload the relationship, destroying the current results
-   * @param string $key relationship to reload
-   */
-  final public function live($key) {
-    return $this->loadRelationship($key);
-  }
+	/**
+	* reload the relationship, destroying the current results
+	* @param string $key relationship to reload
+	*/
+	final public function live($key) {
+		return $this->loadRelationship($key);
+	}
 
-  private function loadRelationship($key) {
-    if($this->schema->relationships->isKey($key)) {
-      return $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
-    }
-  }
+	private function loadRelationship($key) {
+		if($this->schema->relationships->isKey($key)) {
+		  return $this->lazy($this, array($key=>$this->schema->relationships->get($key)), true);
+		}
+	}
 
 	/**
 	 * __get model properties

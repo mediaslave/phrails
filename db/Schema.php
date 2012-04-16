@@ -37,7 +37,7 @@ class Schema
 	 * The last relationship
 	 *
 	 * @author Justin Palmer
-	 * @var Hash
+	 * @var string
 	 */
 	private $last_relationship = null;
 	/**
@@ -165,6 +165,15 @@ class Schema
 	}
 
 	/**
+	 * Set the where params
+	 * 
+	 * @return boolean
+	 */
+	public function whereParams($args){
+		return $this->addOption(array('whereParams'=>$args), 'whereParams');
+	}
+
+	/**
 	 * Set the order by for a relationship
 	 *
 	 * @return string $order
@@ -256,6 +265,15 @@ class Schema
 		return $this->addRelationship($name, 'belongs-to')->className(Inflections::singularize($name));
 	}
 	/**
+	 * Set the last relationship
+	 * 
+	 * @return Schema
+	 */
+	public function setLastRelationship($key){
+		$this->last_relationship = $key;
+		return $this;
+	}
+	/**
 	 * Add the option to the last relationship.
 	 *
 	 * @return Schema
@@ -296,6 +314,7 @@ class Schema
 		$options->table = Inflections::tableize($options->alias);
 		$options->foreign_key = Inflections::foreignKey($this->model->table_name());
 		$options->where = '';
+		$options->whereParams = array();
 		$options->order_by = '';
 		$options->thru = '';
 		$options->join = '';
