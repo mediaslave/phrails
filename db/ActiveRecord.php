@@ -23,7 +23,7 @@ class ActiveRecord extends SqlBuilder
 	 *
 	 * @var stdClass
 	 */
-	 static private $lastQuery=null;
+	 static private $last_query=null;
 	/**
 	 * Save
 	 *
@@ -253,10 +253,10 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	final public function lastQuery()
 	{
-		if(self::$lastQuery === null){
+		if(self::$last_query === null){
 			throw new Exception('No queries have been recorded.');
 		}
-		return self::$lastQuery;
+		return self::$last_query;
 	}
 
 	/**
@@ -420,7 +420,7 @@ class ActiveRecord extends SqlBuilder
 	private function processRead(stdClass $query, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
 		self::$num_queries++;
-		self::$lastQuery = $query;
+		self::$last_query = $query;
 		$this->reset();
 		$this->Statement = $this->conn()->prepare($query->sql);
 		$this->setFetchMode($customFetchMode, $customFetchClass);
@@ -441,7 +441,7 @@ class ActiveRecord extends SqlBuilder
 	private function processCud(stdClass $query)
 	{
 		self::$num_queries++;
-		self::$lastQuery = $query;
+		self::$last_query = $query;
 		$this->Statement = $this->conn()->prepare($query->sql);
 		return $this->Statement->execute($query->params);
 	}
