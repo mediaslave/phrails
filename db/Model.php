@@ -168,8 +168,14 @@ abstract class Model extends ActiveRecord
 
 		$Judge = new RuleJudge($this->props, $this->schema);
 
-		$this->errors = $Judge->judge($this);
-		if(!$this->errors->isEmpty()){
+		try {
+			$this->filter('beforeJudgement');
+			$this->errors = $Judge->judge($this);
+			if(!$this->errors->isEmpty()){
+				return false;
+			}
+			$this->filter('afterJudgement');
+		} catch (FailedModelFilterException $e) {
 			return false;
 		}
 		return true;

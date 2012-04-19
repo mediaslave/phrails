@@ -10,7 +10,13 @@
 */
 class ModelFilters
 {
+	/**
+	 * What is the difference between Validate and Judgement?
+	 * Validate is run before save, but if you call validate directly the 'Validate' filters are bypassed.
+	 * Judgement is on either side of running the actual rules and deciding if all the rules pass.
+	 */
 	private $valid_filters = array('beforeValidate', 'afterValidate',
+								   'beforeJudgement', 'afterJudgement',
 								   'beforeSave', 'afterSave',
 								   'afterCommit',
 								   'beforeCreate', 'afterCreate',
