@@ -33,7 +33,7 @@ class ResultSetSelect extends Select
 		foreach($resultSet as $record){
 			$id = $this->id;
 			$select = false;
-			if($record->$id === $selectedValue)
+			if((string)$record->$id === (string)$selectedValue)
 				$select = true;
 			$this->fillHashOrDisplay($record, $select);
 		}
