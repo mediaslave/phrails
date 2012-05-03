@@ -52,20 +52,33 @@ class ControllerFilters extends Filters
 	 **/
 	public function run($type)
 	{
-		$run = true;
+		$for = $this->filters->get($type)->array;
+		$this->runForAndExcept($for);
+		$except = $this->filters->get($this->exceptName($type))->array;
+		$this->runForAndExcept($except, true);
+	}
+	/**
+	 * Run the filters for both the for and except.
+	 * 
+	 * @return void
+	 */
+	private function runForAndExcept(array $filters, $except=false){
 		$action = $this->object->pr_action;
-		$for = $this->filters->get($type);
-		$except = $this->filters->get($this->exceptName($type));
-		foreach($for->array as $filter => $actions){
+		foreach($filters as $filter => $actions){
 			$run = true;
-			//Make sure the except does not hold this action.
-			if($except->isKey($filter)){
-				if(in_array($action, $except->get($filter), true))
+
+			if($except){
+				//Make sure the except does not hold this action.
+				if(in_array($action, $actions, true)){
 					$run = false;
+				}
+			}else{
+				//If it is not an empty array and it is not in the action list don't run.
+				if(!empty($actions) && !in_array($action, $actions)){
+					$run = false;
+				}
 			}
-			//If it is not an empty array and it is not in the action list don't run.
-			if(!empty($actions) && !in_array($action, $actions))
-				$run = false;
+
 			//if the method does not exist we need to tell them to create it.
 			if(!method_exists($this->object, $filter))
 				throw new Exception("The filter: '$filter()' does not exist please create it in your controller.");
