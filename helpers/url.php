@@ -21,6 +21,15 @@ function path($name, $options=null)
 }
 
 /**
+ * Inject a params string from a model
+ * 
+ * @return string
+ */
+function create_params_from_path($path, Model $model){
+	return Router::injectParamsIntoPathFromModel($path, $model);
+}
+
+/**
  * Get the full url with pr-domain-uri
  *
  * @return void

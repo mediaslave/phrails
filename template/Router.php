@@ -89,6 +89,27 @@ class Router
 	}
 
 	/**
+	 * Object to params converter
+	 * 
+	 * @return string
+	 */
+	public static function createParamsByPathFromModel($path, Model $model){
+		$array = explode('/', $path);
+		$params = array();
+		foreach($array as $key => $value){
+			if(preg_match(self::getTagExpression(), $value)){
+				$value = ltrim(rtrim($value, '}'), '{');
+				if(!$model->columns()->isKey($value)){
+					throw new Exception("The key `$value` is not a column in the model `" . get_class($model . "`."));
+				}
+				$value = $model->$value;
+				$params[$key] = $value;
+			}
+		}	
+		return $params;
+	}
+
+	/**
 	 * Find the route that is a match from the path in the REQUEST_URI
 	 *
 	 * @return array
