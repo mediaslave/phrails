@@ -120,15 +120,15 @@ class Schema
 	 **/
 	public function className($table, $is_global_class=false)
 	{
-    $namespace = PR_APPLICATION_NAMESPACE . '\App\Models\\';
+    	$namespace = PR_APPLICATION_NAMESPACE . '\App\Models\\';
 		if($is_global_class){
-      $pieces = explode('\\', $table);
-      $table = array_pop($pieces);
-      $namespace = implode('\\', $pieces) . '\\';
-    }
+	      $pieces = explode('\\', $table);
+	      $table = array_pop($pieces);
+	      $namespace = implode('\\', $pieces) . '\\';
+	    }
 		return $this->prop(Inflections::underscore($table) . '_id')
-								->addOption(array('table' => Inflections::tableize($table)), 'table')
-								->addOption(array('klass' => $namespace . $table), 'klass');
+					->addOption(array('table' => Inflections::tableize($table)), 'table')
+					->addOption(array('klass' => $namespace . $table), 'klass');
 	}
 	/**
 	 * Set the property to access when doing the where

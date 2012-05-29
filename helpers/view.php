@@ -47,7 +47,7 @@ function image_tag($source, $options='', $from_base=true)
  * @param boolean $jsapi - Include the google jsapi library?
  * @return string
  **/
-function google_javascript_include_tag($library='jquery', $version='1.7.0', $jsapi=true)
+function google_javascript_include_tag($library='jquery', $version='1.7.1', $jsapi=true)
 {
 	$js = '';
 	if($jsapi == true)

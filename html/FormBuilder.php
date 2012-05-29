@@ -277,6 +277,7 @@ class FormBuilder
 	/**
 	 * Register a new object with FormBuilder
 	 *
+	 * @deprecated
 	 * @return void
 	 * @author Justin Palmer
 	 **/
@@ -289,6 +290,7 @@ class FormBuilder
 	/**
 	 * Generate a field
 	 *
+	 * @deprecated
 	 * @return string
 	 * @author Justin Palmer
 	 **/
