@@ -100,7 +100,7 @@ class Router
 			if(preg_match(self::getTagExpression(), $value)){
 				$value = ltrim(rtrim($value, '}'), '{');
 				if(!$model->columns()->isKey($value)){
-					throw new Exception("The key `$value` is not a column in the model `" . get_class($model . "`."));
+					throw new Exception("The key `$value` is not a column in the model `" . get_class($model) . "` for path: $path.");
 				}
 				$value = $model->$value;
 				$params[$key] = $value;

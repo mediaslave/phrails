@@ -19,9 +19,9 @@ class Script extends AssetTag
 	 * @return LinkCss
 	 * @author Justin Palmer
 	 */
-	function __construct($source, $options='')
+	function __construct($source, $options='', $from_base=true)
 	{
-		parent::__construct($source . '.js', $options);
+		parent::__construct($source . '.js', $options, $from_base);
 	}
 	/**
 	 * @see Tag::start

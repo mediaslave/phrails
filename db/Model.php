@@ -73,7 +73,9 @@ abstract class Model extends ActiveRecord
 	 */
 	protected $errors;
 
-  public $validateNulls = false;
+  	public $validateNulls = false;
+
+  	static public $injectedSchema;
 	/**
 	 * The filters for the model
 	 *
@@ -109,6 +111,11 @@ abstract class Model extends ActiveRecord
 
 		$this->filters = new ModelFilters();
 		$this->schema = new Schema($this);
+		if(self::$injectedSchema instanceof Schema){
+			$this->schema->relationships = new Hash(array_merge(self::$injectedSchema->relationships->export(),
+																$this->schema->relationships->export()
+																));
+		}
 
 		$this->init();
 	}
@@ -171,10 +178,10 @@ abstract class Model extends ActiveRecord
 		try {
 			$this->filter('beforeJudgement');
 			$this->errors = $Judge->judge($this);
+			$this->filter('afterJudgement');
 			if(!$this->errors->isEmpty()){
 				return false;
 			}
-			$this->filter('afterJudgement');
 		} catch (FailedModelFilterException $e) {
 			return false;
 		}
@@ -420,6 +427,17 @@ abstract class Model extends ActiveRecord
 			return DataTypeFactory::process($column->Type, $this->props->get($key));
 		}
 		return $this->$key;
+	}
+
+	/**
+	 * A schema that has additional relationships to inject when the model 
+	 * object is instantiated
+	 * 
+	 * @param Schema $schema
+	 * @return void
+	 */
+	static public function injectSchema(Schema $schema){
+		self::$injectedSchema = $schema;
 	}
 
 	/**

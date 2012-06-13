@@ -62,9 +62,9 @@ function google_javascript_include_tag($library='jquery', $version='1.7.1', $jsa
  * @param string $options
  * @return string
  **/
-function javascript_include_tag($source, $options='')
+function javascript_include_tag($source, $options='', $from_base=true)
 {
-	return new Script($source, $options);
+	return new Script($source, $options, $from_base);
 }
 /**
  * Set the content for a certain var from the view.

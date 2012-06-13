@@ -15,28 +15,24 @@ class Schema
 	/**
 	 * The current model
 	 *
-	 * @author Justin Palmer
 	 * @var Model
 	 */
 	private $model;
 	/**
 	 * The rules for the current model.
 	 *
-	 * @author Justin Palmer
 	 * @var Hash
 	 */
 	public $rules;
 	/**
 	 * The relationships defined
 	 *
-	 * @author Justin Palmer
 	 * @var hash
 	 */
 	public $relationships;
 	/**
 	 * The last relationship
 	 *
-	 * @author Justin Palmer
 	 * @var string
 	 */
 	private $last_relationship = null;
@@ -50,7 +46,6 @@ class Schema
 	 * Constructor
 	 *
 	 * @return void
-	 * @author Justin Palmer
 	 **/
 	public function __construct($model)
 	{
@@ -62,7 +57,6 @@ class Schema
 	 * Add a rule to a column
 	 *
 	 * @return void
-	 * @author Justin Palmer
 	 **/
 	public function rule($column, $rule)
 	{
@@ -91,7 +85,6 @@ class Schema
 	 * Get the rules
 	 *
 	 * @return array
-	 * @author Justin Palmer
 	 **/
 	public function rules()
 	{
@@ -100,9 +93,8 @@ class Schema
 	/**
 	 * Add the required rule to all of the properties listed
 	 *
-	 * @params mixed
+	 * @param mixed
 	 * @return void
-	 * @author Justin Palmer
 	 **/
 	public function required($args)
 	{
@@ -116,7 +108,6 @@ class Schema
 	 * Set the table name for the current relationship explicitly.
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function className($table, $is_global_class=false)
 	{
@@ -134,7 +125,6 @@ class Schema
 	 * Set the property to access when doing the where
 	 *
 	 * @return void
-	 * @author Justin Palmer
 	 **/
 	public function prop($prop)
 	{
@@ -144,7 +134,6 @@ class Schema
 	 * Set the table name
 	 *
 	 * @return void
-	 * @author Justin Palmer
 	 **/
 	public function table($table_name)
 	{
@@ -154,7 +143,6 @@ class Schema
 	 * Where claus no dynamic
 	 *
 	 * @return string $clause
-	 * @author Justin Palmer
 	 **/
 	public function where($clause, $operand='AND')
 	{
@@ -177,7 +165,6 @@ class Schema
 	 * Set the order by for a relationship
 	 *
 	 * @return string $order
-	 * @author Justin Palmer
 	 **/
 	public function order($order)
 	{
@@ -190,7 +177,6 @@ class Schema
 	 * The alias that the last relationship should be, this will be used in the join query.
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function alias($alias)
 	{
@@ -200,7 +186,6 @@ class Schema
 	 * Indicate a relationship is through another class.
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function thru($klass, $is_global_class=false)
 	{
@@ -215,7 +200,6 @@ class Schema
 	 * How the join should be preformed(base.id = alias_table.id).
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function on($on)
 	{
@@ -225,7 +209,6 @@ class Schema
 	 * Set the foreign key to join on if it does not follow standard.
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function foreignKey($key)
 	{
@@ -235,7 +218,6 @@ class Schema
 	 * belongs to
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function hasOne($name)
 	{
@@ -246,7 +228,6 @@ class Schema
 	 * has many
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function hasMany($name)
 	{
@@ -257,7 +238,6 @@ class Schema
 	 * has one
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	public function belongsTo($name)
 	{
@@ -277,7 +257,6 @@ class Schema
 	 * Add the option to the last relationship.
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	private function addOption(array $option, $name)
 	{
@@ -302,7 +281,6 @@ class Schema
 	 * Add the relationship
 	 *
 	 * @return Schema
-	 * @author Justin Palmer
 	 **/
 	private function addRelationship($name, $type)
 	{
@@ -327,7 +305,6 @@ class Schema
 	 * AutoGenerate the on for the specified relationship.
 	 *
 	 * @return string
-	 * @author Justin Palmer
 	 **/
 	private function autoGenerateOn($name)
 	{
