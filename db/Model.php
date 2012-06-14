@@ -437,6 +437,14 @@ abstract class Model extends ActiveRecord
 	 * @return void
 	 */
 	static public function injectSchema(Schema $schema){
+		//If we already have a schema then we need to merge the relationships.
+		if(self::$injectedSchema instanceof Schema){
+			self::$injectedSchema->relationships = Hash(array_merge(self::$injectedSchema->relationships->export(),
+																$schema->relationships->export()
+																));
+			return;
+		}
+		//No Schema already?  Store it.
 		self::$injectedSchema = $schema;
 	}
 
