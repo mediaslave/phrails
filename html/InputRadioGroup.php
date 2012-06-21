@@ -29,6 +29,15 @@ class InputRadioGroup
 		}
 		$this->options = $options;
 	}
+
+	/**
+	 * Set the selected value
+	 * 
+	 * @return void
+	 */
+	public function setSelected($selected){
+		$this->selectedValue = $selected;
+	}
 	/**
 	 * To string
 	 *
