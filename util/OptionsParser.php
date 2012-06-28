@@ -128,7 +128,7 @@ class OptionsParser
 		$array = self::toArray($options);
 		if(array_key_exists($key, $array))
 			unset($array[$key]);
-		self::$options = self::toStringFromArray($array);
+		self::$options = $array;
 		return self::$options;
 	}
 
