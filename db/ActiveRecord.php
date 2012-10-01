@@ -273,6 +273,19 @@ class ActiveRecord extends SqlBuilder
 	}
 
 	/**
+	 * Run a sql command
+	 * 
+	 * @return boolean
+	 */
+	public function sql($sql, $param/*, $param, $param, $param */){
+		self::$num_queries++;
+		$args = func_get_args();
+		$sql = array_shift($args);
+		$object = (object) array('sql'=>$sql, 'params'=>$args);
+		return $this->processCud($object);
+	}
+
+	/**
 	 * Call a dynamic finder
 	 *
 	 * @return void
@@ -329,8 +342,8 @@ class ActiveRecord extends SqlBuilder
 				 		->from($klass->database_name(), $klass->table_name(), $query->alias)
 				 		->where($query->where . $query->on, $whereParams)
 				 		->order($query->order_by);
-			$sqlObject = $this->build(DatabaseAdapter::READ);
 
+			$sqlObject = $this->build(DatabaseAdapter::READ);
 			//Function to set the fetchmode for the class
 			$customFetchMode = function($statement, $klass){
 				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $klass);

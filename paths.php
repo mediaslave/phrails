@@ -92,7 +92,7 @@ function add_include_directory($path)
  * @param string $alt_path
  * @return void
  **/
-function add_plugin($plugin, $alt_path=null)
+function add_plugin($plugin,  $alt_path=null)
 {
 	$path = "vendor/plugins/$plugin";
 	if($alt_path !== null)
