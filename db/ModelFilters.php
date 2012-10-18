@@ -90,6 +90,22 @@ class ModelFilters
 	{
 		return $this->Hash->export();
 	}
+
+	/**
+	 * Merge the passed in ModelFilters with the current one.
+	 * 
+	 * @param ModelFilters $filters
+	 * @return void
+	 */
+	public function merge(ModelFilters $filters){
+		foreach ($filters as $model_name => $CallbackHash) {
+			foreach ($CallbackHash->export() as $filter => $callbacks) {
+				foreach ($callbacks as $key => $callback) {
+					$this->Hash->set($model_name, $filter, $callback);
+				}
+			}
+		}
+	}
 }
 
 /**
