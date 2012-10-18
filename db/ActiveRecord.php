@@ -277,7 +277,7 @@ class ActiveRecord extends SqlBuilder
 	 * 
 	 * @return boolean
 	 */
-	public function sql($sql, $param/*, $param, $param, $param */){
+	public function sql($sql, /*$param, $param, $param, $param */){
 		self::$num_queries++;
 		$args = func_get_args();
 		$sql = array_shift($args);
