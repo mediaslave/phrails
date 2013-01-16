@@ -98,10 +98,12 @@ class ModelFilters
 	 * @return void
 	 */
 	public function merge(ModelFilters $filters){
-		foreach ($filters as $model_name => $CallbackHash) {
+		foreach ($filters->export() as $CallbackHash) {
 			foreach ($CallbackHash->export() as $filter => $callbacks) {
 				foreach ($callbacks as $key => $callback) {
-					$this->Hash->set($model_name, $filter, $callback);
+					//new \Dbug($filter, '', false, __FILE__, __LINE__);
+					//new \Dbug($model_name, '', false, __FILE__, __LINE__);
+					$this->Hash->set($this->model_class_name, $filter, $callback);
 				}
 			}
 		}
@@ -123,7 +125,6 @@ class ModelFiltersHash extends Hash
 	//run after-create
 	//run before-update
 	//run after-update
-
 	/**
 	 * undocumented function
 	 *

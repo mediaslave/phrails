@@ -70,6 +70,9 @@ class FormBuilder
 	 * @var string
 	 */
 	protected $array_it_value = '';
+	protected $array_it_actual_value = false;
+	const ARRAY_IT_BOOL_VALUE = false;
+	const ARRAY_IT_ACTUAL_VALUE = true;
 
 	protected $models;
 	protected $modelsForeignKey;
@@ -374,9 +377,10 @@ class FormBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function arrayIt($value = null)
+	public function arrayIt($value = null, $getActualValue=self::ARRAY_IT_BOOL_VALUE)
 	{
 		$this->array_it = true;
+		$this->array_it_actual_value = $getActualValue;
 		if($value !== null)
 			$this->array_it_value = $value;
 		return $this;
@@ -405,7 +409,9 @@ class FormBuilder
 			foreach ($this->models as $m) {
 				if ($m->$foreignKey ==
 					$this->array_it_value) {
-					return true;
+					return ($this->array_it_actual_value) 
+									 ? $m->$property
+									 : true;
 				}
 			}
 		}

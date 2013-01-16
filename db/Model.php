@@ -121,7 +121,7 @@ abstract class Model extends ActiveRecord
 		if(self::$injectedSchema instanceof Schema){
 			$this->schema->relationships = new Hash(array_merge(self::$injectedSchema->relationships->export(),
 																$this->schema->relationships->export()
-																));
+														));
 		}
 
 		$this->init();
@@ -463,12 +463,18 @@ abstract class Model extends ActiveRecord
 	 */
 	static public function injectFilters(ModelFilters $filters){
 		//If we already have a schema then we need to merge the relationships.
-		if(self::$injectedFilters instanceof ModelFilters){
-			self::$injectedFilters->merge($filters);
+		if(!(self::$injectedFilters instanceof Hash)){
+			self::$injectedFilters = new Hash();
+		}
+		if(self::$injectedFilters->get(get_called_class()) instanceof ModelFilters){
+			$filter = self::$injectedFilters->get(get_called_class());
+
+			$filter->merge($filters);
+			self::$injectedFilters->set(get_called_class(), $filter);
 			return;
 		}
-		//No Schema already?  Store it.
-		self::$injectedFilters = $filters;
+		//No filters already?  Store it.
+		self::$injectedFilters->set(get_called_class(), $filters);
 	}
 
 	/**
@@ -477,8 +483,12 @@ abstract class Model extends ActiveRecord
 	 * @return void
 	 */
 	private function setInjectedFilters(){
-		if(self::$injectedFilters instanceof ModelFilters){
-			$this->filters()->merge(self::$injectedFilters);
+		if(self::$injectedFilters instanceof Hash){
+			$filter = self::$injectedFilters->get(get_class($this));
+			if(is_null($filter)){
+				return;
+			}
+			$this->filters()->merge($filter);
 		}
 	}
 
