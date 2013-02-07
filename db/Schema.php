@@ -296,6 +296,7 @@ class Schema
 		$options->order_by = '';
 		$options->thru = '';
 		$options->join = '';
+		$options->join_on = '';
 		$this->relationships->set(strtolower($name), $options);
 		$options->on = $this->autoGenerateOn(strtolower($name));
 		$this->relationships->set(strtolower($name), $options);
@@ -322,8 +323,8 @@ class Schema
 		if($options->thru != ''){
 			$klass = $options->thru;
 			$klass = new $klass;
-			$options->join = ' INNER JOIN `' . $klass->table_name() . '` AS ' . $klass->alias() . '
-									ON ' . $klass->alias() . '.' . Inflections::foreignKey($options->table) . ' = ' . $options->alias . '.id';
+			$options->join = ' INNER JOIN `' . $this->model->database_name() . '`.`' . $klass->table_name() . '` AS ' . $klass->alias() . ' ON ';
+			$options->join_on = $klass->alias() . '.' . Inflections::foreignKey($options->table) . ' = ' . $options->alias . '.id';
 			$ret = $klass->alias() . '.' . $options->foreign_key . ' = ?';
 		}
 		return $ret;

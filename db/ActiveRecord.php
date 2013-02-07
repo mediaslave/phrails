@@ -338,11 +338,10 @@ class ActiveRecord extends SqlBuilder
 			$whereParams = $query->whereParams;
 			$whereParams[] = $this->$prop;
 			$obj = $this->select($query->alias .".*");
-			$obj = parent::join($query->join)
+			$obj = parent::join($query->join . $query->join_on)
 				 		->from($klass->database_name(), $klass->table_name(), $query->alias)
 				 		->where($query->where . $query->on, $whereParams)
 				 		->order($query->order_by);
-
 			$sqlObject = $this->build(DatabaseAdapter::READ);
 			//Function to set the fetchmode for the class
 			$customFetchMode = function($statement, $klass){

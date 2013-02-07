@@ -74,10 +74,18 @@ class SqlBuilder
 		$join = $this->Hash->join();
 		$klass = $relationship->klass;
 		$obj = new $klass;
-		$on = str_replace('?', $this->alias() . "." . $relationship->prop, $relationship->on);
-		$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
+		$on = str_replace('?', '`' . $this->alias() . "`.`" . $relationship->prop . '`', $relationship->on);
+		if($relationship->thru != ''){
+			$join .= $relationship->join . ' ' . $on;
+			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
+					 AS " . $relationship->alias . "
+					  ON " . $relationship->join_on . " ";
+		}else{
+			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
 					 AS " . $relationship->alias . "
 					  ON " . $on . " ";
+		}
+		
 		self::join($join);
 	}
 
