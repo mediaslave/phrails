@@ -316,6 +316,13 @@ class FormBuilder
 	{
 		$klass = Inflections::classify($name);
 		$property = array_shift($args);
+		$select = array_pop(explode('_', $name));
+		if($select == 'select'){
+			return new $klass($this->getElementName($property), 
+							  array_shift($args), 
+							  $this->getValue($property), 
+							  $this->checkForErrors($property,array_shift($args)));
+		}
 		$options = array_shift($args);
 		$options = $this->checkForErrors($property, $options);
 		return new $klass($this->getElementName($property), $this->getValue($property), $options);
