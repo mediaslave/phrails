@@ -318,10 +318,19 @@ class FormBuilder
 		$property = array_shift($args);
 		$select = array_pop(explode('_', $name));
 		if($select == 'select'){
-			return new $klass($this->getElementName($property), 
-							  array_shift($args), 
+			$array = array_shift($args);
+			if(is_array($array)){
+				//this is a type of array select
+				return new $klass($this->getElementName($property), 
+							  $array, 
 							  $this->getValue($property), 
 							  $this->checkForErrors($property,array_shift($args)));
+			}else{
+				//this is a type of array select
+				return new $klass($this->getElementName($property), 
+							  $this->getValue($property), $array);
+			}
+			
 		}
 		$options = array_shift($args);
 		$options = $this->checkForErrors($property, $options);
