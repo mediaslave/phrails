@@ -20,6 +20,6 @@ class InternationalPhoneRule extends PregRule
 	 **/
 	public function __construct($message='%s is not valid.')
 	{
-		parent::__construct("/^([0-9]){1,5}\s?([0-9]){1,5}\s?([0-9 \-]){2,15}$/", $message);
+		parent::__construct("/^((\+)[0-9]{1,4})?([0-9]){1,5}(\s\.\-)?([0-9]){1,5}(\s\.\-)?([0-9 \-]){2,15}\s?(ext|x|extension)?\s?([0-9]){1,6}?$/", $message);
 	}
 } // END class Rule
