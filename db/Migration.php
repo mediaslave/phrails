@@ -61,7 +61,9 @@ abstract class Migration extends Model
 		$this->alter_stack = array();
 		$this->table = $name;
 		$this->statement = "CREATE TABLE `" . $this->config->database . "`.`" . $name . "`(\n\t%s\n)ENGINE=$engine CHARACTER SET $charset COLLATE $collation";
-		$this->integer($primary, 'auto:true');
+		if(!is_null($primary)){
+			$this->integer($primary, 'auto:true');
+		}
 	}
 
 	/**
