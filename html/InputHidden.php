@@ -22,6 +22,21 @@ class InputHidden extends Input
 	 */
 	function __construct($name, $value, $options=null)
 	{
+		$options = $this->destroyHiddenId($options);
 		parent::__construct($name, $value, $options);
+	}
+
+	/**
+	 * Should we destroy the hidden id
+	 * 
+	 * @return void
+	 */
+	public function destroyHiddenId($options){
+		if($options !== null && OptionsParser::find('no-id', $options)){
+			$prompt = OptionsParser::findAndDestroy('no-id', $options);
+			$prompt = OptionsParser::findAndDestroy('id', $options);
+			return OptionsParser::getOptions();
+		}
+		return null;
 	}
 }

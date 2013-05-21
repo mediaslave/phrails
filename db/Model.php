@@ -520,6 +520,16 @@ abstract class Model extends ActiveRecord
 			$this->$key = $value;
 		}
 	}
+
+	final public function lastUpdate($format = 'Y-m-d H:i:s'){
+		if( !is_null($this->updated_at)){
+			return $this->objectify('updated_at')->format($format);
+		}
+		if(!is_null($this->created_at)){
+			return $this->objectify('created_at')->format($format);
+		}
+		return '-';
+	}
 	/**
 	 * init
 	 *

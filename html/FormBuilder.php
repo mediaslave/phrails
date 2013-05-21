@@ -70,12 +70,14 @@ class FormBuilder
 	 * @var string
 	 */
 	protected $array_it_value = '';
+	protected $array_it_second_value = null;
 	protected $array_it_actual_value = false;
 	const ARRAY_IT_BOOL_VALUE = false;
 	const ARRAY_IT_ACTUAL_VALUE = true;
 
 	protected $models;
 	protected $modelsForeignKey;
+	protected $modelsSecondForeignKey;
 	/**
 	 * Constructor
 	 *
@@ -379,7 +381,10 @@ class FormBuilder
 
 		if($this->array_it){
 			if($this->array_it_value != ''){
-				$name .= '[' . $this->array_it_value . ']';
+				$name .= "[$this->array_it_value]";
+				if($this->array_it_second_value !== null){
+					$name .= "[$this->array_it_second_value]";
+				}
 			}else{
 				$name .= '[]';
 			}
@@ -393,18 +398,21 @@ class FormBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	public function arrayIt($value = null, $getActualValue=self::ARRAY_IT_BOOL_VALUE)
+	public function arrayIt($value = null, $getActualValue=self::ARRAY_IT_BOOL_VALUE, $secondValue=null)
 	{
 		$this->array_it = true;
 		$this->array_it_actual_value = $getActualValue;
 		if($value !== null)
 			$this->array_it_value = $value;
+		if($secondValue !== null)
+			$this->array_it_second_value = $secondValue;
 		return $this;
 	}
 
-	public function modelsForCheckbox(array $models, $foreignKey=null) {
+	public function modelsForCheckbox(array $models, $foreignKey=null, $secondForeignKey=null) {
 		$this->models = $models;
 		$this->modelsForeignKey = $foreignKey;
+		$this->modelsSecondForeignKey = $secondForeignKey;
 		if($foreignKey === null){
 				$this->modelsForeignKey = Inflections::foreignKey($this->model->table_name());
 		}
@@ -422,9 +430,20 @@ class FormBuilder
 		//Checkboxes are there models to set the value.
 		if ($this->models !== null) {
 			$foreignKey = $this->modelsForeignKey;
+			$secondForeignKey = $this->modelsSecondForeignKey;
+			//new \Dbug($foreignKey, '', false, __FILE__, __LINE__);
+			//new \Dbug($secondForeignKey, '', false, __FILE__, __LINE__);
 			foreach ($this->models as $m) {
-				if ($m->$foreignKey ==
-					$this->array_it_value) {
+				//new \Dbug($m->$foreignKey, '', false, __FILE__, __LINE__);	
+				//new \Dbug($this->array_it_value, '', false, __FILE__, __LINE__);
+				//new \Dbug($this->modelsSecondForeignKey, '', false, __FILE__, __LINE__);
+				//new \Dbug(($m->$foreignKey == $this->array_it_value), '', false, __FILE__, __LINE__);
+				if ($m->$foreignKey == $this->array_it_value && $secondForeignKey === null) {
+					//die('what?');
+					return ($this->array_it_actual_value) 
+									 ? $m->$property
+									 : true;
+				}elseif($m->$foreignKey == $this->array_it_value && $m->$secondForeignKey == $this->array_it_second_value){
 					return ($this->array_it_actual_value) 
 									 ? $m->$property
 									 : true;
