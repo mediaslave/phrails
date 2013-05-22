@@ -307,7 +307,7 @@ class ActiveRecord extends SqlBuilder
 	/**
 	 * Join the tables passed in based off the Schema.
 	 *
-	 * @return void
+	 * @return ActiveRecord
 	 * @throws NoSchemaRelationshipDefinedException
 	 * @author Justin Palmer
 	 **/
@@ -319,6 +319,22 @@ class ActiveRecord extends SqlBuilder
 				throw new NoSchemaRelationshipDefinedException($this->table_name(), $key);
 			$this->addJoinFromRelationship($this->schema()->relationships->get($key));
 		}
+		return $this;
+	}
+
+	/**
+	 * Join with options
+	 * 
+	 * @return ActiveRecord
+	 * @throws NoSchemaRelationshipDefinedException
+	 * @param $relationship
+	 * @param $join_type
+	 * @param $additional_on
+	 */
+	public function joinWith($relationship, $join_type="INNER", $additional_on=''){
+		if(!$this->schema()->relationships->isKey($relationship))
+				throw new NoSchemaRelationshipDefinedException($this->table_name(), $relationship);
+		$this->addJoinFromRelationship($this->schema()->relationships->get($relationship), $join_type, $additional_on);
 		return $this;
 	}
 	/**

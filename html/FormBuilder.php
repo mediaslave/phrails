@@ -329,8 +329,8 @@ class FormBuilder
 							  $this->checkForErrors($property,array_shift($args)));
 			}else{
 				//this is a type of array select
-				return new $klass($this->getElementName($property), 
-							  $this->getValue($property), $array);
+				return new $klass($this->getElementName($property), $array, 
+							  $this->getValue($property));
 			}
 			
 		}

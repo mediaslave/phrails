@@ -65,7 +65,7 @@ class SqlBuilder
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	final public function addJoinFromRelationship($relationship)
+	final public function addJoinFromRelationship($relationship, $join_type="INNER", $additional_on='')
 	{
 		$join = '';
 		if($relationship->type == 'has-one' || $relationship->type == 'belongs-to'){
@@ -77,13 +77,13 @@ class SqlBuilder
 		$on = str_replace('?', '`' . $this->alias() . "`.`" . $relationship->prop . '`', $relationship->on);
 		if($relationship->thru != ''){
 			$join .= $relationship->join . ' ' . $on;
-			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
-					 AS " . $relationship->alias . "
-					  ON " . $relationship->join_on . " ";
+			$join .= " $join_type JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
+					 AS `" . $relationship->alias . "`
+					  ON " . $relationship->join_on . " $additional_on ";
 		}else{
-			$join .= " INNER JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
-					 AS " . $relationship->alias . "
-					  ON " . $on . " ";
+			$join .= " $join_type JOIN `" . $obj->database_name() . "`.`" . $relationship->table . "`
+					 AS `" . $relationship->alias . "`
+					  ON " . $on . " $additional_on";
 		}
 		
 		self::join($join);
