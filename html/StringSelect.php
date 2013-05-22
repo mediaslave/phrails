@@ -20,7 +20,7 @@ class StringSelect extends Select
 	 * @param string or array $options
 	 * @author Justin Palmer
 	 */
-	function __construct($name, $string, $selectedValue=null, $options=null,$itemDelimiter=";",$nameValueDelimiter=":")
+	function __construct($name, $selectedValue=null, $string, $options=null,$itemDelimiter=";",$nameValueDelimiter=":")
 	{
 		$options = $this->preparePrompt($options);
 		$this->addOptions($string, $itemDelimiter, $nameValueDelimiter);	
