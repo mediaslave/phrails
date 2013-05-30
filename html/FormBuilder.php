@@ -321,12 +321,13 @@ class FormBuilder
 		$select = array_pop(explode('_', $name));
 		if($select == 'select'){
 			$array = array_shift($args);
+			$options = array_shift($args);
 			if(is_array($array)){
 				//this is a type of array select
 				return new $klass($this->getElementName($property), 
 							  $array, 
 							  $this->getValue($property), 
-							  $this->checkForErrors($property,array_shift($args)));
+							  $this->checkForErrors($property,$options));
 			}else{
 				//this is a type of array select
 				return new $klass($this->getElementName($property), 
@@ -431,13 +432,7 @@ class FormBuilder
 		if ($this->models !== null) {
 			$foreignKey = $this->modelsForeignKey;
 			$secondForeignKey = $this->modelsSecondForeignKey;
-			//new \Dbug($foreignKey, '', false, __FILE__, __LINE__);
-			//new \Dbug($secondForeignKey, '', false, __FILE__, __LINE__);
 			foreach ($this->models as $m) {
-				//new \Dbug($m->$foreignKey, '', false, __FILE__, __LINE__);	
-				//new \Dbug($this->array_it_value, '', false, __FILE__, __LINE__);
-				//new \Dbug($this->modelsSecondForeignKey, '', false, __FILE__, __LINE__);
-				//new \Dbug(($m->$foreignKey == $this->array_it_value), '', false, __FILE__, __LINE__);
 				if ($m->$foreignKey == $this->array_it_value && $secondForeignKey === null) {
 					//die('what?');
 					return ($this->array_it_actual_value) 
@@ -452,6 +447,7 @@ class FormBuilder
 		}
 		//Get the value from the request object if we do not have a model
 		//or get it from the model property if we have a model.
+		$property = str_replace('[', '', str_replace(']', '', $property));
 		$value = $this->request->params($property);
 		if($value !== ''){
 			return $value;

@@ -126,9 +126,43 @@ class SqlBuilder
 	{
 		$args = func_get_args();
 		$where = array_shift($args);
+		$newArgs = array();
 		($this->Hash->where() != '') ? $this->Hash->where($this->Hash->where() . ' AND ' . $where)
 									 : $this->Hash->where($where);
 		$this->Hash->whereArgs($args);
+		return $this;
+	}
+
+	/**
+	 * Where in
+	 * 
+	 * @return SqlBuilder
+	 */
+	public function whereIn($property, array $array){
+		return $this->whereInAndNotIn($property, $array);
+	}
+
+	/**
+	 * Where not in
+	 * 
+	 * @return SqlBuilder
+	 */
+	public function whereNotIn($property, array $array){
+		return $this->whereInAndNotIn($property, $array, 'NOT IN');
+	}
+
+	/**
+	 * Where in and not in
+	 * 
+	 * @return SqlBuilder
+	 */
+	private function whereInAndNotIn($property, array $array, $type='IN'){
+		$question_marks = '';
+		foreach($array as $value){
+			$question_marks .= '?,';
+		}
+		$question_marks = rtrim($question_marks, ',');
+		$this->where("$property $type ($question_marks)", $array);
 		return $this;
 	}
 

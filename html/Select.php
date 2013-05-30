@@ -25,6 +25,8 @@ class Select extends FormElement
 		$name = array_shift($args);
 		$selectedValue = array_shift($args);
 		$options = array_pop($args);
+		//new \Dbug($selectedValue, '', false, __FILE__, __LINE__);
+		//new \Dbug($args, '', false, __FILE__, __LINE__);
 		//if $options is not an instance of Option we need to see if there
 		//is a prompt option and prepare if so.
 		if(!$options instanceof Option){
@@ -38,6 +40,16 @@ class Select extends FormElement
 		//If args is an array it could be an array of options.
 		if(is_array($args[0]))
 			$args = $args[0];
+		$this->selectOptions($args, $selectedValue);
+		parent::__construct($name, null, $options, array('method'=>'data-method', 'action'=>'data-action', 'remote'=>'data-remote'));
+	}
+
+	/**
+	 * Select the right option or options
+	 * 
+	 * @return void
+	 */
+	protected function selectOptions($args, $selectedValue){
 		//$args is now the optionTags after stripping out $name, $selectedValue and $options off of the
 		//func_get_args array.
 		if($args[0] !== null){
@@ -49,7 +61,6 @@ class Select extends FormElement
 				$this->display .= $option . "\n";
 			}
 		}
-		parent::__construct($name, null, $options, array('method'=>'data-method', 'action'=>'data-action', 'remote'=>'data-remote'));
 	}
 	/**
 	 * Check to see if we need to include a prompt.
