@@ -29,11 +29,11 @@ class Select extends FormElement
 		//new \Dbug($args, '', false, __FILE__, __LINE__);
 		//if $options is not an instance of Option we need to see if there
 		//is a prompt option and prepare if so.
-		if(!$options instanceof Option){
+		if(!$options instanceof Option && !is_array($options)){
 			$options = $this->preparePrompt($options);
 		//If $options is an instance of Option, then we need to add it back to our
 		//array of Option instances.
-		}else{
+		}elseif ($options instanceof Option || is_array($options)){
 			$args[] = $options;
 			$options = null;
 		}
