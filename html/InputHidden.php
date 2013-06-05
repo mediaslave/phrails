@@ -37,6 +37,6 @@ class InputHidden extends Input
 			$prompt = OptionsParser::findAndDestroy('id', $options);
 			return OptionsParser::getOptions();
 		}
-		return null;
+		return $options;
 	}
 }

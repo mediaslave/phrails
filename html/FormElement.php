@@ -48,7 +48,9 @@ abstract class FormElement extends Element
 	 **/
 	public static function getId($name)
 	{
-		$id = $name . '_id';
+		//$id = $name . '_id';
+		$id = str_replace('[', '_', $name);
+		return str_replace(']', '_', $id) . 'id';
 		$matches = array();
 		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-zA-Z_]*)\](\[(?P<array>[a-z0-9A-Z_\-\.]*)\])*/i", $id, $matches)
 							&& sizeof($matches) > 0){
