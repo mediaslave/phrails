@@ -50,7 +50,7 @@ abstract class FormElement extends Element
 	{
 		//$id = $name . '_id';
 		$id = str_replace('[', '_', $name);
-		return str_replace(']', '_', $id) . '_id';
+		return str_replace(']', '_', $id) . 'id';
 		$matches = array();
 		if(preg_match("/^(?P<table>[a-z_]*)\[(?P<id>[a-zA-Z_]*)\](\[(?P<array>[a-z0-9A-Z_\-\.]?)\])*/i", $id, $matches)
 							&& sizeof($matches) > 0){
