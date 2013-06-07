@@ -16,6 +16,9 @@ class FailedModelFilterException extends Exception
 		if(is_array($filter)){
 			$filter = implode('->', $filter);
 		}
+    if($filter instanceof Closure) {
+      $filter = "Closure";
+    }
 		parent::__construct("In object $class_name::$filter_type running $filter failed.");
 	}
 }
