@@ -162,8 +162,7 @@ class ActiveRecord extends SqlBuilder
 			$args[] = $this->$primary;
 	 	if(count($args) > 0){
 			if(count($args) > 1) $forceArray = true;
-			$question_marks = $this->getQuestionMarks($args);
-			$this->where("$primary IN ($question_marks)", $args);
+			$this->whereIn("$primary", $args);
 		}
 		return $this->processRead($this->build(DatabaseAdapter::READ), $forceArray);
 	}

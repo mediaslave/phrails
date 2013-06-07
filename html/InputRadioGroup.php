@@ -11,12 +11,13 @@
 class InputRadioGroup
 {
 	private $name, $array, $selectedValue, $options;
+
+	private static $hidden_sent = false;
 	/**
 	 * Constructor
 	 *
 	 * @param string $display
 	 * @param array $array - stdClass or comparable
-	 * @author Justin Palmer
 	 */
 	function __construct($name, $array, $selectedValue=null, $options=null)
 	{
@@ -38,11 +39,38 @@ class InputRadioGroup
 	public function setSelected($selected){
 		$this->selectedValue = $selected;
 	}
+
+	/**
+	 * Get the radio option by id
+	 * 
+	 * @return string
+	 */
+	public function getById($id){
+		$html = '';
+		if(self::$hidden_sent == false){
+			$html = new InputHidden($this->name, '');
+		}
+		self::$hidden_sent = true;
+		foreach($this->array as $element){
+			if(is_array($element)){
+				$element = (object)$element;
+			}
+			if($element->id !== $id){
+				continue;
+			}
+			$checked = false;
+			if((string)$element->id === (string)$this->selectedValue && $this->selectedValue !== null){
+				$checked = true;
+			}
+			$html .= new InputRadio($this->name, $element->id, $checked, $element->name, $this->options);
+		}
+		return $html;
+	}
+
 	/**
 	 * To string
 	 *
 	 * @return string
-	 * @author Justin Palmer
 	 **/
 	public function __toString()
 	{
