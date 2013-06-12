@@ -281,6 +281,16 @@ class SqlBuilder
 	}
 
 	/**
+	 * Set the return class for the query
+	 * 
+	 * @return this
+	 */
+	final public function setReturnClass($name){
+		$this->return_class($name);
+		return $this;
+	}
+
+	/**
 	 * export the hash
 	 *
 	 * @return void

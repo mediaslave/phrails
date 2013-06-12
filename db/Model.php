@@ -14,14 +14,12 @@ abstract class Model extends ActiveRecord
 	/**
 	 * The primary key.
 	 *
-	 * @author Justin Palmer
 	 * @var string
 	 */
 	protected $primary_key = 'id';
 	/**
 	 * The models table name.
 	 *
-	 * @author Justin Palmer
 	 * @var string
 	 */
 	protected $table_name;
@@ -33,38 +31,41 @@ abstract class Model extends ActiveRecord
 	/**
 	 * The alias for the model.
 	 *
-	 * @author Justin Palmer
 	 * @var string
 	 */
 	protected $alias;
 	/**
 	 * The Schema for the model.
 	 *
-	 * @author Justin Palmer
 	 * @var Schema
 	 */
 	protected $schema;
 	/**
 	 * The properties for the model set by the user.
 	 *
-	 * @author Justin Palmer
 	 * @var Hash
 	 */
 	protected $props;
 	/**
 	 * An array of properties that have changed.
 	 *
-	 * @author Justin Palmer
 	 * @var array
 	 */
 	protected $props_changed;
 	/**
 	 * The valid columns for the model from the db.
 	 *
-	 * @author Justin Palmer
 	 * @var Hash
 	 */
 	protected $columns;
+	/**
+	 * The return class for the model.  This will be the class that when a query is ran will be
+	 * returned to the user.
+	 *
+	 * @var mixed
+	 */
+	protected $return_class;
+
 	/**
 	 * The current errors, if any during the validation process.
 	 *
@@ -107,6 +108,7 @@ abstract class Model extends ActiveRecord
 
 		$this->columns = $this->adapter()->cacheColumns(get_class($this), '`' . $this->database_name . '`.`' . $this->table_name . '`');
 
+		$this->return_class(get_class($this));
 		//new Dbug($this->columns, '', false, __FILE__, __LINE__);
 
 		$this->props = new Hash();
@@ -362,6 +364,21 @@ abstract class Model extends ActiveRecord
 		}
 		return $this->database_name;
 	}
+
+	/**
+	 * Get the table name.
+	 *
+	 * @return string
+	 * @author Justin Palmer
+	 **/
+	final public function return_class($name=null)
+	{
+		if($name !== null){
+			$this->return_class = $name;
+		}
+		return $this->return_class;
+	}
+
 	/**
 	 * Get the primary_key value
 	 *

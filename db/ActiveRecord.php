@@ -10,6 +10,8 @@
  */
 class ActiveRecord extends SqlBuilder
 {
+	const FORCE_ARRAY = true;
+
 	public static $num_queries = 0;
 	/**
 	 * PDOStatement
@@ -480,11 +482,10 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function setFetchMode($custom=null, $customClass=null)
 	{
-		$class = $customClass;
 		if(is_null($customClass)){
-			$class = get_class($this);
+			$customClass = $this->return_class();
 		}
-		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $class);
+		$this->Statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $customClass);
 		if($this->isRaw()){
 			$this->Statement->setFetchMode(PDO::FETCH_OBJ);
 		}elseif($custom instanceof Closure){
@@ -492,5 +493,7 @@ class ActiveRecord extends SqlBuilder
 		}
 		//return raw to it's original state.
 		$this->raw(false);
+		//return the return_class var back to the model name.
+		$this->return_class(get_class($this));
 	}
 }
