@@ -3,11 +3,16 @@ language: php
 php:
 
   - 5.3
-  - 5.4
-  - 5.5 
 
-env:
-
-  - DB=mysql
+before_install:
+  - pear channel-discover pear.phpunit.de
+  - pear channel-discover pear.symfony-project.com
+  - pear channel-discover components.ez.no
+  - pear config-set auto_discover 1
+  - pear install --alldeps pear.phpunit.de/PHPUnit
+  - pear install --alldeps pear.phpunit.de/DbUnit
+  - pear install phpunit/PHPUnit_Selenium
+  - pear install phpunit/PHPUnit_Story
+  - git submodule update --init --recursive
 
 script: phpunit
