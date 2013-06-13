@@ -37,7 +37,7 @@ class RoutesHashTest extends PHPUnit_Framework_TestCase
 	public function Throws_exception_when_there_is_no_key_set()
 	{
 		try {
-	         $this->o->get('foo');
+	         $this->o->get('foo', 'bar');
 	    }catch (Exception $e) {
 			return;
 	    }
