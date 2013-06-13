@@ -9,7 +9,7 @@
  * @package tests
  */
 //Running PHPUnit 3.5.15 this is to fix bug
-//require_once('PHP/Token/Stream/Autoload.php');
+require_once('PHP/Token/Stream/Autoload.php');
 
 date_default_timezone_set('UTC');
 
