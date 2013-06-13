@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mediaslave/phrails.png?branch=master)](https://travis-ci.org/mediaslave/phrails)
+
 #Phrails
 
 A PHP 5.3 framework for developing applications fast.  A comfortable framework for Ruby on Rails developers that only have a PHP environment.
