@@ -7,6 +7,10 @@ php:
   - 5.4
   - 5.5
 
+branches:
+  only:
+    - travis-ci
+
 before_install:
   - git submodule update --init --recursive
 
