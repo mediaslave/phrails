@@ -25,15 +25,13 @@ class Select extends FormElement
 		$name = array_shift($args);
 		$selectedValue = array_shift($args);
 		$options = array_pop($args);
-		//new \Dbug($selectedValue, '', false, __FILE__, __LINE__);
-		//new \Dbug($args, '', false, __FILE__, __LINE__);
 		//if $options is not an instance of Option we need to see if there
 		//is a prompt option and prepare if so.
 		if(!$options instanceof Option && !is_array($options)){
 			$options = $this->preparePrompt($options);
 		//If $options is an instance of Option, then we need to add it back to our
 		//array of Option instances.
-		}elseif ($options instanceof Option || is_array($options)){
+		}elseif ($options instanceof Option && !is_array($options)){
 			$args[] = $options;
 			$options = null;
 		}
@@ -41,6 +39,7 @@ class Select extends FormElement
 		if(is_array($args[0]))
 			$args = $args[0];
 		$this->selectOptions($args, $selectedValue);
+		//new \Dbug($options, '', false, __FILE__, __LINE__);
 		parent::__construct($name, null, $options, array('method'=>'data-method', 'action'=>'data-action', 'remote'=>'data-remote'));
 	}
 
@@ -61,6 +60,7 @@ class Select extends FormElement
 				$this->display .= $option . "\n";
 			}
 		}
+
 	}
 	/**
 	 * Check to see if we need to include a prompt.

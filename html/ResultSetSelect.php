@@ -7,6 +7,7 @@
  * class description
  *
  * @package html
+ * @deprecated
  */
 class ResultSetSelect extends Select
 {
@@ -31,6 +32,9 @@ class ResultSetSelect extends Select
 		$this->optgroup = $optgroup;
 		$options = $this->preparePrompt($options);
 		foreach($resultSet as $record){
+			if(is_array($record)){
+				$record = (object)$record;
+			}
 			$id = $this->id;
 			$select = false;
 			if((string)$record->$id === (string)$selectedValue)
@@ -38,6 +42,7 @@ class ResultSetSelect extends Select
 			$this->fillHashOrDisplay($record, $select);
 		}
 		$this->createOptGroup();
+		//new \Dbug($options, '', false, __FILE__, __LINE__);
 		parent::__construct($name, $selectedValue, null, $options);
 	}
 

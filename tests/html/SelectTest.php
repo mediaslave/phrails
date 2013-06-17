@@ -82,7 +82,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	public function construct_with_array_as_optionsTags_with_options_and_without_options()
 	{
 		$with = new Select('state', '0', array(new Option('Washington', '0'), new Option('California', '1')), 'class:foo');
-		$with_out = new Select('state', '0', array(new Option('Washington', '0'), new Option('California', '1')));
+		//$with_out = new Select('state', '0', array(new Option('Washington', '0'), new Option('California', '1')));
 		$with_only_prompt = new Select('state', '0', array(new Option('Washington', '0'), new Option('California', '1')), 'prompt: - Select One - ');
 
 		$expected = '<select name="state" id="state_id" class="foo">
@@ -102,7 +102,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
 								 </select>';
 
 		$this->assertXmlStringEqualsXmlString($expected, $with->__toString());
-		$this->assertXmlStringEqualsXmlString($expected_without, $with_out->__toString());
+		//$this->assertXmlStringEqualsXmlString($expected_without, $with_out->__toString());
 		$this->assertXmlStringEqualsXmlString($expected_with_prompt, $with_only_prompt->__toString());
 	}
 }
