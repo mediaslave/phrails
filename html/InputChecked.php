@@ -52,6 +52,8 @@ class InputChecked extends Input
 	{
 		if($this->checked_value == $value){
 			$this->checked = ' checked';
-		}
+		} else {
+      $this->checked = '';
+    }
 	}
 }
