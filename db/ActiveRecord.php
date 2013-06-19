@@ -268,7 +268,6 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	public function findBySql($query, $args, $forceArray=false)
 	{
-		self::$num_queries++;
 		$object = (object) array('sql'=>$query, 'params'=>$args);
 		return $this->processRead($object, $forceArray);
 	}
@@ -279,7 +278,6 @@ class ActiveRecord extends SqlBuilder
 	 * @return boolean
 	 */
 	public function sql($sql /*$param, $param, $param, $param */){
-		self::$num_queries++;
 		$args = func_get_args();
 		$sql = array_shift($args);
 		$object = (object) array('sql'=>$sql, 'params'=>$args);
