@@ -60,6 +60,14 @@ abstract class TemplateCache extends Template
 	 **/
 	public function display()
 	{
+		//Does this template have a cache?
+		$is_valid_type = $this->isValidCacheType();
+		$is_cached = null;
+		if($is_valid_type)
+			$is_cached = $this->Cache->isCached();
+
+		//Call the action
+		$this->Controller->prRun($is_valid_type, $is_cached);
 		//If the cache type is null just return the template.
 		//Or, if the cache_type is not one of the supported cache_types
 		if($this->view_path === null  ||

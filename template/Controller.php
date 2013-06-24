@@ -16,6 +16,7 @@ class Controller
 	 * @var string or null
 	 */
 	public $pr_layout = 'application';
+	public $pr_layout_extension = null;
 	/**
 	 * The current controller.
 	 *
@@ -145,6 +146,21 @@ class Controller
 		$route->action = $action;
 		Registry::set('pr-route', $route);
 	}
+
+	/**
+	 * return the display
+	 * 
+	 * @return boolean
+	 */
+	public function renderToString($view_type='html', $vars=array()){
+		$Controller = new RenderToStringController();
+		$Controller->import(get_object_vars($this));
+		$Controller->import($vars);
+		$Controller->pr_view_types = $this->pr_view_types;
+		$Template = new RenderToStringControllerTemplate($Controller, $view_type);
+		return $Template->display();
+	}
+
 	/**
 	 * Redirect to a different path;
 	 *
@@ -171,12 +187,8 @@ class Controller
 	{
 		$args = func_get_args();
 		$set = array();
-		//new \Dbug($args, '', true, __FILE__, __LINE__);
 		foreach($args as $key => $value){
-			//new \Dbug($key, '', false, __FILE__, __LINE__);
-			//new \Dbug($value, '', false, __FILE__, __LINE__);
 			if(is_array($value)){
-				//$set[key($value)] = array_shift($value);
 				$set[key($value)] = (object) $value;
 			}else{
 				$set[$value] = $value;

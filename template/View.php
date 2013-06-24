@@ -16,6 +16,8 @@ abstract class View implements ViewInterface
 
 	public $should_fallback_to_html = true;
 
+	protected $mime_type = 'text/html';
+
 
 
 	/**

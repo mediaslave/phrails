@@ -10,7 +10,7 @@
  */
 class StringSelect extends Select
 {
-
+	private $optionTags = array();
 	/**
 	 * Constructor
 	 *
@@ -23,8 +23,8 @@ class StringSelect extends Select
 	function __construct($name, $selectedValue=null, $string, $options=null,$itemDelimiter=";",$nameValueDelimiter=":")
 	{
 		$options = $this->preparePrompt($options);
-		$this->addOptions($string, $itemDelimiter, $nameValueDelimiter);	
-		parent::__construct($name, $selectedValue, null, $options);
+		$this->createOptionTagArray($string, $itemDelimiter, $nameValueDelimiter);
+		parent::__construct($name, $selectedValue, $this->optionTags, $options);
 	}
 
 	/**
@@ -32,14 +32,14 @@ class StringSelect extends Select
 	 * 
 	 * @return void
 	 */
-	private function  addOptions($string, $itemDelimiter, $nameValueDelimiter){
+	private function  createOptionTagArray($string, $itemDelimiter, $nameValueDelimiter){
 		$items = explode($itemDelimiter, $string);
 		foreach ($items as $nameValue) {
 			$args = explode($nameValueDelimiter, $nameValue);
 			if(sizeof($args) == 1){
-				$this->display .= new Option($args[0]);
+				$this->optionTags[] = new Option($args[0]);
 			}else{
-				$this->display .= new Option($args[0], $args[1]);
+				$this->optionTags[] = new Option($args[0], $args[1]);
 			}
 		}
 	}

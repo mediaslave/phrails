@@ -327,11 +327,11 @@ class FormBuilder
 				return new $klass($this->getElementName($property), 
 							  $array, 
 							  $this->getValue($property), 
-							  $this->checkForErrors($property,$options));
+							  $this->checkForErrors($property), $options);
 			}else{
 				//this is a type of array select
 				return new $klass($this->getElementName($property), 
-							  $this->getValue($property), $array);
+							  $this->getValue($property), $array, $options);
 			}
 			
 		}

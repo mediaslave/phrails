@@ -49,6 +49,7 @@ class Select extends FormElement
 	 * @return void
 	 */
 	protected function selectOptions($args, $selectedValue){
+		//print $args[0] . "\n";
 		//$args is now the optionTags after stripping out $name, $selectedValue and $options off of the
 		//func_get_args array.
 		if($args[0] !== null){

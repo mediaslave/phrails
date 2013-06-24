@@ -13,6 +13,11 @@ class ControllerTemplate extends TemplateCache
 {
 	protected $layouts_path = 'layouts';
 
+	function __construct($controller) {
+		parent::__construct($controller);
+		$this->route = Registry::get('pr-route');
+	}
+
 	/**
 	 * Sets the file path and route array.
 	 *
@@ -21,27 +26,24 @@ class ControllerTemplate extends TemplateCache
 	 **/
 	protected function prepare()
 	{
-		//Get the current route.
-		$Route = $this->route = Registry::get('pr-route');
 		//Check to make sure that the view type (html/json) is a registered view
 		//through $controller->respond_to
 		try{
-			$this->checkViewType($Route);
-			$this->getView($Route->view_type);
+			$this->checkViewType($this->route);
+			$this->getView($this->route->view_type);
 			//Get the current view path based off of the controller
-			self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->controller));
+			self::$current_view_path = preg_replace('%\\\\-%', '/', preg_replace('/([^\s])([A-Z])/', '\1-\2', $this->route->controller));
 			//print self::$current_view_path . '<br/>';
 			//exit();
-
 			//Get the file to render from the action of the route.
-			$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $Route->action);
-			$this->setViewPath($file, $Route->view_type);
+			$file = preg_replace('/([^\s])([A-Z])/', '\1-\2', $this->route->action);
+			$this->setViewPath($file, $this->route->view_type);
 			//Let's make sure that the view path exists
 			if(!is_file($this->view_path) && is_object($this->View) &&
 					$this->View->should_fallback_to_html &&
 					!($this->View instanceof HtmlView)){
 				$this->View->extension = 'html';
-				$this->setViewPath($file, $Route->view_type);
+				$this->setViewPath($file, $this->route->view_type);
 			}
 		}catch(NoViewTypeException $e){
 			//If it is not a view type then we will change the route to
@@ -71,7 +73,6 @@ class ControllerTemplate extends TemplateCache
 			$this->Controller->pr_layout = null;
 			$this->view_path = 'pr-no-view.html.php';
 		}
-
 	}
 
 	/**

@@ -48,7 +48,8 @@ abstract class Template
 
 
 	static private $view_types = array('html' => 'HtmlView',
-							   		   'json' => 'JsonView');
+							   		   'json' => 'JsonView',
+							   		   'xml' => 'XmlView');
 
 	protected $View;
 
@@ -81,9 +82,26 @@ abstract class Template
 	public function display()
 	{
 		$this->prepare();
+		$this->setControllerVars();
 		//Return the appropriate layout and view or view.
 		return ($this->Controller->pr_layout === null) ? $this->displayNoLayout($this->view_path)
 													   : $this->displayWithLayout($this->view_path);
+	}
+	/**
+	 * Set the controller vars if there are extras
+	 * 
+	 * @return boolean
+	 */
+	public function setControllerVars(){
+		$view_type = $this->route->view_type;
+		if($this->Controller->pr_view_types->$view_type instanceof stdClass){
+			foreach($this->Controller->pr_view_types->$view_type->$view_type as $key => $value){
+				if($key == $view_type){
+					continue;
+				}
+				$this->Controller->$key = $value;
+			}
+		}
 	}
 	/**
 	 * Make sure there is a view of the right type.
@@ -137,7 +155,9 @@ abstract class Template
 			$pr_view = ob_get_contents();
 		ob_clean();
 			extract($this->objectVars(self::$ContentFor), EXTR_REFS);
-			include $this->layouts_path . '/' . $this->Controller->pr_layout . '.html.php';
+			$view_type = (is_null($this->Controller->pr_layout_extension)) ? $this->route->view_type
+																		   : $this->Controller->pr_layout_extension;
+			include $this->layouts_path . '/' . $this->Controller->pr_layout . '.' . $view_type . '.php';
 			$content = ob_get_clean();
 		$this->init();
 		return $this->View->process($content);
@@ -155,6 +175,9 @@ abstract class Template
 			include $path;
 			$content = ob_get_clean();
 		}else{
+			if(!($this->Controller->pr_view_types->get($type) instanceof stdClass)){
+				throw new NoViewException();
+			}
 			$content = $this->Controller->pr_view_types->get($type)->$type;
 		}
 		$this->init();

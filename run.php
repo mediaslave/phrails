@@ -21,12 +21,3 @@ $Controller = $Router->route();
 
 //Register the controller with the Template.
 $Template = new ControllerTemplate($Controller);
-
-//Does this template have a cache?
-$is_valid_type = $Template->isValidCacheType();
-$is_cached = null;
-if($is_valid_type)
-	$is_cached = $Template->Cache->isCached();
-
-//Call the action
-$Controller->prRun($is_valid_type, $is_cached);
