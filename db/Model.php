@@ -305,10 +305,13 @@ abstract class Model extends ActiveRecord
 	 * @return Hash
 	 * @author Justin Palmer
 	 **/
-	final public function props($props=array())
+	final public function props($props=array(), $merge = false)
 	{
 		if(empty($props)){
 			return $this->props;
+		}
+		if($merge){
+			$props = array_merge($this->props()->export(), $props);
 		}
 		//if $props (passed in a array)is not empty then we will set the properties of the model
 		$this->setProperties($props);
