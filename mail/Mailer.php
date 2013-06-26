@@ -19,6 +19,13 @@ class Mailer extends PHPMailer
 	private static $dev_email = null;
 
 	public $pr_layout = 'application';
+	public $pr_layout_extension = 'html';
+	/**
+	 * The view type
+	 *
+	 * @var Hash
+	 */
+	public $pr_view_types;
 
 	private $valid_settings = array('deliveryMethod', 'host', 'port', 'username', 'password', 'secure', 'from', 'debug');
 
@@ -27,6 +34,7 @@ class Mailer extends PHPMailer
 		foreach($vars as $key => $value){
 			$this->$key = $value;
 		}
+		$this->pr_view_types = new Hash(array('html'=>'html'));
 		parent::__construct($exceptions);
 		$this->settings();
 	}
@@ -307,4 +315,10 @@ class Mailer extends PHPMailer
 			parent::IsSendmail();
 
 	}
+	/**
+	 * description...
+	 * 
+	 * @return boolean
+	 */
+	public function prRun(){}
 }
