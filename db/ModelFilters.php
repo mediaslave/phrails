@@ -28,6 +28,13 @@ class ModelFilters
 	function __construct() {
 		$this->Hash = new ModelFiltersHash;
 	}
+
+
+  function destroy() {
+    $this->Hash = new ModelFiltersHash;
+    throw new Exception("You probably should not be doing this");
+  }
+
 	/**
 	 * new model
 	 *
