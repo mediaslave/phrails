@@ -217,7 +217,7 @@ abstract class Model extends ActiveRecord
 	 * @return string
 	 * @author Justin Palmer
 	 **/
-	final public function __get($key)
+	public function __get($key)
 	{
 		//if there is a property with this key in the model return the value.
 		if($this->props->isKey($key)){
