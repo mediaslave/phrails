@@ -96,7 +96,7 @@ abstract class Template
 	public function setControllerVars(){
 		$view_type = $this->route->view_type;
 		if($this->Controller->pr_view_types->$view_type instanceof stdClass){
-			foreach($this->Controller->pr_view_types->$view_type as $key => $value){
+			foreach($this->Controller->pr_view_types->$view_type->$view_type as $key => $value){
 				if($key == $view_type){
 					continue;
 				}
