@@ -107,7 +107,8 @@ class Csv
 				$this->encoded_string = rtrim($this->encoded_string, ',') . "\n";
 				continue;
 			}
-			$props = $model->props()->export();
+			$props = ($model instanceof Model) ? $model->props()->export()
+												: $model;
 			if (!$propHeadersAdded) {
 				$propHeadersAdded = true;
 				foreach ($props as $key => $value) {
