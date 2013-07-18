@@ -100,8 +100,5 @@ class ControllerTemplate extends TemplateCache
 			$path = rtrim($this->Controller->pr_view_path, '\\') . '/' . $path;
 		//Save the sha of the file path.
 		$this->view_path = $path;
-		//if(!is_file(Registry::get('pr-real-install-path') . '/app/views/' . $path) && !($this->Controller->pr_view_types->get($view_type) instanceof stdClass)){
-		//	throw new NoViewException();
-		//}
 	}
 }

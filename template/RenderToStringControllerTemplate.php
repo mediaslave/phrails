@@ -28,6 +28,6 @@ class RenderToStringControllerTemplate extends ControllerTemplate
 	{
 		$this->route->view_type = $this->view_type;
 		parent::prepare();
-		$this->route->controller = 'RenderToStringController';
 	}
+
 }
