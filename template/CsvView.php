@@ -10,7 +10,7 @@
  */
 class CsvView extends View
 {
-	public $can_have_layout=true;
+	public $can_have_layout=false;
 	public $should_fallback_to_html = false;
 	public $extension = 'csv';
 
