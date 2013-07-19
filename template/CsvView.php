@@ -21,7 +21,7 @@ class CsvView extends View
 	 * @author Justin Palmer
 	 **/
 	public function process($content){
-		$csv = new CSV;
+		$csv = new Csv;
 		header("Content-type: text/csv");
 		return $csv->encode($content);
 	}
