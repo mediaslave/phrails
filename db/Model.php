@@ -120,11 +120,7 @@ abstract class Model extends ActiveRecord
 		$this->filters = new ModelFilters();
 		$this->setInjectedFilters();
 		$this->schema = new Schema($this);
-		if(self::$injectedSchema instanceof Schema){
-			$this->schema->relationships = new Hash(array_merge(self::$injectedSchema->relationships->export(),
-																$this->schema->relationships->export()
-														));
-		}
+		$this->setInjectedSchema();
 
 		$this->init();
 	}
@@ -465,14 +461,35 @@ abstract class Model extends ActiveRecord
 	 */
 	static public function injectSchema(Schema $schema){
 		//If we already have a schema then we need to merge the relationships.
-		if(self::$injectedSchema instanceof Schema){
-			self::$injectedSchema->relationships = new Hash(array_merge(self::$injectedSchema->relationships->export(),
-																$schema->relationships->export()
-																));
+		if(!(self::$injectedSchema instanceof Hash)){
+			self::$injectedSchema = new Hash();
+		}
+		if(self::$injectedSchema->get(get_called_class()) instanceof Schema){
+			$stored_schema = self::$injectedSchema->get(get_called_class());
+
+			$stored_schema->relationships = new Hash(array_merge($stored_schema->relationships->export(),
+																	$schema->relationships->export()));
+			self::$injectedSchema->set(get_called_class(), $stored_schema);
 			return;
 		}
-		//No Schema already?  Store it.
-		self::$injectedSchema = $schema;
+		//No filters already?  Store it.
+		self::$injectedSchema->set(get_called_class(), $schema);
+	}
+
+	/**
+	 * Set the injected schemas into the model
+	 * 
+	 * @return void
+	 */
+	public function setInjectedSchema(){
+		if(self::$injectedSchema instanceof Hash){
+			$schema = self::$injectedSchema->get(get_called_class());
+			if(is_null($schema)){
+				return;
+			}
+			$this->schema()->relationships = new Hash(array_merge($this->schema->relationships->export(), 
+																$schema->relationships->export()));
+		}
 	}
 
 	/**
@@ -504,7 +521,7 @@ abstract class Model extends ActiveRecord
 	 */
 	private function setInjectedFilters(){
 		if(self::$injectedFilters instanceof Hash){
-			$filter = self::$injectedFilters->get(get_class($this));
+			$filter = self::$injectedFilters->get(get_called_class());
 			if(is_null($filter)){
 				return;
 			}
