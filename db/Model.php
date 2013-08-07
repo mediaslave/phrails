@@ -567,6 +567,10 @@ abstract class Model extends ActiveRecord
 		}
 		return '-';
 	}
+
+  public function hasPropertyChanged($key) {
+    return in_array($key, $this->props_changed);
+  }
 	/**
 	 * init
 	 *
