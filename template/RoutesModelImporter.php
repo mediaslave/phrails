@@ -40,7 +40,7 @@ class RoutesModelImporter extends RoutesImporter{
 	 */
 	public function import(){
 		//Find all of the routes that need added.
-		$records = $this->Model->findAll();
+		$records = $this->Model->raw()->findAll();
 		foreach ($records as $route) {
 			$this->Routes->add($route->name, $route->path, $route->controller, $route->action, $route->namespace);
 		}
