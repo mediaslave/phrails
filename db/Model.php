@@ -547,6 +547,7 @@ abstract class Model extends ActiveRecord
 	 **/
 	private function setProperties(array $array)
 	{
+		$this->props_changed = array();
 		//Make sure all of the columns get a value.
 		$keys = $this->columns->keys();
 		foreach(array_values($keys) as $key){
