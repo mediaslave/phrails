@@ -25,7 +25,15 @@ class ActiveRecord extends SqlBuilder
 	 *
 	 * @var stdClass
 	 */
-	 static private $last_query=null;
+  static private $last_query=null;
+
+	/**
+	 * Store the last error from the query that was ran.
+	 *
+	 * @var stdClass
+	 */
+	 static private $last_error_info=null;
+
 	/**
 	 * Save
 	 *
@@ -261,6 +269,21 @@ class ActiveRecord extends SqlBuilder
 	}
 
 	/**
+	 * Get the last error code
+	 *
+	 * @return stdClass
+	 * @throws Exception
+	 * @author David Kerschner
+	 **/
+	final public function lastErrorInfo()
+	{
+		if(self::$last_error_info === null){
+			throw new Exception('No errors have been recorded.');
+		}
+		return self::$last_error_info;
+	}
+
+	/**
 	 * findBySql
 	 *
 	 * @return void
@@ -470,7 +493,9 @@ class ActiveRecord extends SqlBuilder
 		self::$num_queries++;
 		self::$last_query = $query;
 		$this->Statement = $this->conn()->prepare($query->sql);
-		return $this->Statement->execute($query->params);
+    $state = $this->Statement->execute($query->params);
+    self::$last_error_info = $this->Statement->errorInfo();
+		return $state;
 	}
 	/**
 	 * Set the fetch mode for the prepare query.
