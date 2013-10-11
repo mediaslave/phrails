@@ -18,6 +18,7 @@ class MailerTemplate extends TemplateCache
 	function __construct($controller, $method) {
 		parent::__construct($controller);
 		$this->method = $method;
+    $this->route = (object)array('view_type' => 'html');
 	}
 	/**
 	 * Sets the file path and route array.
