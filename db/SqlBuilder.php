@@ -97,7 +97,7 @@ class SqlBuilder
 	final public function joinRaw($sql, $args=array()){
 		$join = $this->Hash->join();
 		$this->Hash->whereArgs($args);
-		$join .= $sql;
+		$join .= ' ' . $sql . ' ';
 		$this->Hash->join($join);
 		return $this;
 	}
