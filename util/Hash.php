@@ -105,6 +105,15 @@ class Hash
 		if($this->isKey($key))
 			unset($this->array[$key]);
 	}
+
+	/**
+	 * Merge another hash into this one
+	 * 
+	 * @return boolean
+	 */
+	public function merge(Hash $hash){
+		$this->array = array_merge($this->array, $hash->export());
+	}
 	/**
 	 * Export the current Hash as an array
 	 *
