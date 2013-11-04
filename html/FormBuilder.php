@@ -228,6 +228,17 @@ class FormBuilder
 		return new ResultSetSelect($this->getElementName($property), $set, $this->getValue($property), $options, $optionDisplay, $id, $optgroup);
 	}
 	/**
+	 * return a record set for a model property
+	 *
+	 * @return void
+	 * @author Justin Palmer
+	 **/
+	public function array_select($property, array $array, $options='', $optionDisplay='name', $id='id', $optgroup='optgroup')
+	{
+		$options = $this->checkForErrors($property, $options);
+		return new ArraySelect($this->getElementName($property), $array, $this->getValue($property), $options, $optionDisplay, $id, $optgroup);
+	}
+	/**
 	 * radio group
 	 *
 	 * @return void
@@ -274,9 +285,10 @@ class FormBuilder
 	{
 		$options = $this->checkForErrors($property, $options);
 		$array = array();
-		for($i=$start; $i <= $end; $i++)
+		for($i=$start; $i <= $end; $i++){
 			$array[] = new Option($i);
-		return new ArraySelect($this->getElementName($property), $array, $this->getValue($property), $options);
+		}
+		return new ArrayOptionSelect($this->getElementName($property), $array, $this->getValue($property), $options);
 	}
 
 	/**

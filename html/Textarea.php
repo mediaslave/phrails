@@ -26,7 +26,7 @@ class Textarea extends FormElement
 	 */
 	public function start()
 	{
-		return '<textarea' . $this->options . '>' . $this->value;
+		return '<textarea' . $this->options . ' data-grow="true">' . $this->value;
 	}
 	/**
 	 * @see Tag::end();
