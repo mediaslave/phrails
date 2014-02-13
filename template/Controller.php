@@ -153,11 +153,15 @@ class Controller
 	 * @return boolean
 	 */
 	public function renderToString($view_type='html', $vars=array()){
-    $old_action = $this->pr_action;
+    	$old_action = $this->pr_action;
+    	$old_layout = $this->pr_layout;
 
-    if(in_array('pr_action', array_keys($vars))) {
-      $this->render($vars['pr_action']);
-    }
+	    if(in_array('pr_action', array_keys($vars))) {
+	      $this->render($vars['pr_action']);
+	    }
+	    if(in_array('pr_layout', array_keys($vars))) {
+	      $this->pr_layout = $vars['pr_action'];
+	    }
 
 		$Controller = new RenderToStringController();
 		$Controller->import(get_object_vars($this));
@@ -166,7 +170,8 @@ class Controller
     
 		$Template = new RenderToStringControllerTemplate($Controller, $view_type);
 		$output = $Template->display();
-    $this->render($old_action);
+    	$this->render($old_action);
+    	$this->pr_layout = $old_layout;
     return $output;
 	}
 
