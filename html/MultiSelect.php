@@ -25,6 +25,14 @@ class MultiSelect extends Select
 		$name = array_shift($args);
 		$selectedValue = array_shift($args);
 		$options = array_pop($args);
+		if(is_array($args) && !($args[0] instanceof Option) && is_array($args[0])){
+			$args_temp = array();
+			$array = array_shift($args);
+			foreach ($array as $object) {
+				$args_temp[] = new Option($object->name, $object->id);
+			}
+			$args = $args_temp;
+		}
 		parent::__construct($name, $selectedValue, $args, $options);
 	}
 
