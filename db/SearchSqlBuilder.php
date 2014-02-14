@@ -108,8 +108,13 @@ class SearchSqlBuilder
 						$this->where_params[] = '%' . $value . '%';
 						break;
 					default:
-						$this->where .= '`' . $model->alias() . '`.`' . $key . '` = ? ' . $operand . ' ';
-						$this->where_params[] = $value;
+						if(is_array($value)){
+							$this->where .= $this->whereIn('`' . $model->alias() . '`.`' . $key . '`', $value) . ' ' . $operand . ' ';
+							$this->where_params = array_merge($this->where_params, $value);
+						}else{
+							$this->where .= '`' . $model->alias() . '`.`' . $key . '` = ? ' . $operand . ' ';
+							$this->where_params[] = $value;
+						}
 				}
 			}
 		}
@@ -121,6 +126,15 @@ class SearchSqlBuilder
 		We do it this way, because it is faster than preg_replace to trim the /\s$operand\s^/
 		*/
 		$this->where = trim(rtrim(trim($this->where), $operand));
+	}
+
+	private function whereIn($property, array $array){
+		$question_marks = '';
+		foreach($array as $value){
+			$question_marks .= '?,';
+		}
+		$question_marks = rtrim($question_marks, ',');
+		return "$property IN ($question_marks)";
 	}
 
 }
