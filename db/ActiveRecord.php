@@ -13,6 +13,7 @@ class ActiveRecord extends SqlBuilder
 	const FORCE_ARRAY = true;
 
 	public static $num_queries = 0;
+	public static $queries = array();
 	/**
 	 * PDOStatement
 	 *
@@ -25,7 +26,7 @@ class ActiveRecord extends SqlBuilder
 	 *
 	 * @var stdClass
 	 */
-  static private $last_query=null;
+  	static private $last_query=null;
 
 	/**
 	 * Store the last error from the query that was ran.
@@ -469,8 +470,7 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processRead(stdClass $query, $forceArray = false, $customFetchMode=null, $customFetchClass=null)
 	{
-		self::$num_queries++;
-		self::$last_query = $query;
+		$this->logQueryDetails($query);
 		$this->reset();
 		$this->Statement = $this->conn()->prepare($query->sql);
 		$this->setFetchMode($customFetchMode, $customFetchClass);
@@ -490,11 +490,10 @@ class ActiveRecord extends SqlBuilder
 	 **/
 	private function processCud(stdClass $query)
 	{
-		self::$num_queries++;
-		self::$last_query = $query;
+		$this->logQueryDetails($query);
 		$this->Statement = $this->conn()->prepare($query->sql);
-    $state = $this->Statement->execute($query->params);
-    self::$last_error_info = $this->Statement->errorInfo();
+    	$state = $this->Statement->execute($query->params);
+    	self::$last_error_info = $this->Statement->errorInfo();
 		return $state;
 	}
 	/**
@@ -518,5 +517,16 @@ class ActiveRecord extends SqlBuilder
 		$this->raw(false);
 		//return the return_class var back to the model name.
 		$this->return_class(get_class($this));
+	}
+
+	/**
+	 * Log the query information
+	 * 
+	 * @return void
+	 */
+	private function logQueryDetails($query){
+		self::$num_queries++;
+		self::$last_query = $query;
+		self::$queries[] = $query;
 	}
 }
