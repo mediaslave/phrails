@@ -145,7 +145,7 @@ class ActiveRecord extends SqlBuilder
 		$model = get_class($this);
 		$model = new $model($props);
 		$model->$id = $this->$id;
-		$saved = $model->save();
+		$saved = $model->save(false);
 		$this->errors($model->errors());
 		return $saved;
 	}
