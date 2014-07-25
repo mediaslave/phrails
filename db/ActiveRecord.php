@@ -98,7 +98,7 @@ class ActiveRecord extends SqlBuilder
 		$primary = $this->primary_key();
 		$p_value = $this->$primary;
 		$this->$primary = null;
-		$this->from($this->database_name(), $this->table_name());
+		$this->from($this->database_name(), $this->table_name(), $this->alias());
 		$this->where("$primary = ?", $p_value);
 		if($this->columns->isKey('updated_at')){
 			$this->updated_at = date('Y-m-d H:i:s');
