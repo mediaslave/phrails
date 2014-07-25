@@ -112,4 +112,4 @@ To create documentation from the base folder run:
 
 To run tests from the tests folder in the base folder run:
 
-	phpunit --bootstrap bootstrap.php --colors .
+	phpunit --colors
