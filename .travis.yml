@@ -14,5 +14,6 @@ before_install:
   - pear install phpunit/PHPUnit_Selenium
   - pear install phpunit/PHPUnit_Story
   - git submodule update --init --recursive
+  - php /home/travis/.phpenv/versions/5.3/bin/composer self-update
 
 script: phpunit
