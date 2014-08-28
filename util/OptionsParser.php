@@ -150,7 +150,7 @@ class OptionsParser
 	 * @return mixed
 	 * @author Justin Palmer
 	 **/
-	public function getOptions()
+	public static function getOptions()
 	{
 		return self::$options;
 	}

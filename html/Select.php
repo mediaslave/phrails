@@ -25,6 +25,12 @@ class Select extends FormElement
 		$name = array_shift($args);
 		$selectedValue = array_shift($args);
 		$options = array_pop($args);
+
+        if(($selectedValue == '' || is_null($selectedValue))
+            && isset($options['value'])) {
+            $selectedValue = $options['value'];
+        }
+
 		//if $options is not an instance of Option we need to see if there
 		//is a prompt option and prepare if so.
 		if(!$options instanceof Option && !is_array($options)){

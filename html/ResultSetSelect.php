@@ -31,6 +31,12 @@ class ResultSetSelect extends Select
 		$this->id = $id;
 		$this->optgroup = $optgroup;
 		$options = $this->preparePrompt($options);
+
+        if(($selectedValue == '' || is_null($selectedValue))
+            && isset($options['value'])) {
+            $selectedValue = $options['value'];
+        }
+
 		foreach($resultSet as $record){
 			if(is_array($record)){
 				$record = (object)$record;
