@@ -18,8 +18,8 @@ class StreetRule extends AlphaExtraRule
 	 * @return NameRule
 	 * @author Justin Palmer
 	 **/
-	public function __construct($message='%s should only include lowercase and capital letters, foreign language characters, hyphen, period, space, comma and apostrophe.')
+	public function __construct($message='%s should only include lowercase and capital letters, foreign language characters, hyphen, period, space, ampersand, comma and apostrophe.')
 	{
-		parent::__construct("\s\/\,\-\.\'\(\)#:+0-9\pL", $message);
+		parent::__construct("\s\/\,\-\.\'\(\)\&#:+0-9\pL", $message);
 	}
 } // END class Rule
