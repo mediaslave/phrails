@@ -294,11 +294,17 @@ class SqlBuilder
 	}
 
 	/**
-	 * Set the return class for the query
-	 * 
+	 * Set the return class for the query this needs to be a string with the complete class name including namespace if needed.
+	 * ->setReturnClass('net\mediaslave\project\ClassName');
+	 *
+	 * $name can also be a Model.
+	 * @var  $name Fully qualified string of class name or model
 	 * @return this
 	 */
 	final public function setReturnClass($name){
+		if($name instanceof Model){
+			$name = get_class($name);
+		}
 		$this->return_class($name);
 		return $this;
 	}
