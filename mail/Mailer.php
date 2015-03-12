@@ -195,15 +195,34 @@ class Mailer extends PHPMailer
 			foreach(array_values($address) as $to){
 				if(!is_array($to))
 					throw new Exception('Mailer::to, Mailer::cc, Mailer::bcc expects that $address is an array of arrays. Example: array(array("email_address", "name")), name is optional.');
-				$email = (self::$dev_email !== null) ? self::$dev_email : $to[0];
-				$name = '';
-				if(sizeof($to) == 2)
+				if (strpos($to[0], ';') !== null){
+                                    $addresses = explode(';',$to[0]);
+                                    foreach ($addresses as $nextAddress){
+                                        $email = (self::$dev_email !== null) ? self::$dev_email : $nextAddress;
+                                        $name = '';
+				        if(sizeof($to) == 2)
+					    $name = $to[1];
+				        parent::$method($email, $name);
+                                    } 
+                                }else {
+                                    $email = (self::$dev_email !== null) ? self::$dev_email : $to[0];
+                                    $name = '';
+				    if(sizeof($to) == 2)
 					$name = $to[1];
-				parent::$method($email, $name);
+				    parent::$method($email, $name);
+                                }
 			}
 		}else{
-			$email = (self::$dev_email !== null) ? self::$dev_email : $address;
-			parent::$method($email, $name);
+                        if (strpos($address, ';') !== null){
+                            $addresses = explode(';',$address);
+                            foreach ($addresses as $nextAddress){
+                                $email = (self::$dev_email !== null) ? self::$dev_email : $nextAddress;
+                                parent::$method($email, $name);
+                            } 
+                        } else {
+			    $email = (self::$dev_email !== null) ? self::$dev_email : $address;
+                            parent::$method($email, $name);
+                        }
 		}
 	}
 	/**
