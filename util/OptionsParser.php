@@ -7,6 +7,7 @@
  * class description
  *
  * @package util
+ * @author Justin Palmer
  */
 class OptionsParser
 {
@@ -40,7 +41,7 @@ class OptionsParser
 	 * @param array $optionExceptions - array('remote'=>'data-remote')
 	 * @param mixed $return - What are we returning?
 	 */
-	private function parse($options, array $optionExceptions=array(), $return='')
+	private static function parse($options, array $optionExceptions=array(), $return='')
 	{
 		//if it is an array lets do the conversion and return the value.
 		if(is_array($options)){
@@ -61,7 +62,7 @@ class OptionsParser
 	 * @return void
 	 * @author Justin Palmer
 	 **/
-	private function convertTo(array $options, array $optionExceptions, $ret)
+	private static function convertTo(array $options, array $optionExceptions, $ret)
 	{
 		$keys = array();
 		$do_explode = array_key_exists(0, $options);
