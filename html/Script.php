@@ -21,7 +21,11 @@ class Script extends AssetTag
 	 */
 	function __construct($source, $options='', $from_base=true)
 	{
-		parent::__construct($source . '.js', $options, $from_base);
+		$min = '';
+		if(Registry::get('pr-asset-minification')){
+			$min = '.min';
+		}
+		parent::__construct($source . $min . '.js', $options, $from_base);
 	}
 	/**
 	 * @see Tag::start

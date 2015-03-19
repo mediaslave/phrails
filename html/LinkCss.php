@@ -34,6 +34,10 @@ class LinkCss extends Link
 	 */
 	function __construct($path, $options='')
 	{
-		parent::__construct($path . '.css', $options);
+		$min = '';
+		if(Registry::get('pr-asset-minification')){
+			$min = '.min';
+		}
+		parent::__construct($path . $min . '.css', $options);
 	}
 }
