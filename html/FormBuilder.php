@@ -202,7 +202,8 @@ class FormBuilder
 		$name = $this->getElementName($property);
 		if($checked == false && $this->getValue($property) == $value)
 			$checked = true;
-		return new InputRadio($name, $value, $checked, $options);
+                $label = '';
+		return new InputRadio($name, $value, $checked, $label, $options);
 	}
 	/**
 	 * return a Textarea for a model property
