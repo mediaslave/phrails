@@ -196,13 +196,12 @@ class FormBuilder
 	 * @return InputRadio
 	 * @author Justin Palmer
 	 **/
-	public function radio_button($property, $value, $checked=false, $options='')
+	public function radio_button($property, $value, $checked=false, $options='', $label='')
 	{
 		$options = $this->checkForErrors($property, $options);
 		$name = $this->getElementName($property);
 		if($checked == false && $this->getValue($property) == $value)
 			$checked = true;
-                $label = '';
 		return new InputRadio($name, $value, $checked, $label, $options);
 	}
 	/**
