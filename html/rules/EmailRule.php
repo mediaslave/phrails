@@ -20,6 +20,6 @@ class EmailRule extends PregRule
 	 **/
 	public function __construct($message='%s is an invalid email address.')
 	{
-		parent::__construct("/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/", $message);
+		parent::__construct("/^[0-9a-zA-Z._%?=^+\-!#$'/*{|}~`&]+@[0-9a-zA-Z.\-]+\.[0-9a-zA-Z.]{2,512}$/", $message);
 	}
 } // END class Rule
