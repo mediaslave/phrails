@@ -7,4 +7,8 @@ vendor
 index.php
 docs/*
 build/*
+<<<<<<< HEAD
 * (1)*
+=======
+ (1)*
+>>>>>>> c62fc71... .gitignore added (1) exclusion
