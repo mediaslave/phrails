@@ -445,11 +445,10 @@ abstract class Migration extends Model
 		}elseif($datatype == 'VARCHAR'){
 			$bit .= "(255)";
 		}
-		if(isset($options['null'])){
-			($options['null']) ? $bit .= ' NULL' : $bit .= ' NOT NULL';
-		}else{
-			$bit .= ' NULL';
-		}
+
+		if(isset($options['null']) && $options['null']) ? $bit .= ' NULL' 
+																										: $bit .= ' NOT NULL';
+
 		if(isset($options['default']))
 			$bit .= " DEFAULT '" . $options['default'] . "'";
 
