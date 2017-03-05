@@ -25,10 +25,11 @@ class InputRadio extends InputChecked
 		$this->label = $label;
 		$this->setChecked($checked);
 		$this->id =  $this->getId(rtrim(strtolower(
-															str_replace('[', '_',
-															str_replace(']', '_',
-															str_replace('][', '_',
-															str_replace(' ', '', $value . '_' . $name))))), '_'));
+                        str_replace(',','_',
+                        str_replace('[', '_',
+			str_replace(']', '_',
+			str_replace('][', '_',
+			str_replace(' ', '', $value . '_' . $name)))))), '_'));
 		$this->options .= ',id:' . $this->id;
 		parent::__construct($name, $value, $options);
 	}
